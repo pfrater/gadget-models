@@ -2,12 +2,6 @@
 # landings data with proportions computed from Logbooks entries
 ###############################################################
 
-# read in data for gss landed catch
-landedcatch <- read.csv('data/gss_landings.csv', header=T)
-landedcatch <- rename(landedcatch,
-                      year = ar,
-                      month = man,
-                      gear.type = veidarf)
 
 # adjust mapping dataset
 gridcell.mapping <-

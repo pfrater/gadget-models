@@ -24,10 +24,13 @@ bottom.trawls$areacell <-
 
 gss <- 
     bottom.trawls %>% 
-    select(id, ship.number, lat, lon, areacell, depth,
+    select(id, ship.number, areacell, depth,
            landing.port, year, fishing.day, fishing.month, landing.month, 
            landing.day, area, trawl.time, bottom.temp, mesh.size, number.per.kilo,
-           size, type, bottom, gr.silver.smelt)
+           size, type, bottom, gr.silver.smelt) %>%
+    mutate(lat = sr2d(areacell)$lat, 
+           lon = sr2d(areacell)$lon) %>%
+    filter(lat < 66 & lon < -14.5 & depth > 400)
 
 # first calculate the proportion of catches per year per month
 # this is so that catches don't get replicated 12 times upon left_join

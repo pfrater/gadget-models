@@ -65,7 +65,7 @@ pgt.landings <- pgt.catch.prop %>%
 
 # randomly assign a gridcell to other gear.types based on weighted probability
 other.catch <- landedcatch %>%
-    filter(gear.type %in% other.gt)
+    filter(gear.type %in% ogt)
 
 other.catch$gridcell <- NA
 for (i in 1:nrow(other.catch)) {

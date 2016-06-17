@@ -7,7 +7,7 @@ library(geo)
 library(dplyr)
 library(data.table)
 
-setwd('/home/pfrater/gadget/grSilverSmelt')
+setwd('/home/pfrater/gadget/gadget-models/grSilverSmelt')
 
 # Create connection to MFDB database, as the Icelandic case study
 mdb <- mfdb('Iceland')
@@ -35,7 +35,7 @@ reitmapping <- read.table(
 mfdb_import_area(mdb, data.frame(
     id = 1:nrow(reitmapping),
     name = c(reitmapping$GRIDCELL),
-    size = 30*60*cos(geo::r2d(reitmapping$GRIDCELL)$lat*pi/180)))
+    size = 28*55*cos(geo::r2d(reitmapping$GRIDCELL)$lat*pi/180)))
 mfdb_import_division(mdb, c(
     lapply(split(reitmapping, list(reitmapping$SUBDIVISION)), function (l) l[,'GRIDCELL']),
     NULL))
