@@ -19,6 +19,9 @@ landings <-
     filter(areacell != -1818, areacell != -1316, areacell != 3684) %>%
     arrange(year, areacell)
 
+# for a more detailed analysis of landedcatch by areas, see
+# ~/gadget/gadget-models/grSilverSmelt/initialize/gssCatchByArea.R
+
 landings <- data.table(landings)
 
 

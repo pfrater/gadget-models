@@ -4,6 +4,7 @@ library(fjolstTranslate)
 library(Logbooks)
 library(LogbooksTranslate)
 library(geo)
+library(plyr)
 library(dplyr)
 library(data.table)
 
@@ -35,9 +36,9 @@ reitmapping <- read.table(
 mfdb_import_area(mdb, data.frame(
     id = 1:nrow(reitmapping),
     name = c(reitmapping$GRIDCELL),
-    size = 28*55*cos(geo::r2d(reitmapping$GRIDCELL)$lat*pi/180)))
+    size = 28*55*cos(geo::sr2d(reitmapping$GRIDCELL)$lat*pi/180)))
 mfdb_import_division(mdb, c(
-    lapply(split(reitmapping, list(reitmapping$SUBDIVISION)), function (l) l[,'GRIDCELL']),
+    lapply(split(reitmapping, list(reitmapping$DIVISION)), function (l) l[,'GRIDCELL']),
     NULL))
 mfdb_import_temperature(mdb, data.frame(
     year = rep(1960:2015, each=12),
