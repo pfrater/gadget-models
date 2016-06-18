@@ -1,7 +1,7 @@
 ## general setup for gadget model on greater silver smelt (Argentina silus)
 library(mfdb)
 
-setwd('/home/pfrater/gadget')
+setwd('/home/pfrater/gadget/gadget-models')
 
 # create a gadget directory and define some defaults to use with queries below
 gd <- gadget_directory('grSilverSmelt/gssModel')
@@ -15,8 +15,13 @@ reitmapping <- read.table(
     header=TRUE,
     as.is=TRUE)
 
+
+
 defaults <- list(
-    area = mfdb_group("1" = unique(reitmapping$SUBDIVISION)),
+    area = mfdb_group("101" = 101, "102" = 102, "103" = 103, "104" = 104,
+                      "105" = 105, "106" = 106, "107" = 107, "108" = 108,
+                      "109" = 109, "110" = 110, "111" = 111, "112" = 112,
+                      "113" = 113, "114" = 114, "115" = 115),
     timestep = mfdb_timestep_yearly,
     year = 1982:2015,
     species = 'GSS')
@@ -24,7 +29,8 @@ defaults <- list(
 ## Write out areafile and update mainfile with areafile location
 gadget_dir_write(gd, gadget_areafile(
     size = mfdb_area_size(mdb, defaults)[[1]],
-    temperature = mfdb_temperature(mdb, defaults)[[1]]))
+    temperature = mfdb_temperature(mdb, defaults)[[1]],
+    area = defaults$area))
 
 ## Write a penalty component to the likelihood file
 gadget_dir_write(gd, 

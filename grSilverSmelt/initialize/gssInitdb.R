@@ -43,7 +43,7 @@ mfdb_import_division(mdb, c(
 mfdb_import_temperature(mdb, data.frame(
     year = rep(1960:2015, each=12),
     month = 1:12,
-    areacell = reitmapping$GRIDCELL[1],
+    areacell = reitmapping[!(duplicated(reitmapping$DIVISION)),]$GRIDCELL,
     temperature = 3))
 
 # Set-up some sampling types

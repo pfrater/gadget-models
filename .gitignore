@@ -1,5 +1,6 @@
 /grSilverSmelt/data/
 /grSilverSmelt/gssVersions/*
+/grSilverSmelt/gssModel/
 /grSilverSmelt/documents/
 .Rhistory
 /grSilverSmelt/initialize/gssCatchByArea.R
