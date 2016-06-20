@@ -5,21 +5,25 @@ mla <- mfdb_sample_meanlength_stddev(mdb, c('age'),
                                      c(list(sampling_type="IGFS", 
                                             age=1:30), # got 30 from ICES 2013. Report on the workshop on age estimation of deep water species
                                        defaults))
-
-init.sigma <- mla[[1]] %>% na.omit() %>% group_by(age) %>%
-                summarize(ml=mean(mean), ms=mean(stddev, na.rm=T))
+init.sigma <- 
+    mla[[1]] %>% 
+    na.omit() %>% 
+    group_by(age) %>%
+    summarize(ml=mean(mean), ms=mean(stddev, na.rm=T))
 
 lw <- mfdb_sample_meanweight(mdb, c('length'),
                             c(list(sampling_type='IGFS', species='GSS',
                                    length=mfdb_interval("", seq(0,60, by=1)))))
 
-lw.tmp <-   lw[[1]] %>% 
-            mutate(length=as.numeric(as.character(length)),
-                   weight=mean/1e3) %>%
-            na.omit() %>% 
-            nls(weight ~ a*length^b,.,start=list(a=1e-5,b=3)) %>%
-            coefficients() %>%
-            as.numeric()
+lw.tmp <-   
+    lw[[1]] %>% 
+    mutate(length=as.numeric(as.character(length)),
+           weight=mean/1e3) %>%
+    na.omit() %>%
+    filter(!length == 8) %>% # removing oddball outlier
+    nls(weight ~ a*length^b,.,start=list(a=1e-5,b=3)) %>%
+    coefficients() %>%
+    as.numeric()
 
 ## populate the model with starting default values
 opt <- gadget.options(type='simple2stock')
@@ -101,7 +105,7 @@ gm <- gadget.skeleton(time=opt$time, area=opt$area,
 gm@stocks$imm@initialdata$area.factor <- '( * 100 #gss.mult)'
 gm@stocks$mat@initialdata$area.factor <- '( * 100 #gss.mult)'
 
-gm@fleets <- list(comm.fleet, igfs.fleet)
+gm@fleets <- list(bmt.fleet, pgt.fleet, other.fleet, igfs.fleet)
 gd.list <- list(dir=gd$dir)
 Rgadget:::gadget_dir_write(gd.list, gm)
 

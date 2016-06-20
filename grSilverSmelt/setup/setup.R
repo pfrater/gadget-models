@@ -16,21 +16,16 @@ reitmapping <- read.table(
     as.is=TRUE)
 
 
-
 defaults <- list(
-    area = mfdb_group("101" = 101, "102" = 102, "103" = 103, "104" = 104,
-                      "105" = 105, "106" = 106, "107" = 107, "108" = 108,
-                      "109" = 109, "110" = 110, "111" = 111, "112" = 112,
-                      "113" = 113, "114" = 114, "115" = 115),
+    area = mfdb_group("1" = unique(reitmapping$DIVISION)),
     timestep = mfdb_timestep_yearly,
-    year = 1982:2015,
+    year = 1982:2016,
     species = 'GSS')
 
 ## Write out areafile and update mainfile with areafile location
 gadget_dir_write(gd, gadget_areafile(
     size = mfdb_area_size(mdb, defaults)[[1]],
-    temperature = mfdb_temperature(mdb, defaults)[[1]],
-    area = defaults$area))
+    temperature = mfdb_temperature(mdb, defaults)[[1]]))
 
 ## Write a penalty component to the likelihood file
 gadget_dir_write(gd, 

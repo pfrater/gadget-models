@@ -4,7 +4,6 @@ library(fjolstTranslate)
 library(Logbooks)
 library(LogbooksTranslate)
 library(geo)
-library(plyr)
 library(dplyr)
 library(data.table)
 
@@ -32,7 +31,6 @@ reitmapping <- read.table(
     header=TRUE,
     as.is=TRUE)
 
-
 mfdb_import_area(mdb, data.frame(
     id = 1:nrow(reitmapping),
     name = c(reitmapping$GRIDCELL),
@@ -41,18 +39,17 @@ mfdb_import_division(mdb, c(
     lapply(split(reitmapping, list(reitmapping$DIVISION)), function (l) l[,'GRIDCELL']),
     NULL))
 mfdb_import_temperature(mdb, data.frame(
-    year = rep(1960:2015, each=12),
+    year = rep(1982:2015, each=12),
     month = 1:12,
-    areacell = reitmapping[!(duplicated(reitmapping$DIVISION)),]$GRIDCELL,
+    areacell = reitmapping$GRIDCELL[1],
     temperature = 3))
 
 # Set-up some sampling types
 mfdb_import_sampling_type(mdb, data.frame(
-    id = c(1,2,3,5,6,9),
-    name = c('SEA', 'IGFS','AUT','LND','LOG', 'FLND'),
+    id = c(1,2,3,5,6),
+    name = c('SEA', 'IGFS','AUT','LND','LOG'),
     description = c('Sea sampling', 'Icelandic ground fish survey',
-                    'Icelandic autumn survey', 'Landings','Logbooks',
-                    'Foreign vessel landings')))
+                    'Icelandic autumn survey', 'Landings', 'Logbooks')))
 
 
 ##########################

@@ -55,12 +55,14 @@ aldist <- translate.all.kv() %>%
            sampling_type = 'IGFS',
            month = 3,
            maturity_stage = pmax(1,pmin(maturity,2))) %>%
+    rename(weight = ungutted.wt,
+           gutted = gutted.wt) %>%
     filter(!is.na(areacell)) %>%
     ungroup()
 
 aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-aldist.igfs',
-                   aldist)
+                   data_in=aldist,
+                   data_source = 'iceland-aldist.igfs')
 rm(aldist)

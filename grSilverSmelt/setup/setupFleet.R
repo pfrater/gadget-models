@@ -1,13 +1,40 @@
-## setup catches by fleet for landings
-landings <- mfdb_sample_count(mdb, c('age', 'length'),
+stocknames <- c('gssimm', 'gssmat')
+
+## setup landings for bottom.trawls
+bmt.landings <- mfdb_sample_count(mdb, c('age', 'length'),
+                              c(list(
+                                  gear = c('BMT'),
+                                  sampling_type='LND',
+                                  species=defaults$species), defaults))
+
+## make the bottom trawlers fleet
+bmt.fleet <- Rgadget:::make.gadget.fleet(name='bmt.comm', suitability='exponentiall50',
+                                          fleet.data=bmt.landings[[1]],
+                                          stocknames=stocknames)
+
+## setup landings for pelagic trawls
+pgt.landings <- mfdb_sample_count(mdb, c('age', 'length'),
+                                  c(list(
+                                      gear = c('PGT'),
+                                      sampling_type='LND',
+                                      species=defaults$species), defaults))
+
+## make the pelagic trawlers fleet
+pgt.fleet <- Rgadget:::make.gadget.fleet(name='pgt.comm', suitability='exponentiall50',
+                                         fleet.data=pgt.landings[[1]],
+                                         stocknames=stocknames)
+
+
+## setup fleet for landings other than bottom and pelagic trawls
+other.landings <- mfdb_sample_count(mdb, c('age', 'length'),
                 c(list(
                     sampling_type='LND',
                     species=defaults$species), defaults))
 
-## make the bottom trawlers fleet
-comm.fleet <- Rgadget:::make.gadget.fleet(name='comm', suitability='exponentiall50',
-                                            fleet.data=landings[[1]],
-                                            stocknames=c('gssimm', 'gssmat'))
+## make the fleet for other gear.types
+other.fleet <- Rgadget:::make.gadget.fleet(name='other.comm', suitability='exponentiall50',
+                                            fleet.data=other.landings[[1]],
+                                            stocknames=stocknames)
 
 # Rgadget:::gadget_dir_write(gd, fleet)
 
