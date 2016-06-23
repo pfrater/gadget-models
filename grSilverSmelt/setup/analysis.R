@@ -11,13 +11,11 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/grSilverSmelt/gssModel')
+setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final')
 
 ## fit statistics
 resTable <- fit$resTable[tail(head(names(fit$resTable),-2),-1)]
-names(resTable) <- c('MATs', 'ALKc','ALKs','LDc','LDs','SI 15-25',
-                     'SI 25-40','SI 40-55')
 rownames(resTable) <- c('Catch','Survey', 'Maturation', 'Sind','Final')
 
 summary.plot <-
@@ -69,7 +67,7 @@ ldist.fit.survey <-
 
 # plot the model catchdistribution data over actual catchdistribution data
 ldist.fit.catch <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.catch'),
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.bmt'),
            aes(lower,predicted)) +
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + geom_line() +

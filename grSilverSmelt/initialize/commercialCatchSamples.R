@@ -4,8 +4,9 @@
 stations <-
     data.table(subset(translate.stodvar(),
                       sampling.type %in% c(1,8),
-                      select = c(sample.id,year,month,lat,lon,gear.type))) %>%
+                      select = c(sample.id,year,month,lat,lon,gear.type,depth))) %>%
     left_join(data.table(mapping)) %>%
+    filter(lat < 66 & lon < -14.5 & depth > 400) %>%
     group_by(sample.id) %>%
     mutate(areacell = d2sr(lat,lon),
            gear.type = NULL) %>%
@@ -14,7 +15,8 @@ stations <-
 
 
 # import length distribution from commercial catch samples
-ldist <- translate.all.le() %>%
+ldist <- 
+    translate.all.le() %>%
     filter(sample.id %in% stations$sample.id &
                species.code %in% species.key$species.code) %>%
     group_by(sample.id,species.code) %>%
@@ -50,7 +52,8 @@ aldist <-
            sampling_type = 'SEA',
            maturity_stage = pmax(1,pmin(maturity,2))) %>%
     filter(!is.na(areacell)) %>%
-    ungroup()
+    ungroup() %>%
+    rename(weight = ungutted.wt)
 
 aldist <- data.table(aldist)
 

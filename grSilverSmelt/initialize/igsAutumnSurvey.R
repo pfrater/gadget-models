@@ -4,12 +4,13 @@
 
 stations <-
     subset(translate.stodvar(), sampling.type == 35, ## autumn survey 30
-                      select = c(sample.id,year,month,lat,lon,gear.type)) %>%
+                      select = c(sample.id,year,month,lat,lon,gear.type,depth)) %>%
     left_join(mapping) %>%
+    filter(lat < 66 & lon < -14.5 & depth > 400) %>%
     group_by(sample.id) %>%
     mutate(month = 10,
            areacell = d2sr(lat,lon),
-           sampling_type = 'IGFS') %>%
+           sampling_type = 'AUT') %>%
     filter(!is.na(areacell))
 
 # Import length distribution from autumn survey
@@ -36,7 +37,7 @@ ldist <- translate.all.le() %>%
 ldist <- data.table(ldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-ldist.igfs',
+                   data_source = 'iceland-ldist.aut',
                    ldist)
 rm(ldist)
 
@@ -50,18 +51,18 @@ aldist <- translate.all.kv() %>%
     mutate(count=1,
            areacell = d2sr(lat,lon),
            sex = c('M','F')[pmax(1,sex)],
-           sampling_type = 'IGFS',
            month = 10,
            maturity_stage = pmax(1,pmin(maturity,2))) %>%
     filter(!is.na(areacell)) %>%
     ungroup() %>%
     mutate(maturity=NULL,
            species.code = NULL,
-           gear.type = NULL)
+           gear.type = NULL) %>%
+    rename(weight = ungutted.wt)
 
 aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-aldist.igfs',
+                   data_source = 'iceland-aldist.aut',
                    aldist)
 rm(aldist)

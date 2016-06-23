@@ -14,8 +14,9 @@ source('initialize/computeAreasLogbooks.R')
 
 
 # merge landedcatch with monthly catch proportions to use later with importing areacells
-monthly.catch <- landedcatch %>%
-    filter(gear.type == 6) %>%
+monthly.catch <- 
+    landedcatch %>%
+    #filter(gear.type == 6) %>%
     group_by(year) %>%
     summarize(catch = sum(catch)) %>% 
     left_join(catch.by.month) %>%

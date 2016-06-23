@@ -50,7 +50,7 @@ ann.prop.catch <- gss %>%
     select(year, fishing.month, areacell, prop) %>%
     rename(month = fishing.month)
 
-
+# calculate the proportion of catch in each areacell for weighted probabilities later
 areacell.probs <- 
     gss %>%
     group_by(areacell) %>%
@@ -58,6 +58,7 @@ areacell.probs <-
     mutate(prop = total.catch / sum(total.catch)) %>%
     select(areacell, prop)
 
+# calculate the proportion of catch in each month for weighted probabilities later
 month.probs <- 
     gss %>%
     group_by(fishing.month) %>%

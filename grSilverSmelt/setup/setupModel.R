@@ -34,7 +34,7 @@ weight.beta <- lw.tmp[2]
 
 opt$area$numofareas <- 1
 opt$time$firstyear <- 1982
-opt$time$lastyear <- 2016
+opt$time$lastyear <- 2015
 
 ## set up immature stock
 opt$stocks$imm <- within(opt$stock$imm, {
@@ -53,12 +53,12 @@ opt$stocks$imm <- within(opt$stock$imm, {
             init.abund <- sprintf('(* %s %s)', 
                                   c(0,0.08,0.1,0.1,0.09,0.08,0.06,0.045,0.03,0.02,0.01,0,0,0,0,0,0),
                                  c(0,sprintf('#gss.age%s',2:10),0,0,0,0,0,0,0))
-            n <- sprintf('(* 1000 #gss.rec%s)', 1982:2016)
+            n <- sprintf('(* 1000 #gss.rec%s)', 1982:2015)
             doesmature <- 1
             maturityfunction <- 'continuous'
             maturestocksandratios <- 'gssmat 1'
             maturity.coefficients <- '( * 0.001 #gss.mat1) #gss.mat2 0 0'
-            sigma <- c(init.sigma$ms[1], head(init.sigma$ms, 11), rep(init.sigma$ms[11],5))
+            sigma <- head(init.sigma$ms, 17)
             M <- rep(0.15,17)
             maturitysteps <- '0'
             doesmove <- 0
@@ -91,7 +91,7 @@ opt$stocks$mat <- within(opt$stock$mat, {
             init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.01,0.001,0,
                                                  rep(0,18)),
                                   c(0,sprintf('#gss.age%s',4:10),rep(0,19)))
-            sigma <- c(init.sigma$ms[4], tail(init.sigma$ms, 26), rep(init.sigma$ms[26],3))
+            sigma <- c(init.sigma$ms[4:19], rep(init.sigma$ms[19],12))
             doesmature <- 0
             doesmigrate <- 0
         })
@@ -105,7 +105,7 @@ gm <- gadget.skeleton(time=opt$time, area=opt$area,
 gm@stocks$imm@initialdata$area.factor <- '( * 100 #gss.mult)'
 gm@stocks$mat@initialdata$area.factor <- '( * 100 #gss.mult)'
 
-gm@fleets <- list(bmt.fleet, pgt.fleet, other.fleet, igfs.fleet)
+gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
 gd.list <- list(dir=gd$dir)
 Rgadget:::gadget_dir_write(gd.list, gm)
 

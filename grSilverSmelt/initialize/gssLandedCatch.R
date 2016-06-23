@@ -10,14 +10,16 @@ landedcatch <- rename(landedcatch,
                       year = ar,
                       month = man,
                       gear.type = veidarf)
+landedcatch$gear.type <- 6 # treat all landings as bottom.trawl
 
 source('initialize/gssLandedCatchLogbooks.R')
-source('initialize/gssLandedCatchSeaSamplingProps.R')
+# source('initialize/gssLandedCatchSeaSamplingProps.R') #treating all landings as 
+                                                        #bottom trawls, so not needed
 
 landings <- 
-    rbind(bmt.landings, pgt.landings, other.landings) %>%
-    filter(areacell != -1818, areacell != -1316, areacell != 3684) %>%
-    arrange(year, areacell)
+    bmt.landings %>% 
+    filter(areacell != -1818 & areacell != -1316) %>%
+    arrange(year, month, areacell)
 
 # for a more detailed analysis of landedcatch by areas, see
 # ~/gadget/gadget-models/grSilverSmelt/initialize/gssCatchByArea.R

@@ -16,10 +16,10 @@ reitmapping <- read.table(
     as.is=TRUE)
 
 
-defaults <- list(
+defaults <- list(   
     area = mfdb_group("1" = unique(reitmapping$DIVISION)),
     timestep = mfdb_timestep_yearly,
-    year = 1982:2016,
+    year = 1982:2015,
     species = 'GSS')
 
 ## Write out areafile and update mainfile with areafile location
@@ -51,6 +51,6 @@ source(sprintf('%s/setupCatchDistribution.R', setup.d))
 source(sprintf('%s/setupIndices.R', setup.d))
 
 #file.copy(sprintf('%s/itterfitter.sh', setup.d), gd$dir)
-file.copy(sprintf('%s/run.R', setup.d), gd$dir)
+#file.copy(sprintf('%s/run.R', setup.d), gd$dir)
 file.copy(sprintf('%s/optinfofile', setup.d), gd$dir)
 
