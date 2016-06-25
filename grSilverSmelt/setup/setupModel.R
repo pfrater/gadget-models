@@ -119,7 +119,7 @@ init.params[c('gss.linf', 'gss.k', 'gss.bbin', 'gss.mult',
               grep('age', rownames(init.params), value=T),
               'gss.mat1', 'gss.mat2'),] <-
 read.table(text='switch	 value 		lower 	upper 	optimise
-gss.Linf	         58	      40     70        0
+gss.linf	         58	      40     70        0
 gss.k	          0.14	       0.06      0.30        1
 gss.bbin	         6	   1e-08    100        1
 gss.mult	         100	     0.1      100        1
@@ -154,5 +154,15 @@ init.params[grepl('l50',init.params$switch),'upper'] <- 100
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
 
+init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
+init.params[grepl('igfs.p', init.params$switch),'upper'] <- 100
+init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
+init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
+  
+init.params[grepl('aut.p', init.params$switch),'value'] <- 0.5
+init.params[grepl('aut.p', init.params$switch),'upper'] <- 100
+init.params[grepl('aut.p', init.params$switch),'lower'] <- 0.01
+init.params[grepl('aut.p', init.params$switch),'optimise'] <- 1
+  
 write.gadget.parameters(init.params,file='params.in')
 setwd(curr.dir)

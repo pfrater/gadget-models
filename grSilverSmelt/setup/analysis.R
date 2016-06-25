@@ -16,7 +16,6 @@ fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final')
 
 ## fit statistics
 resTable <- fit$resTable[tail(head(names(fit$resTable),-2),-1)]
-rownames(resTable) <- c('Catch','Survey', 'Maturation', 'Sind','Final')
 
 summary.plot <-
     ggplot(subset(fit$likelihoodsummary,
@@ -53,7 +52,7 @@ si.fit.survey <-
 
 # plot the survey length-distribution data over the actual survey length-distribution data
 ldist.fit.survey <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.igfs'),
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.igfs' | name == 'ldist.aut'),
            aes(lower,predicted)) +
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + geom_line() +
