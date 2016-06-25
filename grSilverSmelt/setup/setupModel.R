@@ -153,11 +153,6 @@ init.params[grepl('l50',init.params$switch),'value'] <- 50
 init.params[grepl('l50',init.params$switch),'upper'] <- 100
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
-
-init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
-init.params[grepl('igfs.p', init.params$switch),'upper'] <- 100
-init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
-init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
   
 init.params[grepl('aut.p', init.params$switch),'value'] <- 0.5
 init.params[grepl('aut.p', init.params$switch),'upper'] <- 100
