@@ -2,25 +2,25 @@
 
 igfs.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(15,20,25))),
+    length = mfdb_interval("len", c(20,25,30))),
     defaults))
-# original len values c(5,10,15,20) - receive invalid values
+# values of 15, 20, 25 worked, but fit not good
 
 igfs.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(25,30,35,40))),
+    length = mfdb_interval("len", c(30,35,40))),
     defaults))
-# original len values c(20,25,30,35) - worked well
+# values of 25,30,35,40 worked fine
 
 igfs.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(35,40,45,55))),
+    length = mfdb_interval("len", c(40,45,55))),
     defaults))
-# original len values c(35,40,55) - worked well
+# values of 35,40,45,55 worked fine
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.1525",
+                                                 name = "igfs.si.2030",
                                                  weight = 1,
                                                  data = igfs.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -28,7 +28,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = c("gssimm","gssmat")))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.2540",
+                                                 name = "igfs.si.3040",
                                                  weight = 1,
                                                  data = igfs.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -47,25 +47,25 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
 
 aut.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(15,20,25))),
+    length = mfdb_interval("len", c(20,25,30))),
     defaults))
-# original len values c(5,10,15,20) - receive invalid values
+# values of 15, 20, 25 worked, but fit not good
 
 aut.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(25,30,35,40))),
+    length = mfdb_interval("len", c(30,35,40))),
     defaults))
 # original len values c(20,25,30,35) - worked well
 
 aut.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(35,40,45,55))),
+    length = mfdb_interval("len", c(40,45,55))),
     defaults))
 # original len values c(35,40,55) - worked well
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "aut.si.1525",
+                                                 name = "aut.si.2030",
                                                  weight = 1,
                                                  data = aut.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -73,7 +73,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = c("gssimm","gssmat")))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "aut.si.2540",
+                                                 name = "aut.si.3040",
                                                  weight = 1,
                                                  data = aut.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
