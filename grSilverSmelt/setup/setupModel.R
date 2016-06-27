@@ -155,9 +155,12 @@ init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
   
 init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
-init.params[grepl('igfs.p', init.params$switch),'upper'] <- 100
+init.params[grepl('igfs.p', init.params$switch),'upper'] <- 1
 init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
 init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
   
+init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4',5, 0.01, 10, 1)
+init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5',5, 0.01, 100, 1)
+
 write.gadget.parameters(init.params,file='params.in')
 setwd(curr.dir)
