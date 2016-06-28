@@ -2,7 +2,7 @@ library(Rgadget)
 
 # find some decent starting values for recl and stddev
 mla <- mfdb_sample_meanlength_stddev(mdb, c('age'),
-                                     c(list(sampling_type="IGFS", 
+                                     c(list(sampling_type=c("IGFS","AUT"),
                                             age=1:30), # got 30 from ICES 2013. Report on the workshop on age estimation of deep water species
                                        defaults))
 init.sigma <- 
@@ -12,7 +12,7 @@ init.sigma <-
     summarize(ml=mean(mean), ms=mean(stddev, na.rm=T))
 
 lw <- mfdb_sample_meanweight(mdb, c('length'),
-                            c(list(sampling_type='IGFS', species='GSS',
+                            c(list(sampling_type=c('IGFS','AUT'), species='GSS',
                                    length=mfdb_interval("", seq(0,60, by=1)))))
 
 lw.tmp <-   
@@ -105,7 +105,7 @@ gm <- gadget.skeleton(time=opt$time, area=opt$area,
 gm@stocks$imm@initialdata$area.factor <- '( * 100 #gss.mult)'
 gm@stocks$mat@initialdata$area.factor <- '( * 100 #gss.mult)'
 
-gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
+gm@fleets <- list(bmt.fleet, survey)
 gd.list <- list(dir=gd$dir)
 Rgadget:::gadget_dir_write(gd.list, gm)
 
@@ -154,13 +154,13 @@ init.params[grepl('l50',init.params$switch),'upper'] <- 100
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
   
-init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
-init.params[grepl('igfs.p', init.params$switch),'upper'] <- 1
-init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
-init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
+init.params[grepl('survey.p', init.params$switch),'value'] <- 0.5
+init.params[grepl('survey.p', init.params$switch),'upper'] <- 1
+init.params[grepl('survey.p', init.params$switch),'lower'] <- 0.01
+init.params[grepl('survey.p', init.params$switch),'optimise'] <- 1
   
-init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4',5, 0.01, 10, 1)
-init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5',5, 0.01, 100, 1)
+init.params[init.params$switch=='survey.p4',] <- c('survey.p4',5, 0.01, 10, 1)
+init.params[init.params$switch=='survey.p5',] <- c('survey.p5',5, 0.01, 100, 1)
 
 write.gadget.parameters(init.params,file='params.in')
 setwd(curr.dir)
