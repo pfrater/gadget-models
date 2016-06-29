@@ -52,12 +52,12 @@ si.fit.survey <-
 
 # plot the survey length-distribution data over the actual survey length-distribution data
 ldist.fit.survey <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.surv'),
-           aes(lower,predicted)) +
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.igfs' | name == 'ldist.aut') ,
+           aes(lower,predicted)) + geom_line() +
     geom_line(aes(lower,observed),col='gray') +
-    facet_wrap(~year+step) + theme_bw() + geom_line() +
+    facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
-                                 name == 'ldist.igfs' & lower==min(lower)),y=Inf),
+                                 name == 'ldist.surv' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),

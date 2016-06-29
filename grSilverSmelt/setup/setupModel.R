@@ -51,7 +51,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
             init.abund <- sprintf('(* %s %s)', 
-                                  c(0,0.08,0.1,0.1,0.09,0.08,0.06,0.045,0.03,0.02,0.01,0,0,0,0,0,0),
+                                  c(0,0.03,0.06,0.08,0.1,0.1,0.08,0.06,0.045,0.03,0.02,0.01,0,0,0,0,0),
                                  c(0,sprintf('#gss.age%s',2:10),0,0,0,0,0,0,0))
             n <- sprintf('(* 1000 #gss.rec%s)', 1982:2015)
             doesmature <- 1
@@ -105,7 +105,7 @@ gm <- gadget.skeleton(time=opt$time, area=opt$area,
 gm@stocks$imm@initialdata$area.factor <- '( * 100 #gss.mult)'
 gm@stocks$mat@initialdata$area.factor <- '( * 100 #gss.mult)'
 
-gm@fleets <- list(bmt.fleet, survey)
+gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
 gd.list <- list(dir=gd$dir)
 Rgadget:::gadget_dir_write(gd.list, gm)
 
@@ -154,13 +154,13 @@ init.params[grepl('l50',init.params$switch),'upper'] <- 100
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
   
-init.params[grepl('survey.p', init.params$switch),'value'] <- 0.5
-init.params[grepl('survey.p', init.params$switch),'upper'] <- 1
-init.params[grepl('survey.p', init.params$switch),'lower'] <- 0.01
-init.params[grepl('survey.p', init.params$switch),'optimise'] <- 1
-  
-init.params[init.params$switch=='survey.p4',] <- c('survey.p4',5, 0.01, 10, 1)
-init.params[init.params$switch=='survey.p5',] <- c('survey.p5',5, 0.01, 100, 1)
+init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
+init.params[grepl('igfs.p', init.params$switch),'upper'] <- 1
+init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
+init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
+
+init.params[init.params$switch=='igfs.p4',] <- c('survey.p4',5, 0.01, 10, 1)
+init.params[init.params$switch=='igfs.p5',] <- c('survey.p5',5, 0.01, 100, 1)
 
 write.gadget.parameters(init.params,file='params.in')
 setwd(curr.dir)
