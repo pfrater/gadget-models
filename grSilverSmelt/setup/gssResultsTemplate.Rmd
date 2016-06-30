@@ -1,0 +1,35 @@
+---
+title:  "GSS Model"
+author: "Paul Frater"
+date:   ""
+output: html_document
+---
+```{r global_options, include=F}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, echo=F, warning=F, message=F)
+```
+
+# Gadget Model for greater silver smelt
+
+```{r, gadget results, include=F}
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(grid)
+library(Rgadget)
+setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
+fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final')
+```
+
+<!-- Add specific results/figures you want presented here-->
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

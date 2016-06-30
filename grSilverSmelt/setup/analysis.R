@@ -81,7 +81,7 @@ ldist.fit.catch <-
 # plot suitability against length for both survey and commercial fleets
 selection.plot <-
     ggplot(fit$suitability,
-           aes(l,suit,lty=fleet)) +
+           aes(l,suit,lty=fleet, color=stock)) +
     geom_line() +
     theme_bw() + ylab('Suitability') + xlab('Length') +
     theme(legend.position = c(0.8,0.25), legend.title = element_blank(),
