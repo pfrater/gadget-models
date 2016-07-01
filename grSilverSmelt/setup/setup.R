@@ -15,7 +15,6 @@ reitmapping <- read.table(
     header=TRUE,
     as.is=TRUE)
 
-
 defaults <- list(   
     area = mfdb_group("1" = unique(reitmapping$DIVISION)),
     timestep = mfdb_timestep_yearly,

@@ -154,21 +154,22 @@ init.params[grepl('l50',init.params$switch),'upper'] <- 100
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
   
-init.params[grepl('igfs.p', init.params$switch),'value'] <- 0.5
+init.params[grepl('igfs.p', init.params$switch),'value'] <- 1
 init.params[grepl('igfs.p', init.params$switch),'upper'] <- 1
 init.params[grepl('igfs.p', init.params$switch),'lower'] <- 0.01
 init.params[grepl('igfs.p', init.params$switch),'optimise'] <- 1
 
-init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4',5, 0.01, 10, 1)
-init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5',5, 0.01, 100, 1)
+init.params[init.params$switch=='igfs.p1',] <- c('igfs.p1', 0, 0, 1, 1)
+init.params[init.params$switch=='igfs.p2',] <- c('igfs.p2', 0.5, 0, 1, 1)
+init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 1, 0.5, 1, 1)
+init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 0.01, 100, 1)
+init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 0.01, 100, 1)
 
-init.params[grepl('aut.p', init.params$switch),'value'] <- 0.5
-init.params[grepl('aut.p', init.params$switch),'upper'] <- 1
-init.params[grepl('aut.p', init.params$switch),'lower'] <- 0.01
-init.params[grepl('aut.p', init.params$switch),'optimise'] <- 1
-
-init.params[init.params$switch=='aut.p4',] <- c('aut.p4',5, 0.01, 10, 1)
-init.params[init.params$switch=='aut.p5',] <- c('aut.p5',5, 0.01, 100, 1)
+init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0, 0, 1, 1)
+init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0, 1, 1)
+init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 1, 0.5, 1, 1)
+init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.01, 100, 1)
+init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.01, 100, 1)
 
 
 write.gadget.parameters(init.params,file='params.in')

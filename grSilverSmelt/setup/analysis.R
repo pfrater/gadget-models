@@ -34,10 +34,11 @@ tmp <- rbind.fill(fit$sidat,
                         lower = sum(lower*0.00000659*lower^3.01721 ),
                         lower = 110, lower = 180,
                         length = 'Biomass'))
+tmp <- mutate(tmp, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
 
 # plot the model survey data over the actual survey data
 si.fit.survey <-
-    ggplot(tmp, aes(year,number.x)) +
+    ggplot(tmp, aes(year,number.x, color=survey)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
@@ -51,8 +52,8 @@ si.fit.survey <-
 
 
 # plot the survey length-distribution data over the actual survey length-distribution data
-ldist.fit.survey <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.igfs' | name == 'ldist.aut') ,
+ldist.fit.spr.survey <-
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.igfs') ,
            aes(lower,predicted)) + geom_line() +
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + 
@@ -63,6 +64,20 @@ ldist.fit.survey <-
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
+
+ldist.fit.aut.survey <-
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
+           aes(lower,predicted)) + geom_line() +
+    geom_line(aes(lower,observed),col='gray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=mutate(subset(fit$catchdist.fleets,
+                                 name == 'ldist.surv' & lower==min(lower)),y=Inf),
+              aes(lower,y,label=year), vjust = 2,hjust = -1)+
+    ylab('Proportion') + xlab('length') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
 
 # plot the model catchdistribution data over actual catchdistribution data
 ldist.fit.catch <-
