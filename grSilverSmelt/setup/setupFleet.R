@@ -17,13 +17,13 @@ bmt.fleet <- Rgadget:::make.gadget.fleet(name='bmt.comm', suitability='exponenti
 igfs.landings <- data.frame(year=defaults$year, step=1, number=1, area=1)
 igfs.fleet <- Rgadget:::make.gadget.fleet(name='igfs', suitability='andersen',
                                             fleet.data=igfs.landings,
-                                            stocknames=c('gssimm', 'gssmat'))
+                                            stocknames=stocknames)
 
 # set up and make autumn survey as fleet
-aut.landings <- data.frame(year=defaults$year, step=1, number=1, area=1)
+aut.landings <- data.frame(year=defaults$year, step=4, number=1, area=1)
 aut.fleet <- Rgadget:::make.gadget.fleet(name='aut', suitability='andersen',
                                          fleet.data=aut.landings,
-                                         stocknames=c('gssimm', 'gssmat'))
+                                         stocknames=stocknames)
 
 
 

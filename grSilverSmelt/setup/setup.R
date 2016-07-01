@@ -9,7 +9,6 @@ file.remove(sprintf('%s/Modelfiles/fleets', gd$dir))
 setup.d <- 'grSilverSmelt/setup'
 mdb <- mfdb('Iceland')
 
-
 reitmapping <- read.table(
     system.file("demo-data", "reitmapping.tsv", package="mfdb"),
     header=TRUE,
