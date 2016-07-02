@@ -112,7 +112,7 @@ Rgadget:::gadget_dir_write(gd.list, gm)
 fleet.file <- file(sprintf('%s/Modelfiles/fleets', gd$dir))
 fleet.lines <- readLines(fleet.file)
 fleet.lines <- gsub('#igfs.p ', '#igfs.p', fleet.lines)
-fleet.lines <- gsub('#aut.p ',  '#aut.p', fleet.lines)
+#fleet.lines <- gsub('#aut.p ',  '#aut.p', fleet.lines)
 writeLines(fleet.lines, con=fleet.file)
 close(fleet.file)
 rm(fleet.file)
@@ -157,8 +157,8 @@ init.params[grepl('alpha',init.params$switch),'upper'] <- 3
 init.params[grepl('alpha',init.params$switch),'lower'] <- 0.01
 init.params[grepl('alpha',init.params$switch),'optimise'] <- 1
 
-init.params[grepl('l50',init.params$switch),'value'] <- 50
-init.params[grepl('l50',init.params$switch),'upper'] <- 100
+init.params[grepl('l50',init.params$switch),'value'] <- 30
+init.params[grepl('l50',init.params$switch),'upper'] <- 60
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
   
@@ -173,11 +173,11 @@ init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 1, 1, 1, 0)
 init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 0.01, 100, 1)
 init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 0.01, 100, 1)
 
-init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0, 0, 1, 1)
-init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0, 1, 1)
-init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 1, 1, 1, 0)
-init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.01, 100, 1)
-init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.01, 100, 1)
+#init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0, 0, 1, 1)
+#init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0, 1, 1)
+#init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 1, 1, 1, 0)
+#init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.01, 100, 1)
+#init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.01, 100, 1)
 
 
 write.gadget.parameters(init.params,file='params.in')
