@@ -62,8 +62,8 @@ opt$stocks$imm <- within(opt$stock$imm, {
             M <- rep(0.15,17)
             maturitysteps <- '0'
             doesmove <- 0
-            #transitionstep <- 4
-            #transitionstockandratios <- 'gssmat 1'
+            transitionstep <- 4
+            transitionstockandratios <- 'gssmat 1'
             doesmigrate <- 0
             doesrenew <- 1
             renewal <- list(minlength=5, maxlength=20)

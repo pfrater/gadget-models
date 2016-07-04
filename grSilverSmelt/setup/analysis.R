@@ -86,7 +86,7 @@ ldist.fit.catch <-
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + geom_line() +
     geom_text(data=mutate(subset(fit$catchdist.fleets,
-                                 name == 'ldist.catch' & lower==min(lower)),y=Inf),
+                                 name == 'ldist.bmt' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),

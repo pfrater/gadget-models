@@ -25,7 +25,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = igfs.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  name = "igfs.si.3040",
@@ -33,7 +33,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = igfs.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  name = "igfs.si.4055",
@@ -41,7 +41,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = igfs.SI3[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))
 
 ## AUT survey indices
 
@@ -70,7 +70,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = aut.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  name = "aut.si.3040",
@@ -78,7 +78,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = aut.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  name = "aut.si.4055",
@@ -86,4 +86,4 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  data = aut.SI3[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
                                                  slope=1,
-                                                 stocknames = c("gssimm","gssmat")))
+                                                 stocknames = stocknames))

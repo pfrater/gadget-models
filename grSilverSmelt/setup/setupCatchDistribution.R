@@ -18,7 +18,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("igfs"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 
 rm(aggdata)
 
@@ -40,7 +40,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("igfs"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
 
 
@@ -58,7 +58,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("igfs"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
 
 # Query length data to create autumn survey catchdistribution components
@@ -76,7 +76,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("aut"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
 
 ## Age autumn survey
@@ -97,7 +97,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("aut"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
 
 
@@ -115,7 +115,7 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("aut"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
 
 
@@ -134,7 +134,7 @@ gadget_dir_write(gd, gadget_likelihood_component("catchdistribution",
                                                  weight = 1,
                                                  data = aggdata[[1]],
                                                  fleetnames = c("bmt.comm"),
-                                                 stocknames = c("gssimm", "gssmat")))
+                                                 stocknames = stocknames))
 rm(aggdata)
 
 
@@ -155,5 +155,5 @@ gadget_dir_write(gd,
                                              weight = 1,
                                              data = aggdata[[1]],
                                              fleetnames = c("bmt.comm"),
-                                             stocknames = c("gssimm", "gssmat")))
+                                             stocknames = stocknames))
 rm(aggdata)
