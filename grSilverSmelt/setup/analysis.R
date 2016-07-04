@@ -58,7 +58,7 @@ ldist.fit.spr.survey <-
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
-                                 name == 'ldist.surv' & lower==min(lower)),y=Inf),
+                                 name == 'ldist.igfs' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
@@ -71,7 +71,7 @@ ldist.fit.aut.survey <-
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
-                                 name == 'ldist.surv' & lower==min(lower)),y=Inf),
+                                 name == 'ldist.aut' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),

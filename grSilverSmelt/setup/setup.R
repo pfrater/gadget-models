@@ -14,9 +14,13 @@ reitmapping <- read.table(
     header=TRUE,
     as.is=TRUE)
 
+subdiv <- c(1011, 1012, 1013, 1014, 1015, 1022, 1023, 1031, 1053, 1054, 1061,
+            1071, 1081, 1082, 1091, 1092, 1093, 1094, 1095, 1101, 1132, 1141, 
+            1142, 1143, 1144, 1145, 1146, 1151)
+
 defaults <- list(   
-    area = mfdb_group("1" = unique(reitmapping$DIVISION)),
-    timestep = mfdb_timestep_yearly,
+    area = mfdb_group("1" = subdiv),
+    timestep = mfdb_timestep_quarterly,
     year = 1982:2015,
     species = 'GSS')
 
