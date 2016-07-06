@@ -14,12 +14,23 @@ library(Rgadget)
 setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final')
 
+# source('~/R/rgadget/trunk/gadgetFileIO.R')
+# source('~/R/rgadget/trunk/gadgetfunctions.R')
+# source('~/R/rgadget/trunk/gadgetClass.R')
+# source('~/R/rgadget/trunk/gadgetMethods.R')
+# source('~/R/rgadget/trunk/function.R')
+# 
+# gssForward <-
+#     gadget.forward(years=6,params.file='WGTS/params.final',
+#                    stochastic=FALSE,
+#                    num.trials=1,
+#                    effort=0.2)
+
 ## fit statistics
 resTable <- fit$resTable[tail(head(names(fit$resTable),-2),-1)]
 
 summary.plot <-
-    ggplot(subset(fit$likelihoodsummary,
-                  year!='all'),
+    ggplot(filter(fit$likelihoodsummary, year != 'all'),
            aes(as.numeric(year), likelihood.value)) +
     geom_point() + facet_wrap(~component) +theme_bw()+
     xlab('Year') + ylab('Score')
@@ -161,11 +172,52 @@ ssb.plot <-
 
 
 ##################################################################################
-## there are other plots that Bjarki has put together looking at yield per recruit
-## and forward projections, but you should get the model working first
-## start with gssmat growth. There seems to be something wrong there
+## plots from gadget.forward
 ##################################################################################
 
+progn.ssb <-
+    gssForward$lw %>%
+    filter(step == 1) %>%
+    group_by(year) %>%
+    summarise(ssb = sum(weight*logit(mat.par[1],
+                                     mat.par[2],length)*
+                            number),
+              total.biomass = sum(number*weight))#,
+
+progn.by.year <-
+    left_join(prognFmax$catch %>%
+                  group_by(year) %>%
+                  summarise(catch=sum(biomass.consumed)),
+              progn.ssb)
+
+
+prog.bio.plot <-
+    ggplot(progn.by.year,aes(year,ssb/1e6)) +
+    geom_rect(aes(xmin=max(fit$res.by.year$year),
+                  xmax=Inf,ymin=-Inf,ymax=Inf),
+              fill = 'gray90', alpha=0.1) +
+    geom_line() +
+    theme_bw() + xlab('Year') + ylab('SSB (\'000 tons)') +
+    theme(plot.margin = unit(c(0,0,0,0),'cm'),
+          legend.title = element_blank(),
+          legend.position = c(0.2,0.7))
+
+
+prog.catch.plot <-
+    ggplot(progn.by.year,aes(year,catch/1000)) +
+    geom_rect(aes(xmin=max(fit$res.by.year$year),
+                  xmax=Inf,ymin=-Inf,ymax=Inf),
+              fill = 'gray90', alpha=0.1) +
+    geom_line() +
+    theme_bw() + xlab('Year') + ylab('Catch (\'000 tons)') +
+    theme(plot.margin = unit(c(0,0,0,0),'cm'),
+          legend.title = element_blank(),
+          legend.position = c(0.2,0.7)) +
+    ylim(c(0,max(fit$res.by.year$catch/1000)))
+
+prog.rec.plot <- rec.plot + geom_bar(aes(year,10*recruitment),
+                                     data=gssForward$recruitment,
+                                     fill='red',stat='identity')
 
 
 

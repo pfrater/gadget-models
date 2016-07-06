@@ -112,7 +112,7 @@ Rgadget:::gadget_dir_write(gd.list, gm)
 fleet.file <- file(sprintf('%s/Modelfiles/fleets', gd$dir))
 fleet.lines <- readLines(fleet.file)
 fleet.lines <- gsub('#igfs.p ', '#igfs.p', fleet.lines)
-fleet.lines <- gsub('#aut.p ',  '#aut.p', fleet.lines)
+#fleet.lines <- gsub('#aut.p ',  '#aut.p', fleet.lines)
 writeLines(fleet.lines, con=fleet.file)
 close(fleet.file)
 rm(fleet.file)
@@ -164,15 +164,21 @@ init.params[grepl('l50',init.params$switch),'optimise'] <- 1
 
 init.params[init.params$switch=='igfs.p1',] <- c('igfs.p1', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='igfs.p2',] <- c('igfs.p2', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 0.5, 0.01, 1, 1)
+init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 0.82, 0.01, 0.82, 1)
 init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 0.01, 10, 1)
 init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 0.01, 100, 1)
 
-init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.01, 10, 1)
-init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.01, 100, 1)
+init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 15, 10, 60, 1)
+init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.2, 0.001, 2, 1)
+init.params[init.params$switch=='aut.gamma',] <- c('aut.gamma', 0.5, 0, 1, 1)
+init.params[init.params$switch=='aut.delta',] <- c('aut.delta', 0.5, 0, 1, 1)
+
+
+# init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0.5, 0.01, 1, 1)
+# init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0.01, 1, 1)
+# init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 0.82, 0.01, 0.82, 1)
+# init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.01, 10, 1)
+# init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.01, 100, 1)
 
 
 write.gadget.parameters(init.params,file='params.in')
