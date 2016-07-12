@@ -2,7 +2,7 @@
 # landings data
 ##########################
 
-mfdb_import_cs_taxonomy(mdb,'index_type',data.frame(name='landings'))
+mfdb_import_cs_taxonomy(mdb,'index_type',data.frame(name='Landings'))
 
 # read in data for gss landed catch
 landedcatch <- read.csv('data/gss_landings.csv', header=T)
@@ -19,7 +19,8 @@ source('initialize/gssLandedCatchLogbooks.R')
 landings <- 
     bmt.landings %>% 
     filter(areacell != -1818 & areacell != -1316) %>%
-    arrange(year, month, areacell)
+    arrange(year, month, areacell) %>%
+    rename(weight = catch)
 
 # for a more detailed analysis of landedcatch by areas, see
 # ~/gadget/gadget-models/grSilverSmelt/initialize/gssCatchByArea.R

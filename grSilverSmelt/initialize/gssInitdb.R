@@ -46,10 +46,10 @@ mfdb_import_temperature(mdb, data.frame(
 
 # Set-up some sampling types
 mfdb_import_sampling_type(mdb, data.frame(
-    id = c(1,2,3,5,6),
-    name = c('SEA', 'IGFS','AUT','LND','LOG'),
+    id = c(1,2,3,5),
+    name = c('SEA', 'IGFS','AUT','LND'),
     description = c('Sea sampling', 'Icelandic ground fish survey',
-                    'Icelandic autumn survey', 'Landings', 'Logbooks')))
+                    'Icelandic autumn survey', 'Landings')))
 
 
 ##########################

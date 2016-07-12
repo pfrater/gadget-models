@@ -50,8 +50,21 @@ tmp <- rbind.fill(fit$sidat,
 tmp <- mutate(tmp, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
 
 # plot the model survey data over the actual survey data
-si.fit.survey <-
-    ggplot(tmp, aes(year,number.x, color=survey)) +
+si.fit.spr.survey <-
+    ggplot(subset(tmp, survey=='igfs' | length=='Biomass'), aes(year,number.x)) +
+    geom_point() +
+    geom_line(aes(year,predict)) +
+    geom_linerange(data=subset(tmp,year==max(year)),
+                   aes(year,ymax=number.x,ymin=predict),col='green')+
+    geom_text(data=mutate(subset(tmp,year==min(year)),y=Inf),
+              aes(year,y,label=length), vjust = 2,hjust = -1)+
+    facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
+    ylab('Index') + xlab('Year') +
+    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+si.fit.aut.survey <-
+    ggplot(subset(tmp, survey=='aut' | length == 'Biomass'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
@@ -121,8 +134,8 @@ selection.plot <-
 # there is a problem here with the growth for gssmat
 gr.plot <-
     ggplot(fit$stock.growth,
-           aes(age,length, color=stock)) + 
-    geom_line(aes(color=stock)) +
+           aes(age,length)) + 
+    geom_line() +
     theme_bw() + ylab('Length') + xlab('Age') +
     theme(legend.position = c(0.9,0.75), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
