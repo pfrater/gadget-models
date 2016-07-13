@@ -39,19 +39,18 @@ summary.plot <-
 
 
 ## to calculate biomass index
-tmp <- rbind.fill(fit$sidat,
-                  ddply(fit$sidat,~year, summarise,
+tmp <- mutate(fit$sidat, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
+tmp <- rbind.fill(tmp,
+                  ddply(tmp,~year+survey, summarise,
                         number.x = sum(number.x*0.00000659*lower^3.01721 ),
                         predict = sum(predict*0.00000659*lower^3.01721 ),
                         upper = sum(upper*0.00000659*lower^3.01721 ),
                         lower = sum(lower*0.00000659*lower^3.01721 ),
-                        lower = 110, lower = 180,
                         length = 'Biomass'))
-tmp <- mutate(tmp, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
 
 # plot the model survey data over the actual survey data
 si.fit.spr.survey <-
-    ggplot(subset(tmp, survey=='igfs' | length=='Biomass'), aes(year,number.x)) +
+    ggplot(subset(tmp, survey=='igfs'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
@@ -64,7 +63,7 @@ si.fit.spr.survey <-
            strip.background = element_blank(), strip.text.x = element_blank())
 
 si.fit.aut.survey <-
-    ggplot(subset(tmp, survey=='aut' | length == 'Biomass'), aes(year,number.x)) +
+    ggplot(subset(tmp, survey=='aut'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),

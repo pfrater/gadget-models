@@ -46,8 +46,8 @@ opt$stocks$imm <- within(opt$stock$imm, {
             dl <- 1
             growth <- c(linf='#gss.linf', 
                         k='#gss.k',
-                        beta='(* 10 #gss.bbin)', 
-                        binn=15, recl='#gss.recl'
+                        beta='(* 10 #gss.imm.bbin)', 
+                        binn=5, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
             init.abund <- sprintf('(* %s %s)', 
@@ -84,8 +84,8 @@ opt$stocks$mat <- within(opt$stock$mat, {
             dl <- 1
             M <- rep(0.15, 27)
             growth <- c(linf='#gss.linf', k='#gss.k',
-                        beta='(* 10 #gss.bbin)', 
-                        binn=15, recl='#gss.recl'
+                        beta='(* 20 #gss.mat.bbin)', 
+                        binn=3, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
             init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.01,0.001,0,
@@ -126,13 +126,14 @@ callGadget(s=1, log='logfile.txt', ignore.stderr=FALSE)
 
 init.params <- read.gadget.parameters('params.out')
 
-init.params[c('gss.linf', 'gss.k', 'gss.bbin', 'gss.mult',
+init.params[c('gss.linf', 'gss.k', 'gss.imm.bbin', 'gss.mat.bbin', 'gss.mult',
               grep('age', rownames(init.params), value=T),
               'gss.mat1', 'gss.mat2'),] <-
 read.table(text='switch	 value 		lower 	upper 	optimise
 gss.linf	         58	      40     70        0
 gss.k	          0.14	       0.06      0.30        1
-gss.bbin	         6	   1e-08    100        1
+gss.imm.bbin	         6	   1e-08    100        1
+gss.mat.bbin	         6	   1e-08    100        1
 gss.mult	         100	     0.1      100        1
 gss.age2	         35	    0.01     150        1
 gss.age3	         25	    0.01     120        1
@@ -168,8 +169,8 @@ init.params[grepl('l50',init.params$switch),'optimise'] <- 1
 init.params[init.params$switch=='igfs.p1',] <- c('igfs.p1', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='igfs.p2',] <- c('igfs.p2', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 5, 100, 1)
-init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 5, 100, 1)
+init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 0.1, 100, 1)
+init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 0.1, 100, 1)
 
 # init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 20, 10, 60, 1)
 # init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.9, 0.001, 2, 1)
@@ -179,8 +180,8 @@ init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 5, 100, 1)
 init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 5, 100, 1)
-init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 5, 100, 1)
+init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.1, 100, 1)
+init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.1, 100, 1)
 
 
 write.gadget.parameters(init.params,file='params.in')

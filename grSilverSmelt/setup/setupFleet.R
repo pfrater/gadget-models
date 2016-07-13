@@ -6,7 +6,7 @@ bmt.landings <- mfdb_sample_totalweight(mdb, c('age', 'length'),
                                   gear = c('BMT'),
                                   sampling_type='LND',
                                   species=defaults$species), defaults))
-bmt.landings[[1]] <- rename(bmt.landings[[1]], number = total_weight)
+names(bmt.landings[[1]])[names(bmt.landings[[1]])=='total_weight'] <- 'number'
 
 ## make the bottom trawlers fleet
 bmt.fleet <- Rgadget:::make.gadget.fleet(name='bmt.comm', suitability='exponentiall50',
