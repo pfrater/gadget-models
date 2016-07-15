@@ -59,14 +59,14 @@ opt$stocks$imm <- within(opt$stock$imm, {
             maturestocksandratios <- 'gssmat 1'
             maturity.coefficients <- '( * 0.001 #gss.mat1) #gss.mat2 0 0'
             sigma <- head(init.sigma$ms, 17)
-            M <- rep(0.15,17)
+            M <- rep(0.22,17)
             maturitysteps <- '0'
             doesmove <- 0
             transitionstep <- 4
             transitionstockandratios <- 'gssmat 1'
             doesmigrate <- 0
             doesrenew <- 1
-            renewal <- list(minlength=5, maxlength=20)
+            renewal <- list(minlength=0.1, maxlength=10)
 })
     
 # for both stocks (imm and mat) I used von Bertalanffy growth curve from Magnusson 1996 
@@ -82,9 +82,9 @@ opt$stocks$mat <- within(opt$stock$mat, {
             minlength <- 10
             maxlength <- 58
             dl <- 1
-            M <- rep(0.15, 27)
+            M <- rep(0.22, 27)
             growth <- c(linf='#gss.linf', k='#gss.k',
-                        beta='(* 20 #gss.mat.bbin)', 
+                        beta='(* 10 #gss.mat.bbin)', 
                         binn=3, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
@@ -150,11 +150,11 @@ gss.mat2	          50	      30      100        1',header=TRUE)
 init.params$switch <- rownames(init.params)
 
 init.params[grepl('rec[0-9]',init.params$switch),'value'] <- 1
-init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 4
+init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 8
 init.params[grepl('rec[0-9]',init.params$switch),'lower'] <- 0.001
 init.params[grepl('rec[0-9]',init.params$switch),'optimise'] <- 1
 
-init.params['gss.recl',-1] <- c(12, 4, 20,1)
+init.params['gss.recl',-1] <- c(2, 0.1, 10,1)
 
 init.params[grepl('alpha',init.params$switch),'value'] <- 0.5
 init.params[grepl('alpha',init.params$switch),'upper'] <- 3

@@ -15,28 +15,25 @@ bmt.fleet <- Rgadget:::make.gadget.fleet(name='bmt.comm', suitability='exponenti
 
 
 ## set up and make surveys as fleet
-igfs.landings <- mfdb_sample_totalweight(mdb, cols=c('age', 'length'),
-                                         c(list(
-                                             gear = 'BMT',
-                                             sampling_type='IGFS',
-                                             species=defaults$species), defaults))
-names(igfs.landings[[1]])[names(igfs.landings[[1]])=='total_weight'] <- 'number'
+igfs.landings <- data.frame(year=defaults$year, step=1, number=1, area=1)
 igfs.fleet <- Rgadget:::make.gadget.fleet(name='igfs', suitability='andersen',
-                                            fleet.data=igfs.landings[[1]],
+                                            fleet.data=igfs.landings,
                                             stocknames=stocknames)
 
 # set up and make autumn survey as fleet
-#aut.landings <- data.frame(year=defaults$year, step=4, number=1, area=1) # old version
-aut.landings <- mfdb_sample_totalweight(mdb, cols=c('age', 'length'),
-                                         c(list(
-                                             gear = 'BMT',
-                                             sampling_type='AUT',
-                                             species=defaults$species), defaults))
-names(aut.landings[[1]])[names(aut.landings[[1]])=='total_weight'] <- 'number'
+aut.landings <- data.frame(year=defaults$year, step=4, number=1, area=1)
 aut.fleet <- Rgadget:::make.gadget.fleet(name='aut', suitability='andersen',
                                          fleet.data=aut.landings[[1]],
                                          stocknames=stocknames)
 
 
+## this is an old thing I was testing out
+## sets up survey fleets with total weight caught
+# igfs.landings <- mfdb_sample_totalweight(mdb, cols=c('age', 'length'),
+#                                          c(list(
+#                                              gear = 'BMT',
+#                                              sampling_type='IGFS',
+#                                              species=defaults$species), defaults))
+# names(igfs.landings[[1]])[names(igfs.landings[[1]])=='total_weight'] <- 'number'
 
 # Rgadget:::gadget_dir_write(gd, igfs.fleet)

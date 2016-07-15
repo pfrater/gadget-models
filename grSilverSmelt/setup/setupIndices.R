@@ -1,5 +1,7 @@
 ## IGFS survey indices
 
+# may want to change these to mfdb_sample_totalweight and 
+# use survey biomass index instead
 igfs.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='IGFS',
     length = mfdb_interval("len", c(20,25,30))),
