@@ -92,14 +92,14 @@ biomass.igfs <-
     group_by(sample.id, length) %>%
     mutate(biomass = (count*(a*length^b)) / p) %>%
     mutate(biomass = replace(biomass, is.na(biomass), 0)) %>%
-    ungroup() %>% group_by(sample.id) %>%
+    ungroup() %>% group_by(sample.id, length) %>%
     summarize(weight = sum(biomass)) %>%
     left_join(stations) %>%
     mutate(areacell = d2sr(lat,lon),
            sampling_type = 'IGFS',
            month = 3,
            species = 'GSS') %>%
-    select(sample.id, sampling_type, year, month, areacell, species, gear, weight)
+    select(sample.id, species, sampling_type, year, month, areacell, gear, length, weight)
 
 biomass.igfs <- data.table(biomass.igfs)
 
