@@ -12,7 +12,8 @@ init.sigma <-
     summarize(ml=mean(mean), ms=mean(stddev, na.rm=T))
 
 lw <- mfdb_sample_meanweight(mdb, c('length'),
-                            c(list(sampling_type=c('IGFS','AUT'), species='GSS',
+                            c(list(sampling_type=c('IGFS','AUT'),
+                                   species='GSS',
                                    length=mfdb_interval("", seq(0,60, by=1)))))
 
 lw.tmp <-   
@@ -47,7 +48,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
             growth <- c(linf='#gss.linf', 
                         k='#gss.k',
                         beta='(* 10 #gss.imm.bbin)', 
-                        binn=5, recl='#gss.recl'
+                        binn=10, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
             init.abund <- sprintf('(* %s %s)', 
@@ -66,7 +67,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
             transitionstockandratios <- 'gssmat 1'
             doesmigrate <- 0
             doesrenew <- 1
-            renewal <- list(minlength=0.1, maxlength=10)
+            renewal <- list(minlength=5, maxlength=20)
 })
     
 # for both stocks (imm and mat) I used von Bertalanffy growth curve from Magnusson 1996 
@@ -85,12 +86,12 @@ opt$stocks$mat <- within(opt$stock$mat, {
             M <- rep(0.22, 27)
             growth <- c(linf='#gss.linf', k='#gss.k',
                         beta='(* 10 #gss.mat.bbin)', 
-                        binn=3, recl='#gss.recl'
+                        binn=10, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
-            init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.01,0.001,0,
+            init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.08,0.05,0.02,
                                                  rep(0,18)),
-                                  c(0,sprintf('#gss.age%s',4:10),rep(0,19)))
+                                  c(0,sprintf('#gss.age%s',4:11),rep(0,18)))
             sigma <- c(init.sigma$ms[4:19], rep(init.sigma$ms[19],12))
             doesmature <- 0
             doesmigrate <- 0
@@ -144,17 +145,18 @@ gss.age7	          5	   1e-08     100        1
 gss.age8	          5	   1e-10     100        1
 gss.age9	         25	   1e-12     100        1
 gss.age10	         10	   1e-15     100        1
+gss.age11            10    1e-15     100        1
 gss.mat1	          50	      10      200        1
 gss.mat2	          50	      30      100        1',header=TRUE) 
 
 init.params$switch <- rownames(init.params)
 
 init.params[grepl('rec[0-9]',init.params$switch),'value'] <- 1
-init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 8
+init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 20
 init.params[grepl('rec[0-9]',init.params$switch),'lower'] <- 0.001
 init.params[grepl('rec[0-9]',init.params$switch),'optimise'] <- 1
 
-init.params['gss.recl',-1] <- c(2, 0.1, 10,1)
+init.params['gss.recl',-1] <- c(15, 5, 20,1)
 
 init.params[grepl('alpha',init.params$switch),'value'] <- 0.5
 init.params[grepl('alpha',init.params$switch),'upper'] <- 3

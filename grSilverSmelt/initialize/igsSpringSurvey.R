@@ -67,45 +67,45 @@ mfdb_import_survey(mdb,
                    data_source = 'iceland-aldist.igfs')
 rm(aldist)
 
-# import weights and compute length~weight relationship
-biomass.fit.igfs <- 
-    translate.all.kv() %>%
-    filter(sample.id %in% stations$sample.id &
-               species.code %in% species.key$species.code &
-               !is.na(ungutted.wt)) %>%
-    mutate(wt.kilo=ungutted.wt/1e3) %>%
-    nls(wt.kilo ~ a*length^b, ., start=c(a=1e-05, b=3)) %>%
-    coef(nls)
-a <- biomass.fit.igfs[1]
-b <- biomass.fit.igfs[2]
-
-biomass.igfs <-
-    translate.all.nu() %>%
-    filter(species.code == 19) %>%
-    mutate(total=ifelse(number.counted > 1,
-                        number.counted + number.measured,
-                        ifelse(number.counted == 0,
-                               number.measured, 0))) %>%
-    mutate(p = number.measured / total) %>%
-    filter(sample.id %in% stations$sample.id) %>%
-    left_join(translate.all.le()) %>%
-    group_by(sample.id, length) %>%
-    mutate(biomass = (count*(a*length^b)) / p) %>%
-    mutate(biomass = replace(biomass, is.na(biomass), 0)) %>%
-    ungroup() %>% group_by(sample.id, length) %>%
-    summarize(weight = sum(biomass)) %>%
-    left_join(stations) %>%
-    mutate(areacell = d2sr(lat,lon),
-           sampling_type = 'IGFS',
-           month = 3,
-           species = 'GSS') %>%
-    select(sample.id, species, sampling_type, year, month, areacell, gear, length, weight)
-
-biomass.igfs <- data.table(biomass.igfs)
-
-mfdb_import_survey(mdb,
-                   data_in = biomass.igfs,
-                   data_source = 'iceland-biomass.igfs')
-
-rm(biomass.fit.igfs)
-rm(biomass.igfs)
+# # import weights and compute length~weight relationship
+# biomass.fit.igfs <- 
+#     translate.all.kv() %>%
+#     filter(sample.id %in% stations$sample.id &
+#                species.code %in% species.key$species.code &
+#                !is.na(ungutted.wt)) %>%
+#     mutate(wt.kilo=ungutted.wt/1e3) %>%
+#     nls(wt.kilo ~ a*length^b, ., start=c(a=1e-05, b=3)) %>%
+#     coef(nls)
+# a <- biomass.fit.igfs[1]
+# b <- biomass.fit.igfs[2]
+# 
+# biomass.igfs <-
+#     translate.all.nu() %>%
+#     filter(species.code == 19) %>%
+#     mutate(total=ifelse(number.counted > 1,
+#                         number.counted + number.measured,
+#                         ifelse(number.counted == 0,
+#                                number.measured, 0))) %>%
+#     mutate(p = number.measured / total) %>%
+#     filter(sample.id %in% stations$sample.id) %>%
+#     left_join(translate.all.le()) %>%
+#     group_by(sample.id, length) %>%
+#     mutate(biomass = (count*(a*length^b)) / p) %>%
+#     mutate(biomass = replace(biomass, is.na(biomass), 0)) %>%
+#     ungroup() %>% group_by(sample.id, length) %>%
+#     summarize(weight = sum(biomass)) %>%
+#     left_join(stations) %>%
+#     mutate(areacell = d2sr(lat,lon),
+#            sampling_type = 'IGFS',
+#            month = 3,
+#            species = 'GSS') %>%
+#     select(sample.id, species, sampling_type, year, month, areacell, gear, length, weight)
+# 
+# biomass.igfs <- data.table(biomass.igfs)
+# 
+# mfdb_import_survey(mdb,
+#                    data_in = biomass.igfs,
+#                    data_source = 'iceland-biomass.igfs')
+# 
+# rm(biomass.fit.igfs)
+# rm(biomass.igfs)

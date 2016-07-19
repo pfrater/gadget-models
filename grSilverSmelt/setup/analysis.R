@@ -42,10 +42,10 @@ summary.plot <-
 tmp <- mutate(fit$sidat, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
 tmp <- rbind.fill(tmp,
                   ddply(tmp,~year+survey, summarise,
-                        number.x = sum(number.x*0.00000659*lower^3.01721 ),
-                        predict = sum(predict*0.00000659*lower^3.01721 ),
-                        upper = sum(upper*0.00000659*lower^3.01721 ),
-                        lower = sum(lower*0.00000659*lower^3.01721 ),
+                        number.x = sum(number.x*0.000003129303*lower^3.224769 ),
+                        predict = sum(predict*0.000003129303*lower^3.224769 ),
+                        upper = sum(upper*0.000003129303*lower^3.224769 ),
+                        lower = sum(lower*0.000003129303*lower^3.224769 ),
                         length = 'Biomass'))
 
 # plot the model survey data over the actual survey data

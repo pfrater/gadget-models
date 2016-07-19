@@ -23,7 +23,7 @@ igfs.fleet <- Rgadget:::make.gadget.fleet(name='igfs', suitability='andersen',
 # set up and make autumn survey as fleet
 aut.landings <- data.frame(year=defaults$year, step=4, number=1, area=1)
 aut.fleet <- Rgadget:::make.gadget.fleet(name='aut', suitability='andersen',
-                                         fleet.data=aut.landings[[1]],
+                                         fleet.data=aut.landings,
                                          stocknames=stocknames)
 
 
