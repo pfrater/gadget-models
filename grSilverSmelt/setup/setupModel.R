@@ -72,7 +72,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
     
 # for both stocks (imm and mat) I used von Bertalanffy growth curve from Magnusson 1996 
 # to set parameters for minlengths and maxlengths
-# for details see 'vbParams.R'
+# for details see 'functions/vbParams.R'
     
     
 ## set up mature stock
@@ -89,9 +89,9 @@ opt$stocks$mat <- within(opt$stock$mat, {
                         binn=10, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
-            init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.08,0.05,0.02,
-                                                 rep(0,18)),
-                                  c(0,sprintf('#gss.age%s',4:11),rep(0,18)))
+            init.abund <- sprintf('(* %s %s)', c(0,0.02,0.04,0.06,0.08,0.10,0.08,0.05,
+                                                 rep(0,19)),
+                                  c(0,sprintf('#gss.age%s',4:10),rep(0,19)))
             sigma <- c(init.sigma$ms[4:19], rep(init.sigma$ms[19],12))
             doesmature <- 0
             doesmigrate <- 0
@@ -136,7 +136,7 @@ gss.k	          0.14	       0.06      0.30        1
 gss.imm.bbin	         6	   1e-08    100        1
 gss.mat.bbin	         6	   1e-08    100        1
 gss.mult	         100	     0.1      100        1
-gss.age2	         35	    0.01     150        1
+gss.age2	         35	    0.01     200        1
 gss.age3	         25	    0.01     120        1
 gss.age4	         15	   0.001     100        1
 gss.age5	          7	  0.0001     100        1
@@ -145,14 +145,13 @@ gss.age7	          5	   1e-08     100        1
 gss.age8	          5	   1e-10     100        1
 gss.age9	         25	   1e-12     100        1
 gss.age10	         10	   1e-15     100        1
-gss.age11            10    1e-15     100        1
-gss.mat1	          50	      10      200        1
-gss.mat2	          50	      30      100        1',header=TRUE) 
+gss.mat1	          50	      10      600        1
+gss.mat2	          35	      20      100        1',header=TRUE) 
 
 init.params$switch <- rownames(init.params)
 
 init.params[grepl('rec[0-9]',init.params$switch),'value'] <- 1
-init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 50
+init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 100
 init.params[grepl('rec[0-9]',init.params$switch),'lower'] <- 0.001
 init.params[grepl('rec[0-9]',init.params$switch),'optimise'] <- 1
 
