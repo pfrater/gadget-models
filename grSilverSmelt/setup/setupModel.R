@@ -34,6 +34,8 @@ weight.alpha <- lw.tmp[1]
 weight.beta <- lw.tmp[2]
 
 opt$area$numofareas <- 1
+opt$area$areasize <- mfdb_area_size(mdb, defaults)[[1]]$size
+opt$area$area.temperature <- 3
 opt$time$firstyear <- 1982
 opt$time$lastyear <- 2015
 
@@ -47,14 +49,14 @@ opt$stocks$imm <- within(opt$stock$imm, {
             dl <- 1
             growth <- c(linf='#gss.linf', 
                         k='#gss.k',
-                        beta='(* 10 #gss.imm.bbin)', 
+                        beta='(* 10 #gss.bbin)', 
                         binn=10, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
             init.abund <- sprintf('(* %s %s)', 
                                   c(0,0.03,0.06,0.08,0.1,0.1,0.08,0.06,0.045,0.03,0.02,0.01,0,0,0,0,0),
                                  c(0,sprintf('#gss.age%s',2:10),0,0,0,0,0,0,0))
-            n <- sprintf('(* 1000 #gss.rec%s)', 1982:2015)
+            n <- sprintf('(* #gss.rec.mult #gss.rec%s)', 1982:2015)
             doesmature <- 1
             maturityfunction <- 'continuous'
             maturestocksandratios <- 'gssmat 1'
@@ -85,7 +87,7 @@ opt$stocks$mat <- within(opt$stock$mat, {
             dl <- 1
             M <- rep(0.22, 27)
             growth <- c(linf='#gss.linf', k='#gss.k',
-                        beta='(* 10 #gss.mat.bbin)', 
+                        beta='(* 10 #gss.bbin)', 
                         binn=10, recl='#gss.recl'
                         )
             weight <- c(a=weight.alpha, b=weight.beta)
@@ -102,13 +104,13 @@ opt$stocks$mat <- within(opt$stock$mat, {
 gm <- gadget.skeleton(time=opt$time, area=opt$area,
                       stocks=opt$stocks, fleets=opt$fleets)
 
-gm@stocks$imm@initialdata$area.factor <- '( * 100 #gss.mult)'
-gm@stocks$mat@initialdata$area.factor <- '( * 100 #gss.mult)'
+gm@stocks$imm@initialdata$area.factor <- '( * 1000 #gss.mult)'
+gm@stocks$mat@initialdata$area.factor <- '( * 1000 #gss.mult)'
 
 gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
-gm@fleets[[2]]@suitability$params <- c("#igfs.p1 #igfs.p2 #igfs.p3 #igfs.p4 #igfs.p5")
-gm@fleets[[3]]@suitability$params <- c("#aut.p1 #aut.p2 #aut.p3 #aut.p4 #aut.p5")
-#gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
+gm@fleets[[2]]@suitability$params <- c("#igfs.p1 #igfs.p2 (- 1 #igfs.p1) #igfs.p4 #igfs.p5 100")
+#gm@fleets[[3]]@suitability$params <- c("#aut.p1 #aut.p2 #aut.p3 #aut.p4 #aut.p5")
+gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
 
 gd.list <- list(dir=gd$dir)
 Rgadget:::gadget_dir_write(gd.list, gm)
@@ -127,14 +129,13 @@ callGadget(s=1, log='logfile.txt', ignore.stderr=FALSE)
 
 init.params <- read.gadget.parameters('params.out')
 
-init.params[c('gss.linf', 'gss.k', 'gss.imm.bbin', 'gss.mat.bbin', 'gss.mult',
+init.params[c('gss.linf', 'gss.k', 'gss.bbin', 'gss.mult',
               grep('age', rownames(init.params), value=T),
-              'gss.mat1', 'gss.mat2'),] <-
+              'gss.mat1', 'gss.mat2', 'gss.rec.mult'),] <-
 read.table(text='switch	 value 		lower 	upper 	optimise
 gss.linf	         58	      40     70        0
 gss.k	          0.14	       0.06      0.30        1
-gss.imm.bbin	         6	   1e-08    100        1
-gss.mat.bbin	         6	   1e-08    100        1
+gss.bbin	         6	   1e-08    100        1
 gss.mult	         100	     0.1      100        1
 gss.age2	         35	    0.01     200        1
 gss.age3	         25	    0.01     120        1
@@ -146,7 +147,8 @@ gss.age8	          5	   1e-10     100        1
 gss.age9	         25	   1e-12     100        1
 gss.age10	         10	   1e-15     100        1
 gss.mat1	          50	      10      600        1
-gss.mat2	          35	      20      100        1',header=TRUE) 
+gss.mat2	          35	      20      100        1
+gss.rec.mult          100      0.001    1e+05        1',header=TRUE) 
 
 init.params$switch <- rownames(init.params)
 
@@ -169,20 +171,20 @@ init.params[grepl('l50',init.params$switch),'optimise'] <- 1
 
 init.params[init.params$switch=='igfs.p1',] <- c('igfs.p1', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='igfs.p2',] <- c('igfs.p2', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 0.5, 0.01, 1, 1)
+#init.params[init.params$switch=='igfs.p3',] <- c('igfs.p3', 0.5, 0.01, 1, 1)
 init.params[init.params$switch=='igfs.p4',] <- c('igfs.p4', 5, 0.1, 100, 1)
 init.params[init.params$switch=='igfs.p5',] <- c('igfs.p5', 5, 0.1, 100, 1)
 
-# init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 20, 10, 60, 1)
-# init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.9, 0.001, 2, 1)
+init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 20, 5, 60, 1)
+init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.9, 0.06, 2, 1)
 # #init.params[init.params$switch=='aut.gamma',] <- c('aut.gamma', 0.5, 0, 1, 1)
 # #init.params[init.params$switch=='aut.delta',] <- c('aut.delta', 0.5, 0, 1, 1)
 
-init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 0.5, 0.01, 1, 1)
-init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.1, 100, 1)
-init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.1, 100, 1)
+#init.params[init.params$switch=='aut.p1',] <- c('aut.p1', 0.5, 0.01, 1, 1)
+#init.params[init.params$switch=='aut.p2',] <- c('aut.p2', 0.5, 0.01, 1, 1)
+#init.params[init.params$switch=='aut.p3',] <- c('aut.p3', 0.5, 0.01, 1, 1)
+#init.params[init.params$switch=='aut.p4',] <- c('aut.p4', 5, 0.1, 100, 1)
+#init.params[init.params$switch=='aut.p5',] <- c('aut.p5', 5, 0.1, 100, 1)
 
 
 write.gadget.parameters(init.params,file='params.in')

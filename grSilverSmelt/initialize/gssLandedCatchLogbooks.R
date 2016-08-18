@@ -41,28 +41,28 @@ big.catches$prop.catch <- big.catches$prop * big.catches$catch
 bc.86 <- 
     filter(big.catches, year==1986) %>%
     select(year, month, catch) %>%
-    cbind(areacell=filter(big.catches, year==1987)$areacell, 
+    data.frame(., areacell=filter(big.catches, year==1987)$areacell, 
           prop=filter(big.catches, year==1987)$prop) %>%
     mutate(prop.catch = prop * catch,
            month = 7)
 bc.89 <- 
     filter(big.catches, year==1989) %>%
     select(year, month, catch) %>%
-    cbind(areacell=filter(big.catches, year==1988, month==11)$areacell, 
+    data.frame(areacell=filter(big.catches, year==1988, month==11)$areacell, 
           prop=filter(big.catches, year==1988, month==11)$prop) %>%
     mutate(prop.catch = prop * catch,
            month = 7)
 bc.16 <- 
     filter(big.catches, year==2016) %>%
     select(year, catch) %>%
-    cbind(areacell=filter(big.catches, year==2015, month==4)$areacell, 
+    data.frame(areacell=filter(big.catches, year==2015, month==4)$areacell, 
           prop=filter(big.catches, year==2015, month==4)$prop) %>%
     mutate(prop.catch = prop * catch,
            month = 2)
 big.catches.all <- big.catches %>%
-    filter(!is.na(areacell)) %>%
-    rbind(bc.86, bc.89, bc.16) %>%
+    filter(!is.na(areacell)) %>%    
     ungroup() %>%
+    rbind(bc.86, bc.89, bc.16) %>%
     select(year, month, areacell, prop.catch) %>%
     arrange(year, month, areacell)
 

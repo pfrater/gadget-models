@@ -1,6 +1,6 @@
 # analyzing the output from final gadget run from using gadget.iterative in run.R
 
-# source('~/R/rgadget/trunk/gadgetFileIO.R') ## gadget.fit function doesn't work when this is read in
+#source('~/R/rgadget/trunk/gadgetFileIO.R') ## gadget.fit function doesn't work when this is read in
 #source('~/R/rgadget/trunk/gadgetfunctions.R')
 #source('~/R/rgadget/trunk/gadgetClass.R')
 #source('~/R/rgadget/trunk/gadgetMethods.R')
@@ -117,6 +117,7 @@ ldist.fit.catch <-
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
+
 
 # plot suitability against length for both survey and commercial fleets
 selection.plot <-

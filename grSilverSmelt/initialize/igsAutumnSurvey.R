@@ -6,7 +6,7 @@ stations <-
     subset(translate.stodvar(), sampling.type == 35, ## autumn survey 30
                       select = c(sample.id,year,month,lat,lon,gear.type,depth)) %>%
     left_join(mapping) %>%
-    filter(lat < 66 & lon < -14.5) %>%
+    filter(lat < 66 & lon < -14.5 & depth > 400) %>%
     group_by(sample.id) %>%
     mutate(month = 10,
            areacell = d2sr(lat,lon),
