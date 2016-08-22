@@ -36,8 +36,8 @@ weight.beta <- lw.tmp[2]
 opt$area$numofareas <- 1
 opt$area$areasize <- mfdb_area_size(mdb, defaults)[[1]]$size
 opt$area$area.temperature <- 3
-opt$time$firstyear <- 1982
-opt$time$lastyear <- 2015
+opt$time$firstyear <- st.year
+opt$time$lastyear <- end.year
 
 ## set up immature stock
 opt$stocks$imm <- within(opt$stock$imm, {
@@ -56,7 +56,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
             init.abund <- sprintf('(* %s %s)', 
                                   c(0,0.03,0.06,0.08,0.1,0.1,0.08,0.06,0.045,0.03,0.02,0.01,0,0,0,0,0),
                                  c(0,sprintf('#gss.age%s',2:10),0,0,0,0,0,0,0))
-            n <- sprintf('(* #gss.rec.mult #gss.rec%s)', 1982:2015)
+            n <- sprintf('(* #gss.rec.mult #gss.rec%s)', st.year:end.year)
             doesmature <- 1
             maturityfunction <- 'continuous'
             maturestocksandratios <- 'gssmat 1'

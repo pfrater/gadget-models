@@ -22,7 +22,7 @@ igfs.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.2029",
+                                                 name = "igfs.si.2030",
                                                  weight = 1,
                                                  data = igfs.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -30,7 +30,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.3039",
+                                                 name = "igfs.si.3040",
                                                  weight = 1,
                                                  data = igfs.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -49,7 +49,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
 
 aut.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(20,25,29))),
+    length = mfdb_interval("len", c(25,29))),
     defaults))
 # values of 15, 20, 25 worked, but fit not good
 

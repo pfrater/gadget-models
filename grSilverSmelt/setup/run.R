@@ -2,7 +2,7 @@ library(Rgadget)
 setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
 tmp <- gadget.iterative(rew.sI=TRUE,
                         main='main',
-                        grouping=list(spr.sind=c('igfs.si.2029', 'igfs.si.3039',
+                        grouping=list(spr.sind=c('igfs.si.2030', 'igfs.si.3040',
                                              'igfs.si.4050+'),
                                       aut.sind=c('aut.si.2030', 
                                              'aut.si.3040', 'aut.si.4050+'),

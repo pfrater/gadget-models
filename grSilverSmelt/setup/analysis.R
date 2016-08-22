@@ -34,7 +34,7 @@ resTable <- fit$resTable[tail(head(names(fit$resTable),-2),-1)]
 summary.plot <-
     ggplot(filter(fit$likelihoodsummary, year != 'all'),
            aes(as.numeric(year), likelihood.value)) +
-    geom_point() + facet_wrap(~component) +theme_bw()+
+    geom_point() + facet_wrap(~component, scales="free_y") +theme_bw()+
     xlab('Year') + ylab('Score')
 
 
@@ -63,7 +63,7 @@ si.fit.spr.survey <-
            strip.background = element_blank(), strip.text.x = element_blank())
 
 si.fit.aut.survey <-
-    ggplot(subset(tmp, survey=='aut'), aes(year,number.x)) +
+    ggplot(filter(tmp, survey=='aut'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
@@ -88,7 +88,7 @@ ldist.fit.spr.survey <-
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
-           strip.background = element_blank(), strip.text.x = element_blank())
+           strip.background = element_blank(), strip.text.x = element_blank()) 
 
 ldist.fit.aut.survey <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
@@ -183,6 +183,13 @@ ssb.plot <-
     geom_bar(stat='identity') +
     ylab("SSB (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
+          plot.margin = unit(c(0,0,0,0),'cm'))
+
+f.plot <- 
+    ggplot(fit$res.by.year, aes(year, F, color=stock)) + 
+    geom_line() + 
+    ylab("F") + xlab("Year") +  theme_bw() +
+    theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
 
 
