@@ -26,9 +26,9 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'IGFS',
-                             age = mfdb_step_interval('age',by=1,from=1,to=30),
+                             age = mfdb_step_interval('age',by=3,from=1,to=30),
                              species=defaults$species,
-                             length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+                             length = mfdb_interval("len", seq(0, maxlength, by = 5))),
                         defaults))
 
 #attributes(aggdata[[1]])$age <-
@@ -49,7 +49,7 @@ aggdata <- mfdb_sample_count(mdb, c('maturity_stage','age','length'),
                     append(defaults,
                         list(sampling_type='IGFS',
                                 age=mfdb_group(imm=1:6, mat=7:30),
-                                length = mfdb_step_interval('len', by = 1, from = 1, to = maxlength),              
+                                length = mfdb_step_interval('len', by=5, from=0, to=maxlength),              
                                 maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
 
 gadget_dir_write(gd,
@@ -65,7 +65,7 @@ rm(aggdata)
 aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'AUT',
     species = defaults$species,
-    length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+    length = mfdb_interval("len", seq(0, maxlength, by = 5))),
     defaults))
 
 attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
@@ -83,9 +83,9 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'AUT',
-                             age = mfdb_step_interval('age',by=1,from=1,to=30),
+                             age = mfdb_step_interval('age',by=3,from=1,to=30),
                              species=defaults$species,
-                             length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+                             length = mfdb_interval("len", seq(0, maxlength, by = 5))),
                         defaults))
 
 #attributes(aggdata[[1]])$age <-
@@ -106,7 +106,7 @@ aggdata <- mfdb_sample_count(mdb, c('maturity_stage','age','length'),
                              append(defaults,
                                     list(sampling_type='AUT',
                                          age=mfdb_group(imm=1:6, mat=7:20),
-                                         length = mfdb_step_interval('len', by = 1, from = 1, to = maxlength),
+                                         length = mfdb_step_interval('len', by=5, from=0, to=maxlength),
                                          maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
 
 gadget_dir_write(gd,
@@ -125,7 +125,7 @@ aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SEA',
     species = defaults$species,
     gear = c('BMT'),
-    length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+    length = mfdb_interval("len", seq(0, maxlength, by = 5))),
     defaults))
 attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
 
@@ -143,8 +143,8 @@ aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'SEA',
                              gear = 'BMT',
-                             age = mfdb_step_interval('age',by=1,from=1,to=30),
-                             length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+                             age = mfdb_step_interval('age',by=3,from=1,to=30),
+                             length = mfdb_interval("len", seq(0, maxlength, by = 5))),
                         defaults))
 #attributes(aggdata[[1]])$age <-
 #    llply(attributes(aggdata[[1]])$age,function(x) x[1])

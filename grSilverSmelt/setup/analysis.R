@@ -147,7 +147,8 @@ rec.plot <-
     geom_bar(stat='identity') +
     ylab("Recruitment (in millions)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm'))
+          plot.margin = unit(c(0,0,0,0),'cm')) + 
+    facet_wrap(~stock, scales='free_y')
 
 
 # plotting the catch by year
@@ -161,20 +162,22 @@ ggplot(fit$res.by.year,aes(year,catch/1000)) +
 
 # plotting the biomass by year
 biomass.plot <- 
-    ggplot(fit$res.by.year,aes(year,total.biomass/1000)) +
+    ggplot(fit$res.by.year,aes(year,total.biomass/1000, fill=stock)) +
     geom_bar(stat='identity') +
     ylab("Total biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm'))
+          plot.margin = unit(c(0,0,0,0),'cm')) +
+    facet_wrap(~stock, scales="free_y")
 
 
 # plotting the harvest per year
 harv.plot <- 
-    ggplot(fit$res.by.year,aes(year,harv.biomass/1000)) +
+    ggplot(fit$res.by.year,aes(year,harv.biomass/1000, fill=stock)) +
     geom_bar(stat='identity') +
     ylab("Harvestable biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm'))
+          plot.margin = unit(c(0,0,0,0),'cm')) +
+    facet_wrap(~stock, scales="free_y")
 
 
 # plot sustainable harvest biomass per year
@@ -183,15 +186,24 @@ ssb.plot <-
     geom_bar(stat='identity') +
     ylab("SSB (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm'))
+          plot.margin = unit(c(0,0,0,0),'cm')) +
+    facet_wrap(~stock, scales="free_y")
 
 f.plot <- 
-    ggplot(fit$res.by.year, aes(year, F, color=stock)) + 
+    ggplot(filter(fit$res.by.year, area=='area1'), aes(year, F, color=stock)) + 
     geom_line() + 
     ylab("F") + xlab("Year") +  theme_bw() +
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
 
+# mig.params <- 
+#     read.gadget.parameters('WGTS/params.final') %>%
+#     filter(grepl('mig', switch)) %>%
+#     mutate(year = as.numeric(gsub('gss.mig', '', switch)))
+# mig.plot <- 
+#     ggplot(data=mig.params, aes(x=year, y=value)) +
+#     geom_line() + theme_bw()
+    
 
 ##################################################################################
 ## plots from gadget.forward

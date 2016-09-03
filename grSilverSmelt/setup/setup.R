@@ -5,7 +5,6 @@ setwd('/home/pfrater/gadget/gadget-models')
 
 # create a gadget directory and define some defaults to use with queries below
 gd <- gadget_directory('grSilverSmelt/gssModel')
-file.remove(sprintf('%s/Modelfiles/fleets', gd$dir))
 setup.d <- 'grSilverSmelt/setup'
 mdb <- mfdb('Iceland')
 
@@ -18,7 +17,7 @@ subdiv <- c(1011, 1012, 1013, 1014, 1015, 1022, 1023, 1061,
             1071, 1081, 1082, 1091, 1092, 1093, 1094, 1095, 1101, 1132, 1141, 
             1142, 1143, 1144, 1145, 1146, 1151)
 
-st.year <- 1970
+st.year <- 1975
 end.year <- 2015
 defaults <- list(   
     area = mfdb_group("1" = subdiv),
