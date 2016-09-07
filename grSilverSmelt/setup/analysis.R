@@ -147,9 +147,7 @@ rec.plot <-
     geom_bar(stat='identity') +
     ylab("Recruitment (in millions)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm')) + 
-    facet_wrap(~stock, scales='free_y')
-
+          plot.margin = unit(c(0,0,0,0),'cm')) 
 
 # plotting the catch by year
 catch.plot <- 
@@ -186,8 +184,7 @@ ssb.plot <-
     geom_bar(stat='identity') +
     ylab("SSB (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm')) +
-    facet_wrap(~stock, scales="free_y")
+          plot.margin = unit(c(0,0,0,0),'cm'))
 
 f.plot <- 
     ggplot(filter(fit$res.by.year, area=='area1'), aes(year, F, color=stock)) + 
