@@ -8,3 +8,7 @@
 /grSilverSmelt/setup/vbParams.R
 /grSilverSmelt/initialize/checkSurveyBiomass.R
 /grSilverSmelt/setup/functions/*
+/grSilverSmelt/setup/gssResults.Rmd
+/capelin/capModel/*
+/capelin/data/*
+/capelin/capVersions/*

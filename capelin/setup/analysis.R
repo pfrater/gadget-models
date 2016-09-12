@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
+setwd('~/gadget/gadget-models/capelin/capModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-7.9997960, 0.2001406))
@@ -39,7 +39,7 @@ summary.plot <-
 
 
 ## to calculate biomass index
-tmp <- mutate(fit$sidat, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
+tmp <- mutate(fit$sidat, survey = gsub('.si', '', name))
 tmp <- rbind.fill(tmp,
                   ddply(tmp,~year+survey, summarise,
                         number.x = sum(number.x*0.000003129303*lower^3.224769 ),
@@ -70,7 +70,7 @@ si.fit.aut.survey <-
                    aes(year,ymax=number.x,ymin=predict),col='green')+
     geom_text(data=mutate(subset(tmp,year==min(year)),y=Inf),
               aes(year,y,label=length), vjust = 2,hjust = -1)+
-    facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
+    facet_wrap(~length,scales='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
     theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -122,7 +122,7 @@ ldist.fit.catch <-
 # plot suitability against length for both survey and commercial fleets
 selection.plot <-
     ggplot(fit$suitability,
-           aes(l,suit,lty=fleet)) +
+           aes(l,suit,lty=fleet,color=fleet)) +
     geom_line() +
     theme_bw() + ylab('Suitability') + xlab('Length') +
     theme(legend.position = c(0.8,0.25), legend.title = element_blank(),

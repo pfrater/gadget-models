@@ -153,7 +153,7 @@ gss.mat2	          35	      20      100        1', header=TRUE)
 init.params$switch <- rownames(init.params)
 
 init.params[grepl('rec[0-9]',init.params$switch),'value'] <- 1
-init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 200
+init.params[grepl('rec[0-9]',init.params$switch),'upper'] <- 300
 init.params[grepl('rec[0-9]',init.params$switch),'lower'] <- 0.001
 init.params[grepl('rec[0-9]',init.params$switch),'optimise'] <- 1
 
