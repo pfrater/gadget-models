@@ -4,25 +4,25 @@
 # use survey biomass index instead
 igfs.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='IGFS',
-    length = mfdb_interval("len", c(20,25,29))),
+    length = mfdb_interval("len", c(12,15,18,21))),
     defaults))
 # values of 15, 20, 25 worked, but fit not good
 
 igfs.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(30,35,39))),
+    length = mfdb_interval("len", c(21,24,27,30,33))),
     defaults))
 # values of 25,30,35,40 worked fine
 
 igfs.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(40,45,50), open_ended=T)),
+    length = mfdb_interval("len", c(33,36,39,42,45), open_ended=T)),
     defaults))
 # values of 35,40,45,55 worked fine
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.2030",
+                                                 name = "igfs.si.short",
                                                  weight = 1,
                                                  data = igfs.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -30,7 +30,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.3040",
+                                                 name = "igfs.si.mid",
                                                  weight = 1,
                                                  data = igfs.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -38,7 +38,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "igfs.si.4050+",
+                                                 name = "igfs.si.long",
                                                  weight = 1,
                                                  data = igfs.SI3[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -46,28 +46,24 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 ## AUT survey indices
-
 aut.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(25,29))),
+    length = mfdb_interval("len", c(12,15,18,21))),
     defaults))
-# values of 15, 20, 25 worked, but fit not good
 
 aut.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(30,35,39))),
+    length = mfdb_interval("len", c(21,24,27,30,33))),
     defaults))
-# original len values c(20,25,30,35) - worked well
 
 aut.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(40,45,50), open_ended=T)),
+    length = mfdb_interval("len", c(33,36,39,42,45), open_ended=T)),
     defaults))
-# original len values c(35,40,55) - worked well
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "aut.si.2030",
+                                                 name = "aut.si.short",
                                                  weight = 1,
                                                  data = aut.SI1[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -75,7 +71,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "aut.si.3040",
+                                                 name = "aut.si.mid",
                                                  weight = 1,
                                                  data = aut.SI2[[1]],
                                                  fittype = 'fixedslopeloglinearfit',
@@ -83,7 +79,7 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  stocknames = stocknames))
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
-                                                 name = "aut.si.4050+",
+                                                 name = "aut.si.long",
                                                  weight = 1,
                                                  data = aut.SI3[[1]],
                                                  fittype = 'fixedslopeloglinearfit',

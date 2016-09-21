@@ -1,4 +1,4 @@
-stocknames <- c('gssimm', 'gssmat')
+stocknames <- c('gss')
 
 ## setup landings for bottom.trawls
 bmt.landings <- mfdb_sample_totalweight(mdb, c('age', 'length'),
@@ -25,15 +25,3 @@ aut.landings <- data.frame(year=defaults$year, step=4, number=1, area=1)
 aut.fleet <- Rgadget:::make.gadget.fleet(name='aut', suitability='exponential',
                                          fleet.data=aut.landings,
                                          stocknames=stocknames)
-
-
-## this is an old thing I was testing out
-## sets up survey fleets with total weight caught
-# igfs.landings <- mfdb_sample_totalweight(mdb, cols=c('age', 'length'),
-#                                          c(list(
-#                                              gear = 'BMT',
-#                                              sampling_type='IGFS',
-#                                              species=defaults$species), defaults))
-# names(igfs.landings[[1]])[names(igfs.landings[[1]])=='total_weight'] <- 'number'
-
-# Rgadget:::gadget_dir_write(gd, igfs.fleet)

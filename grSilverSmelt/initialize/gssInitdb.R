@@ -38,10 +38,15 @@ mfdb_import_area(mdb, data.frame(
 mfdb_import_division(mdb, c(
     lapply(split(reitmapping, list(reitmapping$SUBDIVISION)), function (l) l[,'GRIDCELL']),
     NULL))
+
+unique.cells <- 
+    reitmapping %>%
+    group_by(SUBDIVISION) %>%
+    slice(1)
 mfdb_import_temperature(mdb, data.frame(
-    year = rep(1982:2015, each=12),
+    year = rep(1950:2015, each=12),
     month = 1:12,
-    areacell = reitmapping$GRIDCELL[1],
+    areacell = rep(unique.cells$GRIDCELL, times=(2015-1950+1)*12),
     temperature = 3))
 
 # Set-up some sampling types

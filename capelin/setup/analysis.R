@@ -42,10 +42,10 @@ summary.plot <-
 tmp <- mutate(fit$sidat, survey = gsub('.si', '', name))
 tmp <- rbind.fill(tmp,
                   ddply(tmp,~year+survey, summarise,
-                        number.x = sum(number.x*0.000003129303*lower^3.224769 ),
-                        predict = sum(predict*0.000003129303*lower^3.224769 ),
-                        upper = sum(upper*0.000003129303*lower^3.224769 ),
-                        lower = sum(lower*0.000003129303*lower^3.224769 ),
+                        number.x = sum(number.x*0.001*lower^3.21 ),
+                        predict = sum(predict*0.001*lower^3.21 ),
+                        upper = sum(upper*0.001*lower^3.21 ),
+                        lower = sum(lower*0.001*lower^3.21 ),
                         length = 'Biomass'))
 
 # plot the model survey data over the actual survey data
@@ -72,6 +72,20 @@ si.fit.aut.survey <-
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scales='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
+    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+si.fit.aco.survey <-
+    ggplot(filter(tmp, survey=='aco', length == 'all'), aes(year,number.x)) +
+    geom_point() +
+    geom_line(aes(year,predict)) +
+    geom_linerange(data=subset(filter(tmp, 
+                                      survey=='aco', 
+                                      length == 'all'),
+                               year==max(year)),
+                   aes(year,ymax=number.x,ymin=predict),col='green') +
+    annotate("text", 2002, 1e+07, label='Acoustic Surveys') + theme_bw() +
+    ylab('Index') + xlab('Year') + scale_x_continuous(breaks=seq(2000,2012,2)) +
     theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
@@ -106,7 +120,7 @@ ldist.fit.aut.survey <-
 
 # plot the model catchdistribution data over actual catchdistribution data
 ldist.fit.catch <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.bmt'),
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.comm'),
            aes(lower,predicted)) +
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + geom_line() +

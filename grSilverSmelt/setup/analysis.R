@@ -14,7 +14,7 @@ library(Rgadget)
 setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
-                  mat.par=c(-7.9997960, 0.2001406))
+                  mat.par=c(-18.2401844, 0.5536777))
 
 # source('~/R/rgadget/trunk/gadgetFileIO.R')
 # source('~/R/rgadget/trunk/gadgetfunctions.R')
@@ -130,8 +130,6 @@ selection.plot <-
 
 
 # plot growth curve from model
-# gssimm looks good
-# there is a problem here with the growth for gssmat
 gr.plot <-
     ggplot(fit$stock.growth,
            aes(age,length)) + 
@@ -164,21 +162,21 @@ biomass.plot <-
     geom_bar(stat='identity') +
     ylab("Total biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm')) +
-    facet_wrap(~stock, scales="free_y")
+          plot.margin = unit(c(0,0,0,0),'cm')) #+
+    #facet_wrap(~stock, scales="free_y")
 
 
 # plotting the harvest per year
 harv.plot <- 
-    ggplot(fit$res.by.year,aes(year,harv.biomass/1000, fill=stock)) +
+    ggplot(fit$res.by.year,aes(year,harv.biomass/1000)) +
     geom_bar(stat='identity') +
     ylab("Harvestable biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm')) +
-    facet_wrap(~stock, scales="free_y")
+          plot.margin = unit(c(0,0,0,0),'cm')) #+
+    #facet_wrap(~stock, scales="free_y")
 
 
-# plot sustainable harvest biomass per year
+# plot sustainable stock biomass per year
 ssb.plot <- 
     ggplot(fit$res.by.year,aes(year,ssb/1000)) +
     geom_bar(stat='identity') +
@@ -187,7 +185,7 @@ ssb.plot <-
           plot.margin = unit(c(0,0,0,0),'cm'))
 
 f.plot <- 
-    ggplot(filter(fit$res.by.year, area=='area1'), aes(year, F, color=stock)) + 
+    ggplot(fit$res.by.year, aes(year, F, color=stock)) + 
     geom_line() + 
     ylab("F") + xlab("Year") +  theme_bw() +
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
