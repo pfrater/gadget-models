@@ -3,7 +3,7 @@
 ##########################
 
 stations <-
-    subset(translate.stodvar(), sampling.type == 35, ## autumn survey 30
+    subset(translate.stodvar(), sampling.type == 35, ## spring survey 30
                       select = c(sample.id,year,month,lat,lon,gear.type,depth)) %>%
     left_join(mapping) %>%
     filter(lat < 66 & lon < -14.5) %>%
@@ -21,6 +21,7 @@ ldist <- translate.all.le() %>%
     left_join(stations) %>%
     left_join(species.key) %>%
     left_join(translate.all.nu()) %>%
+    filter(year >= 2000) %>%
     mutate(count=round(count*pmax(number.counted+number.measured,1,na.rm=TRUE)/
                            pmax(1,number.measured,na.rm=TRUE)),
            sex = c('M','F')[pmax(1,sex)],
@@ -48,6 +49,7 @@ aldist <- translate.all.kv() %>%
     group_by(sample.id, species.code) %>%
     left_join(stations) %>%
     left_join(species.key) %>%
+    filter(year >= 2000) %>%
     mutate(count=1,
            areacell = d2sr(lat,lon),
            sex = c('M','F')[pmax(1,sex)],

@@ -1,5 +1,3 @@
-stocknames <- c('gss')
-
 ## setup landings for bottom.trawls
 bmt.landings <- mfdb_sample_totalweight(mdb, c('age', 'length'),
                               c(list(

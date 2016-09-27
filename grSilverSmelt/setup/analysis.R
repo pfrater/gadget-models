@@ -185,7 +185,7 @@ ssb.plot <-
           plot.margin = unit(c(0,0,0,0),'cm'))
 
 f.plot <- 
-    ggplot(fit$res.by.year, aes(year, F, color=stock)) + 
+    ggplot(fit$res.by.year, aes(year, F)) + 
     geom_line() + 
     ylab("F") + xlab("Year") +  theme_bw() +
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),

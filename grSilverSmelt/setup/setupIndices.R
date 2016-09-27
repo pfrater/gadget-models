@@ -1,24 +1,19 @@
 ## IGFS survey indices
 
-# may want to change these to mfdb_sample_totalweight and 
-# use survey biomass index instead
 igfs.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='IGFS',
-    length = mfdb_interval("len", c(12,15,18,21))),
+    length = mfdb_interval("len", c(18,21,24))),
     defaults))
-# values of 15, 20, 25 worked, but fit not good
 
 igfs.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
-    sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(21,24,27,30,33))),
+    sampling_type ='IGFS',
+    length = mfdb_interval("len", c(24,27,30,33))),
     defaults))
-# values of 25,30,35,40 worked fine
 
-igfs.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
+igfs.SI3 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'IGFS',
-    length = mfdb_interval("len", c(33,36,39,42,45), open_ended=T)),
+    length = mfdb_interval("len", c(33,36,39), open_ended=T)),
     defaults))
-# values of 35,40,45,55 worked fine
 
 
 gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
@@ -45,20 +40,21 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
                                                  slope=1,
                                                  stocknames = stocknames))
 
+
 ## AUT survey indices
 aut.SI1 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(12,15,18,21))),
+    length = mfdb_interval("len", c(21,24,27,30))),
     defaults))
 
 aut.SI2 <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(21,24,27,30,33))),
+    length = mfdb_interval("len", c(30,33,36,39))),
     defaults))
 
 aut.SI3 <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'AUT',
-    length = mfdb_interval("len", c(33,36,39,42,45), open_ended=T)),
+    length = mfdb_interval("len", c(39,42,45), open_ended=T)),
     defaults))
 
 

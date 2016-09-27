@@ -35,11 +35,17 @@ gr.plot <-
 
 ## read in model data
 library(Rgadget)
-setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
+setwd('~/gadget/gadget-models/grSilverSmelt/gssVersions/gssModelVer51')
 main <- Rgadget:::read.gadget.main('main')
 stocks <- Rgadget:::read.gadget.stockfiles(main$stockfiles)
 params <- read.gadget.parameters('WGTS/params.final')
 stock.growth <- Rgadget:::get.gadget.growth(stocks, params, age.based=T)
 
-
+## growth plot facetted by years
 gr.plot + geom_line(data=stock.growth, aes(x=age, y=length))
+
+## overall growth plot
+overall.growth <-
+    ggplot(temp, aes(age, mean)) + geom_point() + 
+    geom_errorbar(aes(ymax=mean+ci, ymin=mean-ci, width = 0)) +
+    geom_line(data=stock.growth, aes(x=age, y=length))

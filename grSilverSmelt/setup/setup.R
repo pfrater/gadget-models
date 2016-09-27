@@ -7,6 +7,7 @@ setwd('/home/pfrater/gadget/gadget-models')
 gd <- gadget_directory('grSilverSmelt/gssModel')
 setup.d <- 'grSilverSmelt/setup'
 mdb <- mfdb('Iceland')
+stocknames <- 'gss'
 
 reitmapping <- read.table(
     system.file("demo-data", "reitmapping.tsv", package="mfdb"),

@@ -57,14 +57,14 @@ opt$stocks$imm <- within(opt$stock$imm, {
     dl <- 1
     growth <- c(linf='#gss.linf', 
                 k='#gss.k',
-                beta='(* 10 #gss.bbin)', 
+                beta='(* #gss.beta.mult #gss.bbin)', 
                 binn=15, recl='#gss.recl'
     )
     weight <- c(a=weight.alpha, b=weight.beta)
     init.abund <- sprintf('(* %s %s)', pop, c(sprintf('#gss.age%s', 1:30)))
     n <- sprintf('(* 100 #gss.rec%s)', st.year:end.year)
     doesmature <- 0
-    sigma <- c(init.sigma$ms, 0,0,0,0)
+    sigma <- c(init.sigma$ms[1], init.sigma$ms, 0,0,0,0)
     M <- rep(nat.mort,30)
     doesmove <- 0
     doesmigrate <- 0
@@ -166,12 +166,13 @@ callGadget(s=1, log='logfile.txt', ignore.stderr=FALSE)
 
 init.params <- read.gadget.parameters('params.out')
 
-init.params[c('gss.linf', 'gss.k', 'gss.bbin', 'gss.mult', 
-              'gss.init.abund', 'gss.rec.sd'), ] <-
+init.params[c('gss.linf', 'gss.k', 'gss.bbin', 'gss.beta.mult',
+              'gss.mult', 'gss.init.abund', 'gss.rec.sd'), ] <-
 read.table(text='switch	 value  lower 	upper 	optimise
 gss.linf	         50	   40       70         1
 gss.k	             0.2   0.06     0.30       1
-gss.bbin	         6	   1e-08    200        1
+gss.bbin	         6	   1e-08    300        1
+gss.beta.mult        1000  1e-08    1e06       1
 gss.mult	         100   1e-05    1e+05      1
 gss.init.abund       100   0.1      100        1
 gss.rec.sd           2     0.1      5          1', 
