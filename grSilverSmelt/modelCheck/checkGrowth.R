@@ -31,11 +31,11 @@ temp <- mutate(mla[[1]], se = stddev / sqrt(number), ci = 1.96*se)
 gr.plot <-
     ggplot(temp, aes(age, mean)) + geom_point() + 
     geom_errorbar(aes(ymax=mean+ci, ymin=mean-ci, width = 0)) + 
-    facet_wrap(~year)
+    facet_wrap(~year) + xlab('Age') + ylab('Length')
 
 ## read in model data
 library(Rgadget)
-setwd('~/gadget/gadget-models/grSilverSmelt/gssVersions/gssModelVer51')
+setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
 main <- Rgadget:::read.gadget.main('main')
 stocks <- Rgadget:::read.gadget.stockfiles(main$stockfiles)
 params <- read.gadget.parameters('WGTS/params.final')

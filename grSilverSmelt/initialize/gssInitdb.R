@@ -10,7 +10,7 @@ library(data.table)
 setwd('/home/pfrater/gadget/gadget-models/grSilverSmelt')
 
 # Create connection to MFDB database, as the Icelandic case study
-mdb <- mfdb('Iceland')
+mdb <- mfdb('iceland')
 
 species.key <- data.frame(species.code = 19, species = 'GSS')
 mapping <- read.table('data/mapping.txt', header=T)
