@@ -3,7 +3,7 @@ library(Rgadget)
 # find some decent starting values for recl and stddev
 mla <- mfdb_sample_meanlength_stddev(mdb, c('age'),
                                      c(list(sampling_type=c("SprSurvey","AutSurvey"),
-                                            age=1:18),
+                                            age=1:19),
                                        defaults))
 init.sigma <- 
     mla[[1]] %>% 
@@ -40,7 +40,7 @@ opt$time$lastyear <- end.year
 
 ## setup M and determine initial abundance
 nat.mort <- 0.2
-rc <- length(init.sigma$age)*2
+rc <- length(init.sigma$age)
 pop <- 1
 for (i in 1:rc) {
     pop[i+1] <- round(pop[i]*exp(-nat.mort), 3)
@@ -51,7 +51,7 @@ for (i in 1:rc) {
 opt$stocks$imm <- within(opt$stock$imm, {
     name <- 'cod'
     minage <- 1
-    maxage <- 18
+    maxage <- 19
     minlength <- 1
     maxlength <- 200
     dl <- 1
@@ -61,10 +61,10 @@ opt$stocks$imm <- within(opt$stock$imm, {
                 binn=15, recl='#cod.recl'
     )
     weight <- c(a=weight.alpha, b=weight.beta)
-    init.abund <- sprintf('(* %s %s)', pop[2:19], c(sprintf('#cod.age%s', 1:rc)))
-    n <- sprintf('(* 100 #cod.rec%s)', st.year:end.year)
+    init.abund <- sprintf('(* %s %s)', pop[2:20], c(sprintf('#cod.age%s', 1:rc)))
+    n <- sprintf('(* #cod.rec.mult  #cod.rec%s)', st.year:end.year)
     doesmature <- 0
-    sigma <- 6.1931 + 0.607*(1:18) #from regression of length sd~age from surveys
+    sigma <- c(init.sigma$ms[1:16], rep(init.sigma$ms[16], 3))
     M <- rep(nat.mort, rc)
     doesmove <- 0
     doesmigrate <- 0
@@ -146,7 +146,7 @@ gm@stocks$imm@initialdata$area.factor <- '( * #cod.mult #cod.init.abund)'
 #gm@stocks$mat@initialdata$area.factor <- '( * #cod.mult #cod.init.abund)'
 
 gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
-gm@fleets[[3]]@suitability$params <- c("(* #igfs.alpha (* -1 #igfs.beta)) #igfs.beta 0 1")
+gm@fleets[[2]]@suitability$params <- c("(* #igfs.alpha (* -1 #igfs.beta)) #igfs.beta 0 1")
 gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
 
 #gm@fleets[[2]]@suitability$params <- c("#igfs.p1 #igfs.p2 (- 1 #igfs.p1) #igfs.p4 #igfs.p5 100")
@@ -169,15 +169,16 @@ setwd(gd$dir)
 
 init.params <- read.gadget.parameters('params.out')
 
-init.params[c('cod.linf', 'cod.k', 'cod.bbin',
-              'cod.mult', 'cod.init.abund', 'cod.rec.sd'), ] <-
+init.params[c('cod.linf', 'cod.k', 'cod.bbin', 'cod.mult', 
+              'cod.init.abund', 'cod.rec.sd', 'cod.rec.mult'), ] <-
 read.table(text='switch	 value  lower 	upper 	optimise
-cod.linf	         170   150      200         1
+cod.linf	         170   150      200        1
 cod.k	             0.2   0.06     0.30       1
 cod.bbin	         6	   1e-08    100        1
 cod.mult	         100   1e-05    1e+05      1
+cod.rec.mult         100   1e-05    1e+05      1
 cod.init.abund       100   0.1      100        1
-cod.rec.sd           2     0.1      10          1', 
+cod.rec.sd           2     0.1      10         1', 
 header=TRUE) 
 
 
@@ -189,7 +190,7 @@ for (i in 1:(rc-1)) {
     init.upper[i+1] <- ceiling(init.upper[i]*exp(-nat.mort+0.1))
 }
 
-initial.abundance <- data.frame(switch = sprintf('#cod.age%s', 1:18),
+initial.abundance <- data.frame(switch = sprintf('#cod.age%s', 1:19),
                                 value = init.val,
                                 lower = 1,
                                 upper = init.upper,

@@ -27,9 +27,12 @@ defaults <- list(
 ## Write out areafile and update mainfile with areafile location
 ## this currently does not work with the current schema for some reason
 ## mfdb_area_size does not pull any data
-gadget_dir_write('cod/codModel', gadget_areafile(
+gadget_dir_write(gd, gadget_areafile(
      size = mfdb_area_size(mdb, defaults)[[1]],
      temperature = mfdb_temperature(mdb, defaults)[[1]]))
+
+file.copy(paste(getwd(), gd$dir, 'Modelfiles/area', sep='/'), 
+          paste(getwd(), gd$dir, 'area', sep='/'), overwrite=T)
 
 ## Write a penalty component to the likelihood file
 gadget_dir_write(gd, 

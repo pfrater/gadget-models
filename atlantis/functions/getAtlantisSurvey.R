@@ -1,3 +1,6 @@
+## this was just being used in the meanwhile while Jamie pushed some edits to github
+## he still needs to change how weight is calculated though
+
 getAtlantisSurvey <- function (tracer_data, length_group, survey_suitability, survey_sigma) 
 {
     lengrp_lower <- length_group[-length(length_group)]

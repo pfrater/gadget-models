@@ -26,7 +26,7 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'SprSurvey',
-                             age = mfdb_step_interval('age',by=1,from=1,to=18),
+                             age = mfdb_step_interval('age',by=1,from=1,to=19),
                              species=defaults$species,
                              length = mfdb_interval("len", seq(0, maxlength, by = 1))),
                         defaults))
@@ -83,7 +83,7 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'AutSurvey',
-                             age = mfdb_step_interval('age',by=1,from=1,to=18),
+                             age = mfdb_step_interval('age',by=1,from=1,to=19),
                              species=defaults$species,
                              length = mfdb_interval("len", seq(0, maxlength, by = 1))),
                         defaults))

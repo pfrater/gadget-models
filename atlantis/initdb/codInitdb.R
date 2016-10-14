@@ -15,7 +15,6 @@ is_run_options <- atlantis_run_options(is_dir)
 
 # Read in areas / surface temperatures, insert into mfdb
 is_area_data <- atlantis_read_areas(is_dir)
-is_area_data <- mutate(is_area_data, name = as.numeric(gsub('Box', '', name)))
 is_temp <- atlantis_temperature(is_dir, is_area_data)
 mfdb_import_area(mdb, is_area_data)
 mfdb_import_temperature(mdb, is_temp[is_temp$depth == 1,])
@@ -61,6 +60,7 @@ is_fg_survey <- is_fg_count[
         is_fg_count$month %in% c(4,10),] %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma)
+
 
 # Throw away empty rows
 is_fg_survey <- is_fg_survey[is_fg_survey$count > 0,]

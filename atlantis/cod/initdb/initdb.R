@@ -1,9 +1,19 @@
+library(plyr)
 library(dplyr)
 library(tidyr)
 library(mfdb)
 library(mfdbatlantis)
 library(utils)
 library(magrittr)
+
+setwd('~/gadget/gadget-models/atlantis')
+# source files for both functions and outside data
+source('functions/smoothAgeGroups.R')
+source('functions/stripAgeLength.R')
+source('functions/getAtlantisSurvey.R')
+source('initdb/getCodLengthVar.R') # source cod length sd at age group
+
+
 
 mfdb('Atlantis-Iceland', destroy_schema = TRUE)
 
@@ -15,7 +25,6 @@ is_run_options <- atlantis_run_options(is_dir)
 
 # Read in areas / surface temperatures, insert into mfdb
 is_area_data <- atlantis_read_areas(is_dir)
-is_area_data$name <- as.numeric(as.character(gsub('Box', '', is_area_data$name)))
 is_temp <- atlantis_temperature(is_dir, is_area_data)
 mfdb_import_area(mdb, is_area_data)
 mfdb_import_temperature(mdb, is_temp[is_temp$depth == 1,])
@@ -32,13 +41,13 @@ mfdb_import_sampling_type(mdb,
                           data.frame(id = 1:4, 
                                      name = c("Bio", "Cat", "SprSurvey", "AutSurvey")))
 
-# source cod length sd at age group
-source('~/gadget/gadget-models/atlantis/initdb/getCodLengthVar.R')
+
 
 # assemble and import cod 
 fgName <- 'Cod'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
+is_fg_count <- smoothAgeGroups(is_fg_count, 0.2)
 
 
 length_group <-  c(seq(0, 150, by = 2), 200)
@@ -46,7 +55,7 @@ sigma_per_cohort <- cod.length.mn.sd$length.sd
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49
 sel_b <- 0.046 # Controls the shape of the curve
-survey_suitability <- 2.33e-05 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
+survey_suitability <- 3e-05 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
 survey_sigma <- 8.37e-06
 
 # Import entire Cod/Haddock content for one sample point so we can use this as a tracer value
@@ -58,15 +67,9 @@ is_fg_tracer$areacell <- is_fg_tracer$area
 is_fg_tracer$sampling_type <- 'Bio'
 mfdb_import_survey(mdb, is_fg_tracer, data_source = paste0('atlantis_tracer_', fg_group$Name))
 
-##############################################################
-# to do yet!!!
-# 1. take proportion of lengths from surveys (70%)
-# 2. take proportion of ages from surveys
-##############################################################
-# Survey only works on first month, in selected areas
-source('~/gadget/gadget-models/atlantis/initdb/getAtlantisSurvey.R')
+# create survey from tracer values
 is_fg_survey <- is_fg_count[
-    is_fg_count$area %in% 0:52 &
+    is_fg_count$area %in% paste('Box', 0:52, sep='') &
         is_fg_count$month %in% c(4,10),] %>%
     mutate(sampling_type = ifelse(month == 4,
                                   "SprSurvey",
@@ -74,8 +77,15 @@ is_fg_survey <- is_fg_count[
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma)
 
+survey <- filter(is_fg_survey, count > 0)
+
+# strip ages and lengths from survey to mimic real world data
+# see '~gadget/gadget-models/atlantis/cod/initdb/codSampleNumbers.R
+al.survey <- stripAgeLength(survey, 0.7072256, 0.07072157)
+
+
 # Throw away empty rows
-is_fg_survey <- is_fg_survey[is_fg_survey$count > 0,]
+is_fg_survey <- al.survey[al.survey$count > 0,]
 is_fg_survey$weight <- (fg_group$FLAG_LI_A*is_fg_survey$length^fg_group$FLAG_LI_B)
 
 is_fg_survey$species <- fg_group$MfdbCode
@@ -134,6 +144,7 @@ fishery <- is_fisheries[is_fisheries$Code == fisheryCode,]
 
 is_catch <- atlantis_fisheries_catch(is_dir, is_area_data, fishery)
 is_catch <- filter(is_catch, functional_group == 'FCD')
+is_catch$weight_total <- is_catch$weight_total*1000
 
 # Species column that maps to MFDB code
 is_catch$species <- is_catch$functional_group

@@ -2,17 +2,17 @@
 
 spr.survey.short <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='SprSurvey',
-    length = mfdb_interval("len", seq(0,50,10))),
+    length = mfdb_interval("len", seq(0,30,10))),
     defaults))
 
 spr.survey.mid <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='SprSurvey',
-    length = mfdb_interval("len", seq(50,100,10))),
+    length = mfdb_interval("len", seq(30,70,10))),
     defaults))
 
 spr.survey.long <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'SprSurvey',
-    length = mfdb_interval("len", seq(100,150,10), open_ended=T)),
+    length = mfdb_interval("len", seq(70,100,10), open_ended=T)),
     defaults))
 
 
@@ -44,17 +44,17 @@ gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
 ## AUT survey indices
 aut.survey.short <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AutSurvey',
-    length = mfdb_interval("len", seq(0,50,10))),
+    length = mfdb_interval("len", seq(0,30,10))),
     defaults))
 
 aut.survey.mid <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'AutSurvey',
-    length = mfdb_interval("len", seq(50,100,10))),
+    length = mfdb_interval("len", seq(30,70,10))),
     defaults))
 
 aut.survey.long <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'AutSurvey',
-    length = mfdb_interval("len", seq(100,150,10), open_ended=T)),
+    length = mfdb_interval("len", seq(70,100,10), open_ended=T)),
     defaults))
 
 
