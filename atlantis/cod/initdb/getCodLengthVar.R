@@ -33,14 +33,14 @@ n.by.age <- aldist %>% group_by(age) %>% summarize(total = sum(total))
 # assemble data.frame used to calculate mean and sd
 lengths.at.age <- data.frame(age=rep(n.by.age$age, n.by.age$total),
                   length=rep(aldist$length, aldist$total))
-# age.groups <- data.frame(age = 0:19,
-#                          age.group = sort(rep(seq(0,18, by=2), 2)))
-# lengths.at.age <- mutate(lengths.at.age, 
-#                          age.group = ifelse(age %% 2 == 0, age, age-1))
+age.groups <- data.frame(age = 0:19,
+                          age.group = sort(rep(seq(0,18, by=2), 2)))
+lengths.at.age <- mutate(lengths.at.age, 
+                          age.group = ifelse(age %% 2 == 0, age, age-1))
 
 cod.length.mn.sd <- 
     lengths.at.age %>%
-    group_by(age) %>%
+    group_by(age.group) %>%
     summarize(length.mean = mean(length), length.sd = sd(length)) %>% 
     na.omit()
 
@@ -62,16 +62,16 @@ survey.numbers <-
 
 # must read in atlantis data first
 # open ~/gadget/gadget-models/atlantis/cod/initdb/initdb.R
-surv.prop <-
-    is_fg_count %>%
-    group_by(year) %>%
-    summarize(total = sum(count, na.rm=T)) %>%
-    left_join(survey.numbers) %>%
-    mutate(survey.prop = survey.total / total) %>%
-    na.omit() %>%
-    summarize(median = median(survey.prop),
-              mean = mean(survey.prop),
-              sd = sd(survey.prop))
+# surv.prop <-
+#     is_fg_count %>%
+#     group_by(year) %>%
+#     summarize(total = sum(count, na.rm=T)) %>%
+#     left_join(survey.numbers) %>%
+#     mutate(survey.prop = survey.total / total) %>%
+#     na.omit() %>%
+#     summarize(median = median(survey.prop),
+#               mean = mean(survey.prop),
+#               sd = sd(survey.prop))
 
 
 

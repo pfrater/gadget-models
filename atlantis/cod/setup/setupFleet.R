@@ -14,7 +14,7 @@ bmt.fleet <- Rgadget:::make.gadget.fleet(name='bmt.comm', suitability='exponenti
 
 
 ## set up and make surveys as fleet
-igfs.landings <- data.frame(year=defaults$year, step=1, number=1, area=1)
+igfs.landings <- data.frame(year=defaults$year, step=2, number=1, area=1)
 igfs.fleet <- Rgadget:::make.gadget.fleet(name='igfs', suitability='exponential',
                                             fleet.data=igfs.landings,
                                             stocknames=stocknames)

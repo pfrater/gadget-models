@@ -15,3 +15,8 @@
 /atlantis/cod/codVersions/*
 /atlantis/cod/codModel/*
 /atlantis/atlantisInfo/*
+modelRunProtocol.txt
+/template/
+/atlantis/codeFromErla/*
+/atlantis/sppTemplate/*
+/atlantis/cod/modelCheck/*

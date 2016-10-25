@@ -11,7 +11,7 @@ setwd('~/gadget/gadget-models/atlantis')
 source('functions/smoothAgeGroups.R')
 source('functions/stripAgeLength.R')
 source('functions/getAtlantisSurvey.R')
-source('initdb/getCodLengthVar.R') # source cod length sd at age group
+source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
 
 
@@ -47,10 +47,10 @@ mfdb_import_sampling_type(mdb,
 fgName <- 'Cod'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
-is_fg_count <- smoothAgeGroups(is_fg_count, 0.2)
+#is_fg_count <- smoothAgeGroups(is_fg_count, 0.2)
 
 
-length_group <-  c(seq(0, 150, by = 2), 200)
+length_group <-  c(seq(-5, 155, by = 10), 195)
 sigma_per_cohort <- cod.length.mn.sd$length.sd
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49

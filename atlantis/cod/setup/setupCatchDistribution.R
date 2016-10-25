@@ -6,7 +6,7 @@ maxlength <- 200 #max(Rgadget:::getLengthgroups(gm))
 aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SprSurvey',
     species = defaults$species,
-    length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+    length = mfdb_interval("len", seq(0, maxlength, by = 10))),
     defaults))
 
 attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
@@ -26,9 +26,9 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'SprSurvey',
-                             age = mfdb_step_interval('age',by=1,from=1,to=19),
+                             age = mfdb_step_interval('age',by=2,from=0,to=18),
                              species=defaults$species,
-                             length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+                             length = mfdb_interval("len", seq(0, maxlength, by = 10))),
                         defaults))
 
 #attributes(aggdata[[1]])$age <-
@@ -65,7 +65,7 @@ rm(aggdata)
 aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'AutSurvey',
     species = defaults$species,
-    length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+    length = mfdb_interval("len", seq(0, maxlength, by = 10))),
     defaults))
 
 attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
@@ -83,9 +83,9 @@ rm(aggdata)
 aggdata <-
     mfdb_sample_count(mdb, c('age', 'length'),
                       c(list(sampling_type = 'AutSurvey',
-                             age = mfdb_step_interval('age',by=1,from=1,to=19),
+                             age = mfdb_step_interval('age',by=2,from=0,to=18),
                              species=defaults$species,
-                             length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+                             length = mfdb_interval("len", seq(0, maxlength, by = 10))),
                         defaults))
 
 #attributes(aggdata[[1]])$age <-
