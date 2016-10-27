@@ -56,7 +56,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
                 binn=15, recl='#cod.recl'
     )
     weight <- c(a=weight.alpha, b=weight.beta)
-    init.abund <- c('#cod.age1', sprintf('(* #cod.age1 (exp (* -%s (+ %s 1))))',nat.mort, 2:19))
+    init.abund <- sprintf('#cod.age%s', 1:rc)
     n <- sprintf('(* #cod.rec.mult  #cod.rec%s)', st.year:end.year)
     doesmature <- 0
     sigma <- sort(c(init.sigma$ms, init.sigma$ms[1:9]))
@@ -94,15 +94,16 @@ init.params <- read.gadget.parameters('params.out')
 
 
 rn <- rownames(init.params)
-init.params[grep('linf', rn), ] <- c('cod.linf', 170, 150, 200, 1)
-init.params[grep('k', rn), ] <- c('cod.k', 0.2, 0.06, 0.30, 1)
+init.params[grep('linf', rn), ] <- c('cod.linf', 170, 150, 250, 1)
+init.params[grep('k', rn), ] <- c('cod.k', 0.2, 0.01, 0.30, 1)
 init.params[grep('bbin', rn), ] <- c('cod.bbin', 6, 1e-08, 100, 1)
 init.params[grep('mult', rn), ][1,] <- c('cod.mult', 100, 1e-05, 1e+05, 1)
 init.params[grep('init.abund', rn), ] <- c('cod.init.abund', 100, 0.1, 100, 1)
 init.params[grep('rec.sd', rn), ] <- c('cod.rec.sd', 2, 0.1, 10, 1)
 init.params[grep('rec.mult', rn), ] <- c('cod.rec.mult', 100, 1e-05, 1e+05, 1)
-init.params[grep('age1', rn), ] <- c('cod.age1', 100, 1e-05, 1e+05, 1)
-
+init.params[grep('age', rn), ] <- data.frame(switch=sprintf('cod.age%s', 1:rc),
+                                             value=rep(100, rc), lower=rep(1e-05, rc),
+                                             upper=rep(1e+05, rc), optimise=rep(1, rc))
 init.params$switch <- rownames(init.params)
 
 init.params[grepl('rec[0-9]',init.params$switch),'value'] <- 1
@@ -113,7 +114,7 @@ init.params[grepl('rec[0-9]',init.params$switch),'optimise'] <- 1
 init.params['cod.recl',-1] <- c(20, 5, 40,1)
 
 init.params[grepl('alpha',init.params$switch),'value'] <- 0.5
-init.params[grepl('alpha',init.params$switch),'upper'] <- 3
+init.params[grepl('alpha',init.params$switch),'upper'] <- 5
 init.params[grepl('alpha',init.params$switch),'lower'] <- 0.01
 init.params[grepl('alpha',init.params$switch),'optimise'] <- 1
 
@@ -122,13 +123,13 @@ init.params[grepl('l50',init.params$switch),'upper'] <- 200
 init.params[grepl('l50',init.params$switch),'lower'] <- 10
 init.params[grepl('l50',init.params$switch),'optimise'] <- 1
 
-init.params[init.params$switch=='igfs.alpha',] <- c('igfs.alpha', 40, 5, 200, 1)
-init.params[init.params$switch=='igfs.beta',] <- c('igfs.beta', 0.9, 0.06, 2, 1)
+init.params[init.params$switch=='igfs.alpha',] <- c('igfs.alpha', 40, 1, 200, 1)
+init.params[init.params$switch=='igfs.beta',] <- c('igfs.beta', 0.9, 0.06, 5, 1)
 # #init.params[init.params$switch=='igfs.gamma',] <- c('igfs.gamma', 0.5, 0, 1, 1)
 # #init.params[init.params$switch=='igfs.delta',] <- c('igfs.delta', 0.5, 0, 1, 1)
 
-init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 40, 5, 200, 1)
-init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.9, 0.06, 2, 1)
+init.params[init.params$switch=='aut.alpha',] <- c('aut.alpha', 40, 1, 200, 1)
+init.params[init.params$switch=='aut.beta',] <- c('aut.beta', 0.9, 0.06, 5, 1)
 # #init.params[init.params$switch=='aut.gamma',] <- c('aut.gamma', 0.5, 0, 1, 1)
 # #init.params[init.params$switch=='aut.delta',] <- c('aut.delta', 0.5, 0, 1, 1)
 

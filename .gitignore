@@ -20,3 +20,5 @@ modelRunProtocol.txt
 /atlantis/codeFromErla/*
 /atlantis/sppTemplate/*
 /atlantis/cod/modelCheck/*
+/atlantis/cod/setup/copyModel.sh
+/atlantis/cod/setup/itterfitter.sh

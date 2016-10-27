@@ -150,20 +150,23 @@ rec.plot <-
 # plotting the catch by year
 catch.plot <- 
 ggplot(fit$res.by.year,aes(year,catch/1000)) +
-    geom_bar(stat='identity') +
+    #geom_bar(stat='identity') +
+    geom_line() +
+    geom_area(alpha=0.3) +
     ylab("Catches (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm'))
+          plot.margin = unit(c(0,0,0,0),'cm')) +
+    xlim(1985, 2015)
 
 
 # plotting the biomass by year
 biomass.plot <- 
-    ggplot(fit$res.by.year,aes(year,total.biomass/1000, fill=stock)) +
+    ggplot(fit$res.by.year,aes(year,total.biomass/1000)) +
     geom_bar(stat='identity') +
     ylab("Total biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
-          plot.margin = unit(c(0,0,0,0),'cm')) #+
-    #facet_wrap(~stock, scales="free_y")
+          plot.margin = unit(c(0,0,0,0),'cm')) +
+    xlim(1980,2015) + ylim(0,150000)
 
 
 # plotting the harvest per year
