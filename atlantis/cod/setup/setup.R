@@ -2,6 +2,7 @@
 library(plyr)
 library(dplyr)
 library(mfdb)
+library(Rgadget)
 
 
 setwd('/home/pfrater/gadget/gadget-models/atlantis')
@@ -54,6 +55,10 @@ gadget_dir_write(gd,
 
 source(sprintf('%s/setupFleet.R', setup.d))
 source(sprintf('%s/setupModel.R', setup.d))
+
+# run gadget -s -log logfile.txt from terminal
+
+source(sprintf('%s/setupParams.R', setup.d))
 source(sprintf('%s/setupCatchDistribution.R', setup.d))
 source(sprintf('%s/setupIndices.R', setup.d))
 
