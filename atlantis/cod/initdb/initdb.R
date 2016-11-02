@@ -8,19 +8,13 @@ library(magrittr)
 
 setwd('~/gadget/gadget-models/atlantis')
 # source files for both functions and outside data
-source('functions/smoothAgeGroups.R')
 source('functions/stripAgeLength.R')
-source('functions/getAtlantisSurvey.R')
 source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
-
-
 mfdb('Atlantis-Iceland', destroy_schema = TRUE)
-
 mdb <- mfdb('Atlantis-Iceland')
 
 is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM42BioV138FMV72_4')
-
 is_run_options <- atlantis_run_options(is_dir)
 
 # Read in areas / surface temperatures, insert into mfdb
@@ -28,7 +22,6 @@ is_area_data <- atlantis_read_areas(is_dir)
 is_temp <- atlantis_temperature(is_dir, is_area_data)
 mfdb_import_area(mdb, is_area_data)
 mfdb_import_temperature(mdb, is_temp[is_temp$depth == 1,])
-
 
 # Read in all functional groups, assign MFDB shortcodes where possible
 is_functional_groups <- atlantis_functional_groups(is_dir)
@@ -47,8 +40,6 @@ mfdb_import_sampling_type(mdb,
 fgName <- 'Cod'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
-#is_fg_count <- smoothAgeGroups(is_fg_count, 0.2)
-
 
 length_group <-  c(seq(-5, 155, by = 10), 195)
 sigma_per_cohort <- cod.length.mn.sd$length.sd
@@ -83,10 +74,8 @@ survey <- filter(is_fg_survey, count > 0)
 # see '~gadget/gadget-models/atlantis/cod/initdb/codSampleNumbers.R
 al.survey <- stripAgeLength(survey, 0.7072256, 0.07072157)
 
-
 # Throw away empty rows
 is_fg_survey <- al.survey[al.survey$count > 0,]
-is_fg_survey$weight <- (fg_group$FLAG_LI_A*is_fg_survey$length^fg_group$FLAG_LI_B)
 
 is_fg_survey$species <- fg_group$MfdbCode
 is_fg_survey$areacell <- is_fg_survey$area
@@ -142,6 +131,16 @@ mfdb_import_vessel_taxonomy(mdb, data.frame(
 fisheryCode <- 'bottrawl'
 fishery <- is_fisheries[is_fisheries$Code == fisheryCode,]
 
+# to set up as age structured data - note that this returns values in kg, not tons
+source('~/gadget/gadget-models/atlantis/functions/getCatchAges.R')
+age.catch <- getCatchAges(is_dir, is_area_data, fg_group, fishery)
+age.catch$weight <- age.catch$weight*1000
+
+# to do here - set up length distributions from data, then strip age and lengths
+
+
+
+# the following is to get landings data without age structure
 is_catch <- atlantis_fisheries_catch(is_dir, is_area_data, fishery)
 is_catch <- filter(is_catch, functional_group == 'FCD')
 is_catch$weight_total <- is_catch$weight_total*1000

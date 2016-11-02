@@ -1,4 +1,5 @@
 # find some decent starting values for recl and stddev
+
 mla <- mfdb_sample_meanlength_stddev(mdb, c('age'),
                                      c(list(sampling_type=c("SprSurvey","AutSurvey"),
                                             age=0:19),

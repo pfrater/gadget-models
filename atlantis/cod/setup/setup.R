@@ -14,8 +14,8 @@ mdb <- mfdb('Atlantis-Iceland')
 stocknames <- 'cod'
 
 areas <- read.csv('atlantisInfo/boxInfo.csv', header=T)
-boxes <- filter(areas, boundary == 0)$box_id
-#boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
+#boxes <- filter(areas, boundary == 0)$box_id
+boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
 
 st.year <- 1948
 end.year <- 2013
@@ -64,5 +64,6 @@ source(sprintf('%s/setupIndices.R', setup.d))
 
 file.copy(sprintf('%s/itterfitter.sh', setup.d), gd$dir)
 file.copy(sprintf('%s/run.R', setup.d), gd$dir)
+file.copy(sprintf('%s/mfrun.R', setup.d), gd$dir)
 file.copy(sprintf('%s/optinfofile', setup.d), gd$dir)
 
