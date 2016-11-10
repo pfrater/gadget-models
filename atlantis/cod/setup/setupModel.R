@@ -20,7 +20,7 @@ lw.tmp <-
     mutate(length=as.numeric(as.character(length)),
            weight=mean/1e3) %>%
     na.omit() %>%
-    nls(weight ~ a*length^b,.,start=list(a=1e-5,b=3)) %>%
+    nls(weight ~ a*length^b,.,start=list(a=0.1,b=3)) %>%
     coefficients() %>%
     as.numeric()
 
@@ -59,7 +59,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
     n <- sprintf('(* #cod.rec.mult  #cod.rec%s)', st.year:end.year)
     doesmature <- 0
     sigma <- sort(c(init.sigma$ms, init.sigma$ms[1:9]))
-    M <- rep(nat.mort, rc)
+    M <- rep('#cod.mort', rc)
     doesmove <- 0
     doesmigrate <- 0
     doesrenew <- 1

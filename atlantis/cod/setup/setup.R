@@ -5,7 +5,7 @@ library(mfdb)
 library(Rgadget)
 
 
-setwd('/home/pfrater/gadget/gadget-models/atlantis')
+setwd('/home/pfrater/gadget/models/atlantis')
 
 # create a gadget directory and define some defaults to use with queries below
 gd <- gadget_directory('cod/codModel')

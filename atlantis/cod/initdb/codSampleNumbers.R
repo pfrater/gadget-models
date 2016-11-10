@@ -55,3 +55,34 @@ survey.plot.data$Data <- ordered(survey.plot.data$Data,
 g <- ggplot(data=survey.plot.data, aes(x=year, y=value, linetype=Data, color=Data)) + geom_line() +
     theme_bw() + xlab('Year') + ylab('Number of Samples')
 
+
+
+
+########################################
+## now checking commercial catch samples
+########################################
+
+comm.stations <- 
+    select(translate.stodvar(), sample.id, year, sampling.type) %>%
+    filter(sampling.type %in% c(1,8))
+
+
+fleet.le <-
+    translate.all.le() %>%
+    filter(species.code == 1, sample.id %in% comm.stations$sample.id) %>%
+    left_join(comm.stations)
+
+fleet.le.num <- fleet.le %>% group_by(year) %>% summarize(sample.count = sum(count), 
+                                                          nsamples=sum(count)/200)
+
+fleet.age <- 
+    translate.all.kv() %>%
+    filter(species.code == 1, sample.id %in% comm.stations$sample.id) %>%
+    left_join(comm.stations)
+
+fleet.age.num <- fleet.age %>% group_by(year) %>% summarize(age.count = n())
+
+fleet.props <- 
+    left_join(fleet.le.num, fleet.age.num) %>%
+    mutate(age.prop = age.count / sample.count)
+

@@ -14,7 +14,7 @@ vb.sse <- function(b) {
     linf <- b[1];
     k <- b[2];
     t0 <- b[3];
-    length <- linf*(1 - exp(-k*(a-t0)));
+    length <- linf*(1 - exp(-k*(t-t0)));
     return(length)
 }
 
@@ -28,7 +28,9 @@ sse <- function(b) {
 
 
 # performing a nonlinear minimization on parameters to fit this vb curve to data better
-vbMin <- nlm(sse, c(51.816, 0.952, -4.337))
+t <- #read in some age data
+l <- #read in some length data
+vbMin <- nlm(sse, c(150, 0.13, -1))
 
 # visualize the output
 #plot(mean~age, data=la)
@@ -37,8 +39,8 @@ k.min <- vbMin$estimate[2]
 t0.min <- vbMin$estimate[3]
 #curve(vb(linf.min, k.min, x, t0.min), add=T, col='red', lwd=1.4) # as you can see, not quite there
 
-g <- ggplot(la, aes(x=age, y=mean)) + geom_point() +
-    stat_function(fun=function (x) vb(linf.min, k.min, x, t0.min)) 
+g <- ggplot(filter(is_fg_count, count>0), aes(x=age, y=length)) + geom_point() +
+    stat_function(fun=function (x) vb(175, 0.1622, x, 2)) 
 # curve to test parameter bounds    + stat_function(fun=function(x) vb(linf.min, k.min, x, t0.min))
 # curve to test parameter bounds    + stat_function(fun=function(x) vb(linf.min, k.min, x, t0.min)) 
 
