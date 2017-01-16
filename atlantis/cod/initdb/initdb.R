@@ -9,7 +9,7 @@ library(magrittr)
 setwd('~/gadget/models/atlantis')
 # source files for both functions and outside data
 source('functions/stripAgeLength.R')
-source('functions/pauls_atlantis_tracer.R')
+source('functions/getCodDiscards.R')
 source('functions/commCatchAges.R')
 source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
@@ -35,23 +35,23 @@ is_functional_groups$MfdbCode <- vapply(
 
 # Set up sampling types
 mfdb_import_sampling_type(mdb, 
-                          data.frame(id = 1:5, 
+                          data.frame(id = 1:6, 
                                      name = c("Bio", "Cat", 
-                                              "SprSurvey", "AutSurvey", "CommSurvey")))
+                                              "SprSurvey", "AutSurvey", 
+                                              "CommSurvey", "Discard")))
 
 
 # assemble and import cod 
 fgName <- 'Cod'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
-is_fg_count <- pauls_atlantis_tracer(is_dir, is_area_data, fg_group)
-#is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
+is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
 
-length_group <-  c(0, seq(15, 155, by = 10), 205)
-sigma_per_cohort <- cod.length.mn.sd$length.sd
+length_group <-  c(0, seq(20, 200, by=20))
+sigma_per_cohort <- sqrt(cod.length.mn.sd$length.sd)
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49
 sel_b <- 0.046 # Controls the shape of the curve
-survey_suitability <- 3e-05 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
+survey_suitability <- 1.5e-04 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
 survey_sigma <- 8.37e-06
 
 # Import entire Cod/Haddock content for one sample point so we can use this as a tracer value
@@ -63,6 +63,10 @@ is_fg_tracer$areacell <- is_fg_tracer$area
 is_fg_tracer$sampling_type <- 'Bio'
 mfdb_import_survey(mdb, is_fg_tracer, data_source = paste0('atlantis_tracer_', fg_group$Name))
 
+
+## testing out some different methods of sampling to see what works
+## I think adding error to just the length groups is screwing stuff up
+
 # create survey from tracer values
 is_fg_survey <- is_fg_count[
     is_fg_count$area %in% paste('Box', 0:52, sep='') &
@@ -73,11 +77,28 @@ is_fg_survey <- is_fg_count[
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma)
 
+
+# ss.selector <- function(len, sel_b, sel_lsm) {
+#     1.5e-04 / (1.0 + exp(-sel_b * (len - sel_lsm)))
+# }
+# 
+# is_fg_survey <- 
+#     is_fg_count %>%
+#     filter(area %in% paste('Box', 0:52, sep=''),
+#            month %in% c(3,10),
+#            count >= 1) %>%
+#     mutate(sampling_type = ifelse(month == 3,
+#                                   "SprSurvey",
+#                                   "AutSurvey")) %>%
+#     mutate(count = round(count * 1.5e-04))
+
 survey <- filter(is_fg_survey, count > 0)
 
 # strip ages and lengths from survey to mimic real world data
 # see '~gadget/gadget-models/atlantis/cod/initdb/codSampleNumbers.R
 al.survey <- stripAgeLength(survey, 0.7072256, 0.07072157)
+al.survey$length <- round(al.survey$length)
+al.survey$weight <- round(al.survey$weight)
 
 # Throw away empty rows
 is_fg_survey <- al.survey[al.survey$count > 0,]
@@ -146,14 +167,23 @@ age.catch.wl <- left_join(age.catch, wl)
 fleet.suitability <- rep(0.001444, length(length_group))
 fleet.sigma <- 5.7e-07
 
-comm.catch.samples <- 
+# trying to avoid adding error in lengths here as well
+
+comm.catch.samples <-
     age.catch.wl %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, fleet.suitability, fleet.sigma) %>%
     filter(count > 0)
 
+# comm.catch.samples <-
+#     age.catch.wl %>%
+#     mutate(count = round(count * 0.001444),
+#            length = round(length),
+#            weight = round(weight)) %>%
+#     filter(count > 0)
+
 # strip age data out
-comm.al.samples <- stripFleetAges(comm.catch.samples, 1, 0.03)
+comm.al.samples <- stripFleetAges(comm.catch.samples, 0.05)
 comm.al.samples$species <- "COD"
 comm.al.samples$sampling_type <- 'CommSurvey'
 comm.al.samples$gear <- "BMT"
@@ -183,3 +213,26 @@ is_catch$gear <- 'BMT'
 mfdb_import_survey(mdb, 
                    is_catch, 
                    data_source = paste0("atlantisFishery_", fisheryCode))
+
+##############################
+# get discards data
+##############################
+
+codDiscards <- getCodDiscards(is_dir, is_area_data, fishery)
+codDiscards <- mutate(codDiscards, weight_total = weight_total * 1000)
+codDiscards <- filter(codDiscards, functional_group == 'FCD')
+
+# Species column that maps to MFDB code
+codDiscards$species <- codDiscards$functional_group
+levels(codDiscards$species) <- is_functional_groups[match(
+    levels(codDiscards$functional_group),
+    is_functional_groups$GroupCode), 'MfdbCode']
+
+codDiscards$sampling_type <- "Discard"
+codDiscards <- rename(codDiscards, areacell = area, vessel = fishery, weight = weight_total)
+codDiscards <- filter(codDiscards, weight > 0)
+codDiscards$gear <- 'BMT'
+
+mfdb_import_survey(mdb, 
+                   codDiscards, 
+                   data_source = paste0("atlantisFishery_", fisheryCode, "_Discard"))

@@ -1,0 +1,122 @@
+; Gadget version 2.2.00-BETA running on pfrater Mon Jan  9 06:51:39 2017
+; Listing of the switches used in the current Gadget run
+had.linf	hadgrowergrowthcalcHmodelvariable	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	
+had.k	hadgrowergrowthcalcHmodelvariable	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	
+had.bbin	hadgrower	
+had.mort	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	hadnaturalmortalitymodelvariable	
+had.mult	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	
+had.init.abund	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	
+had.age1	hadinitialcondmeandata	
+had.age2	hadinitialcondmeandata	
+had.age3	hadinitialcondmeandata	
+had.age4	hadinitialcondmeandata	
+had.age5	hadinitialcondmeandata	
+had.age6	hadinitialcondmeandata	
+had.age7	hadinitialcondmeandata	
+had.age8	hadinitialcondmeandata	
+had.age9	hadinitialcondmeandata	
+had.age10	hadinitialcondmeandata	
+had.age11	hadinitialcondmeandata	
+had.age12	hadinitialcondmeandata	
+had.age13	hadinitialcondmeandata	
+had.age14	hadinitialcondmeandata	
+had.age15	hadinitialcondmeandata	
+had.age16	hadinitialcondmeandata	
+had.age17	hadinitialcondmeandata	
+had.age18	hadinitialcondmeandata	
+had.age19	hadinitialcondmeandata	
+had.recl	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadinitialcondmeandata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	
+had.rec.mult	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	
+had.rec1948	hadrenewaldata	
+had.rec.sd	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	hadrenewaldata	
+had.rec1949	hadrenewaldata	
+had.rec1950	hadrenewaldata	
+had.rec1951	hadrenewaldata	
+had.rec1952	hadrenewaldata	
+had.rec1953	hadrenewaldata	
+had.rec1954	hadrenewaldata	
+had.rec1955	hadrenewaldata	
+had.rec1956	hadrenewaldata	
+had.rec1957	hadrenewaldata	
+had.rec1958	hadrenewaldata	
+had.rec1959	hadrenewaldata	
+had.rec1960	hadrenewaldata	
+had.rec1961	hadrenewaldata	
+had.rec1962	hadrenewaldata	
+had.rec1963	hadrenewaldata	
+had.rec1964	hadrenewaldata	
+had.rec1965	hadrenewaldata	
+had.rec1966	hadrenewaldata	
+had.rec1967	hadrenewaldata	
+had.rec1968	hadrenewaldata	
+had.rec1969	hadrenewaldata	
+had.rec1970	hadrenewaldata	
+had.rec1971	hadrenewaldata	
+had.rec1972	hadrenewaldata	
+had.rec1973	hadrenewaldata	
+had.rec1974	hadrenewaldata	
+had.rec1975	hadrenewaldata	
+had.rec1976	hadrenewaldata	
+had.rec1977	hadrenewaldata	
+had.rec1978	hadrenewaldata	
+had.rec1979	hadrenewaldata	
+had.rec1980	hadrenewaldata	
+had.rec1981	hadrenewaldata	
+had.rec1982	hadrenewaldata	
+had.rec1983	hadrenewaldata	
+had.rec1984	hadrenewaldata	
+had.rec1985	hadrenewaldata	
+had.rec1986	hadrenewaldata	
+had.rec1987	hadrenewaldata	
+had.rec1988	hadrenewaldata	
+had.rec1989	hadrenewaldata	
+had.rec1990	hadrenewaldata	
+had.rec1991	hadrenewaldata	
+had.rec1992	hadrenewaldata	
+had.rec1993	hadrenewaldata	
+had.rec1994	hadrenewaldata	
+had.rec1995	hadrenewaldata	
+had.rec1996	hadrenewaldata	
+had.rec1997	hadrenewaldata	
+had.rec1998	hadrenewaldata	
+had.rec1999	hadrenewaldata	
+had.rec2000	hadrenewaldata	
+had.rec2001	hadrenewaldata	
+had.rec2002	hadrenewaldata	
+had.rec2003	hadrenewaldata	
+had.rec2004	hadrenewaldata	
+had.rec2005	hadrenewaldata	
+had.rec2006	hadrenewaldata	
+had.rec2007	hadrenewaldata	
+had.rec2008	hadrenewaldata	
+had.rec2009	hadrenewaldata	
+had.rec2010	hadrenewaldata	
+had.rec2011	hadrenewaldata	
+had.rec2012	hadrenewaldata	
+had.rec2013	hadrenewaldata	
+lln.comm.alpha	fleetlln.commpredatorlln.commsuitabilityforhadmodelvariable	
+lln.comm.l50	fleetlln.commpredatorlln.commsuitabilityforhadmodelvariable	
+igfs.alpha	fleetigfspredatorigfssuitabilityforhadmodelvariable	
+igfs.l50	fleetigfspredatorigfssuitabilityforhadmodelvariable	
+aut.alpha	fleetautpredatorautsuitabilityforhadmodelvariable	
+aut.l50	fleetautpredatorautsuitabilityforhadmodelvariable	
+;
+; Listing of the likelihood components used in the current Gadget run
+;
+; Component	Type	Weight
+aldist.aut	3	0.0926784
+aldist.lln	3	0.0285063
+aldist.spr	3	0.0987167
+ldist.aut	3	0.107101
+ldist.lln	3	0.0291375
+ldist.spr	3	0.102564
+aut.si.long	1	0.431034
+aut.si.short	1	0.000281928
+igfs.si.long	1	0.396668
+igfs.si.short	1	0.000345543
+understocking	2	100
+bounds	8	0.5
+;
+; Listing of the output from the likelihood components for the current Gadget run
+;
+0	       150     0.1172    99.9975        0.4    2.77955    85.2783    90.7982    41.2316    31.9642    37.5909    82.7919      1e-05    72.1108      1e-05      1e-05      1e-05      1e-05    1.02927   0.137936   0.564799    0.12322      1e-05    44.9207    79.8407    63.9987          1      252.5 0.00100008   0.138864    57.0311    118.522    81.0042    88.7667    84.9201    84.0858    89.3293    72.9378    76.4875    49.4315    204.854    78.8054    49.0755    80.6964    70.8124     48.402    54.0882    15.3102    17.9066    22.0226    21.9387    20.4229    16.0206    16.4714    14.5708    16.4713     15.172    18.3314    24.0001     99.801    14.8235    4.89989     15.141    47.2945    7.43113    53.5348   0.360562    183.297    36.8864    28.6855    20.7129    78.5504    230.469    77.4942    55.2319    116.876    37.8727    187.048   0.220852    78.6102   0.519034    297.603    784.981    11.1326    18.4198    999.945    176.829    20.9478    88.9696    342.443      0.001     8.4961    15.7724    32.6269    761.666    1.40376    193.228  0.0935976    27.5262    1.44962    12.5274 		   5.042    12.39    6.739    4.491    11.58    4.777    78.71    515.8    46.63    244.3        0        0 		   55.4459483334835

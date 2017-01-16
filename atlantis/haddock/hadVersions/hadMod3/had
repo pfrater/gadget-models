@@ -1,0 +1,45 @@
+; stock definition file for had created using rgadget
+; at 2016-11-29
+;
+stockname	had
+livesonareas	1
+minage	1
+maxage	19
+minlength	1
+maxlength	120
+dl	1
+refweightfile	./Data/had.refweightfile
+growthandeatlengths	./Aggfiles/had.len.agg
+doesgrow	1
+growthfunction	lengthvbsimple
+growthparameters	#had.linf	#had.k	5.87903e-06	3.116172
+beta	(* 10 #had.bbin)
+maxlengthgroupgrowth	15
+naturalmortality	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort	#had.mort
+iseaten	1
+preylengths	.//Aggfiles/had.prey.agg
+energycontent	1
+doeseat	0
+;
+Initialconditions
+minage	1
+maxage	19
+minlength	1
+maxlength	120
+dl	1
+sdev	1
+normalparamfile	./Modelfiles/had.normalparam
+doesmigrate	0
+;
+doesmature	0
+;
+doesmove	0
+;
+doesrenew	1
+minlength	1
+maxlength	33
+normalparamfile	./Modelfiles/had.rec
+doesspawn	0
+;
+doesstray	0
+;

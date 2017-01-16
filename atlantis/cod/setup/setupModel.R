@@ -28,8 +28,8 @@ lw.tmp <-
 opt <- gadget.options(type='simple1stock')
 
 ## adapt opt list to greater silver smelt
-weight.alpha <- lw.tmp[1]
-weight.beta <- lw.tmp[2]
+weight.alpha <- 0.000008249352
+weight.beta <- 3.026918
 
 opt$area$numofareas <- 1
 opt$area$areasize <- mfdb_area_size(mdb, defaults)[[1]]$size
@@ -66,7 +66,6 @@ opt$stocks$imm <- within(opt$stock$imm, {
     renewal <- list(minlength=1, maxlength=33)
 })
 
-
 # create gadget skeleton
 gm <- gadget.skeleton(time=opt$time, area=opt$area,
                       stocks=opt$stocks, fleets=opt$fleets)
@@ -76,8 +75,11 @@ gm@stocks$imm@renewal.data$stddev <- '#cod.rec.sd'
 gm@stocks$imm@initialdata$area.factor <- '( * #cod.mult #cod.init.abund)'
 
 gm@fleets <- list(bmt.fleet, igfs.fleet, aut.fleet)
-gm@fleets[[2]]@suitability$params <- c("(* #igfs.alpha (* -1 #igfs.beta)) #igfs.beta 0 1")
-gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
+gm@fleets[[2]]@suitability$params <- c("#igfs.alpha #igfs.l50")
+gm@fleets[[3]]@suitability$params <- c("#aut.alpha #aut.l50")
+
+#gm@fleets[[2]]@suitability$params <- c("(* #igfs.alpha (* -1 #igfs.beta)) #igfs.beta 0 1")
+#gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
 
 #gm@fleets[[2]]@suitability$params <- c("#igfs.p1 #igfs.p2 (- 1 #igfs.p1) #igfs.p4 #igfs.p5 100")
 

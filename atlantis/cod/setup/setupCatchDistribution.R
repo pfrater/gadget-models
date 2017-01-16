@@ -31,6 +31,15 @@ aggdata <-
                              length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
                         defaults))
 
+keep.years <- seq(1948, 2013, by=5)
+# age5yr model
+aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
+
+
+# # age0.1 model
+# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
+# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
+
 #attributes(aggdata[[1]])$age <-
 #    llply(attributes(aggdata[[1]])$age,function(x) x[1])
 
@@ -87,6 +96,13 @@ aggdata <-
                              species=defaults$species,
                              length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
                         defaults))
+
+# age5yr model
+aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
+
+# # age0.1 model
+# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
+# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
 
 #attributes(aggdata[[1]])$age <-
 #    llply(attributes(aggdata[[1]])$age,function(x) x[1])
@@ -147,6 +163,13 @@ aggdata <-
                         defaults))
 #attributes(aggdata[[1]])$age <-
 #    llply(attributes(aggdata[[1]])$age,function(x) x[1])
+
+# age5yr model
+aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
+
+# # age0.1 model
+# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
+# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
 
 gadget_dir_write(gd,
                  gadget_likelihood_component("catchdistribution",

@@ -1,0 +1,8 @@
+
+hadMod2 - git commit:
+*******
+I just changed the selectivity curves to what is used in Atlantis for this model.
+
+hadMod1 - git commit:
+*******
+Initial version of a haddock model to compare gadget to atlantis. This really looked pretty good; it matched the trends really well, but the magnitude of biomass is off. I'm starting to wonder if it doesn't have something to do with the refweight file. Parameters for the length-weight relationship are really off when I pull it from the data (compared to what is used in the Atlantis model).

@@ -1,0 +1,13 @@
+; main file for gadget - created in Rgadget
+; WGTS/main.aldist.aut - Mon Jan  9 00:16:34 2017
+timefile time
+areafile area
+printfiles ; no printfile supplied
+[stock]
+stockfiles had
+[tagging]
+[otherfood]
+[fleet]
+fleetfiles Modelfiles/fleets
+[likelihood]
+likelihoodfiles WGTS/likelihood.aldist.aut

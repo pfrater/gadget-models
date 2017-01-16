@@ -12,7 +12,7 @@ spr.survey.mid <- mfdb_sample_count(mdb, c('length'), c(list(
 
 spr.survey.long <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type = 'SprSurvey',
-    length = mfdb_interval("len", seq(80,120,10), open_ended=T)),
+    length = mfdb_interval("len", c(seq(80,120,10), 150), open_ended=T)),
     defaults))
 
 
@@ -54,7 +54,7 @@ aut.survey.mid <- mfdb_sample_count(mdb, c('length'), c(list(
 
 aut.survey.long <- mfdb_sample_count(mdb, c( 'length'), c(list(
     sampling_type = 'AutSurvey',
-    length = mfdb_interval("len", seq(80,120,10), open_ended=T)),
+    length = mfdb_interval("len", c(seq(80,120,10), 150), open_ended=T)),
     defaults))
 
 

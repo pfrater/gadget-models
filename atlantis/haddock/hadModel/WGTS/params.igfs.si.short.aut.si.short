@@ -1,0 +1,113 @@
+; Gadget version 2.2.00-BETA running on mfdb Sat Jan 14 20:44:09 2017
+; Simulated Annealing algorithm ran for 141050 function evaluations
+; and stopped when the likelihood value was 717.25066
+; because the convergence criteria were met
+; Hooke & Jeeves algorithm ran for 2743 function evaluations
+; and stopped when the likelihood value was 717.24901
+; because the convergence criteria were met
+; BFGS algorithm ran for 1665 function evaluations
+; and stopped when the likelihood value was 717.249
+; because the accuracy limit for the gradient calculation was reached
+switch	value		lower	upper	optimise
+had.linf	   116.01845	      75      150        0
+had.k	   0.1389627	    0.01      0.3        0
+had.bbin	    99.99897	   1e-08      100        1
+had.mort	  0.15000465	    0.15      0.4        1
+had.mult	   1.9717142	   1e-05       10        1
+had.init.abund	   44.426667	   1e-05      100        1
+had.age1	   24.028376	   1e-05      100        1
+had.age2	   78.141946	   1e-05      100        1
+had.age3	   8.2689981	   1e-05      100        1
+had.age4	   79.467239	   1e-05      100        1
+had.age5	   99.993936	   1e-05      100        1
+had.age6	   99.998048	   1e-05      100        1
+had.age7	   61.821826	   1e-05      100        1
+had.age8	   52.651538	   1e-05      100        1
+had.age9	    44.15566	   1e-05      100        1
+had.age10	   36.949171	   1e-05      100        1
+had.age11	   31.987551	   1e-05      100        1
+had.age12	   24.645084	   1e-05      100        1
+had.age13	   22.719452	   1e-05      100        1
+had.age14	    14.59049	   1e-05      100        1
+had.age15	   16.791704	   1e-05      100        1
+had.age16	   10.687897	   1e-05      100        1
+had.age17	   2.3001468	   1e-05      100        1
+had.age18	   3.3231503	   1e-05      100        1
+had.age19	   3.7077318	   1e-05      100        1
+had.recl	     15.2704	       1       40        0
+had.rec.mult	   31.942889	   1e-05      500        1
+had.rec1948	   84.067689	   0.001     1000        1
+had.rec.sd	  0.48460355	     0.1       10        1
+had.rec1949	   124.32395	   0.001     1000        1
+had.rec1950	   304.68483	   0.001     1000        1
+had.rec1951	   292.62901	   0.001     1000        1
+had.rec1952	    209.6756	   0.001     1000        1
+had.rec1953	   214.73389	   0.001     1000        1
+had.rec1954	   215.58293	   0.001     1000        1
+had.rec1955	   222.49591	   0.001     1000        1
+had.rec1956	   222.14667	   0.001     1000        1
+had.rec1957	   236.80302	   0.001     1000        1
+had.rec1958	   149.06427	   0.001     1000        1
+had.rec1959	   389.85159	   0.001     1000        1
+had.rec1960	   441.13066	   0.001     1000        1
+had.rec1961	   214.85338	   0.001     1000        1
+had.rec1962	   215.15269	   0.001     1000        1
+had.rec1963	   219.20401	   0.001     1000        1
+had.rec1964	   239.14475	   0.001     1000        1
+had.rec1965	   338.65783	   0.001     1000        1
+had.rec1966	   178.05992	   0.001     1000        1
+had.rec1967	   97.970198	   0.001     1000        1
+had.rec1968	   95.270405	   0.001     1000        1
+had.rec1969	   97.340231	   0.001     1000        1
+had.rec1970	   102.01264	   0.001     1000        1
+had.rec1971	   99.876025	   0.001     1000        1
+had.rec1972	   90.221643	   0.001     1000        1
+had.rec1973	   83.828134	   0.001     1000        1
+had.rec1974	    86.24685	   0.001     1000        1
+had.rec1975	   87.060132	   0.001     1000        1
+had.rec1976	   59.918838	   0.001     1000        1
+had.rec1977	   91.909251	   0.001     1000        1
+had.rec1978	   352.50452	   0.001     1000        1
+had.rec1979	   255.22989	   0.001     1000        1
+had.rec1980	   23.358404	   0.001     1000        1
+had.rec1981	    74.54287	   0.001     1000        1
+had.rec1982	   207.57755	   0.001     1000        1
+had.rec1983	   72.709553	   0.001     1000        1
+had.rec1984	    59.21957	   0.001     1000        1
+had.rec1985	   246.56767	   0.001     1000        1
+had.rec1986	   529.10387	   0.001     1000        1
+had.rec1987	   206.09382	   0.001     1000        1
+had.rec1988	   183.35573	   0.001     1000        1
+had.rec1989	   43.650132	   0.001     1000        1
+had.rec1990	   121.63102	   0.001     1000        1
+had.rec1991	   691.09372	   0.001     1000        1
+had.rec1992	   311.27396	   0.001     1000        1
+had.rec1993	   78.869364	   0.001     1000        1
+had.rec1994	   330.05745	   0.001     1000        1
+had.rec1995	   204.09538	   0.001     1000        1
+had.rec1996	   508.69695	   0.001     1000        1
+had.rec1997	   201.91611	   0.001     1000        1
+had.rec1998	   58.892416	   0.001     1000        1
+had.rec1999	   199.00437	   0.001     1000        1
+had.rec2000	    900.2606	   0.001     1000        1
+had.rec2001	   973.63558	   0.001     1000        1
+had.rec2002	   343.08625	   0.001     1000        1
+had.rec2003	   384.14531	   0.001     1000        1
+had.rec2004	    998.8797	   0.001     1000        1
+had.rec2005	   898.28137	   0.001     1000        1
+had.rec2006	   279.57903	   0.001     1000        1
+had.rec2007	   113.15696	   0.001     1000        1
+had.rec2008	   302.29645	   0.001     1000        1
+had.rec2009	   698.38478	   0.001     1000        1
+had.rec2010	    184.2633	   0.001     1000        1
+had.rec2011	   60.326722	   0.001     1000        1
+had.rec2012	   111.71065	   0.001     1000        1
+had.rec2013	   113.32621	   0.001     1000        1
+lln.comm.alpha	       0.066	    0.01        3        0
+lln.comm.l50	          70	       5      200        0
+lln.discards.alpha	       0.066	    0.01        3        0
+lln.discards.l50	          70	       5      200        0
+igfs.alpha	       0.046	   0.001        3        0
+igfs.l50	          49	       5       50        0
+aut.alpha	       0.046	   0.001        3        0
+aut.l50	          49	       5       50        0

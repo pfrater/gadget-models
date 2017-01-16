@@ -1,0 +1,111 @@
+; Gadget version 2.2.00-BETA running on pfrater Tue Nov 29 18:25:28 2016
+; Simulated Annealing algorithm ran for 211000 function evaluations
+; and stopped when the likelihood value was 161.94101
+; because the convergence criteria were met
+; Hooke & Jeeves algorithm ran for 2557 function evaluations
+; and stopped when the likelihood value was 161.89475
+; because the convergence criteria were met
+; BFGS algorithm ran for 2025 function evaluations
+; and stopped when the likelihood value was 161.89178
+; because the maximum number of function evaluations was reached
+switch	value		lower	upper	optimise
+had.linf	   144.28166	      75      150        1
+had.k	 0.067304547	    0.01      0.3        1
+had.bbin	  0.02608274	   1e-08      100        1
+had.mort	  0.38013983	    0.15      0.4        1
+had.mult	   1.6557402	   1e-05       10        1
+had.init.abund	   83.173566	   1e-05      100        1
+had.age1	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age2	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age3	   39.117699	   1e-05      100        1
+had.age4	         100	   1e-05      100        1
+had.age5	   78.968492	   1e-05      100        1
+had.age6	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age7	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age8	   92.205658	   1e-05      100        1
+had.age9	   41.140279	   1e-05      100        1
+had.age10	   3.4084778	   1e-05      100        1
+had.age11	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age12	   5.4431998	   1e-05      100        1
+had.age13	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age14	1.0000011e-05	   1e-05      100        1
+had.age15	1.0000087e-05	   1e-05      100        1
+had.age16	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age17	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age18	       1e-05	   1e-05      100        1 ; warning - parameter has been reset to bound
+had.age19	1.0000372e-05	   1e-05      100        1
+had.recl	   4.0463795	       1       40        1
+had.rec.mult	   373.17318	   1e-05      500        1
+had.rec1948	   148.15456	   0.001     1000        1
+had.rec.sd	  0.10004777	     0.1       10        1
+had.rec1949	   125.51723	   0.001     1000        1
+had.rec1950	   131.34893	   0.001     1000        1
+had.rec1951	   103.03325	   0.001     1000        1
+had.rec1952	   95.959938	   0.001     1000        1
+had.rec1953	   102.80065	   0.001     1000        1
+had.rec1954	   106.61098	   0.001     1000        1
+had.rec1955	   106.64006	   0.001     1000        1
+had.rec1956	   103.04014	   0.001     1000        1
+had.rec1957	   96.281482	   0.001     1000        1
+had.rec1958	   249.95572	   0.001     1000        1
+had.rec1959	   191.37798	   0.001     1000        1
+had.rec1960	   39.241399	   0.001     1000        1
+had.rec1961	   64.624966	   0.001     1000        1
+had.rec1962	   91.848279	   0.001     1000        1
+had.rec1963	   105.42918	   0.001     1000        1
+had.rec1964	   102.08317	   0.001     1000        1
+had.rec1965	   26.584499	   0.001     1000        1
+had.rec1966	  0.98718787	   0.001     1000        1
+had.rec1967	   31.911331	   0.001     1000        1
+had.rec1968	   41.397513	   0.001     1000        1
+had.rec1969	   42.920098	   0.001     1000        1
+had.rec1970	   39.519024	   0.001     1000        1
+had.rec1971	   25.360159	   0.001     1000        1
+had.rec1972	   35.905676	   0.001     1000        1
+had.rec1973	   31.501212	   0.001     1000        1
+had.rec1974	   32.724532	   0.001     1000        1
+had.rec1975	   32.324574	   0.001     1000        1
+had.rec1976	   74.112862	   0.001     1000        1
+had.rec1977	   171.13616	   0.001     1000        1
+had.rec1978	   84.302627	   0.001     1000        1
+had.rec1979	 0.001000016	   0.001     1000        1
+had.rec1980	   18.349757	   0.001     1000        1
+had.rec1981	   55.464932	   0.001     1000        1
+had.rec1982	   65.654997	   0.001     1000        1
+had.rec1983	   64.842788	   0.001     1000        1
+had.rec1984	   188.39289	   0.001     1000        1
+had.rec1985	   259.86537	   0.001     1000        1
+had.rec1986	   96.995426	   0.001     1000        1
+had.rec1987	0.0010000552	   0.001     1000        1
+had.rec1988	   47.574378	   0.001     1000        1
+had.rec1989	   162.77953	   0.001     1000        1
+had.rec1990	    425.2938	   0.001     1000        1
+had.rec1991	   167.58217	   0.001     1000        1
+had.rec1992	0.0010000288	   0.001     1000        1
+had.rec1993	   42.308455	   0.001     1000        1
+had.rec1994	   258.57682	   0.001     1000        1
+had.rec1995	    9.896243	   0.001     1000        1
+had.rec1996	   206.73331	   0.001     1000        1
+had.rec1997	   27.182951	   0.001     1000        1
+had.rec1998	   262.73932	   0.001     1000        1
+had.rec1999	   585.69635	   0.001     1000        1
+had.rec2000	   921.13854	   0.001     1000        1
+had.rec2001	   94.746283	   0.001     1000        1
+had.rec2002	   290.11242	   0.001     1000        1
+had.rec2003	   424.99102	   0.001     1000        1
+had.rec2004	   463.85619	   0.001     1000        1
+had.rec2005	0.0010000467	   0.001     1000        1
+had.rec2006	0.0010000018	   0.001     1000        1
+had.rec2007	   49.360648	   0.001     1000        1
+had.rec2008	   241.95132	   0.001     1000        1
+had.rec2009	0.0010000431	   0.001     1000        1
+had.rec2010	0.0010000578	   0.001     1000        1
+had.rec2011	0.0010000412	   0.001     1000        1
+had.rec2012	   41.836074	   0.001     1000        1
+had.rec2013	   74.835192	   0.001     1000        1
+lln.comm.alpha	     0.47869	    0.01        3        1
+lln.comm.l50	   63.926402	       5      200        1
+igfs.alpha	 0.073134516	   0.001        3        1
+igfs.l50	   49.999945	       5       50        1
+aut.alpha	 0.080151212	   0.001        3        1
+aut.l50	   33.025681	       5       50        1

@@ -17,6 +17,6 @@ exp.l50 <- function(alpha, l50, l) {
     1 / (1 + exp((-4*alpha)*(l - l50)))
 }
 
-alpha <- 0.05
-l50 <- 50
-curve(exp.l50(alpha, l50, x), add=T, col='red')
+alpha <- (0.046 / 4)
+l50 <- 67
+curve(exp.l50(alpha, l50, x), add=T, col='purple', lwd=4)
