@@ -60,7 +60,7 @@ source(sprintf('%s/setupModel.R', setup.d))
 
 source(sprintf('%s/setupParams.R', setup.d))
 source(sprintf('%s/setupCatchDistribution.R', setup.d))
-source(sprintf('%s/setupIndices.R', setup.d))
+source(sprintf('%s/setupIndicesTest.R', setup.d))
 
 file.copy(sprintf('%s/itterfitter.sh', setup.d), gd$dir)
 file.copy(sprintf('%s/run.R', setup.d), gd$dir)

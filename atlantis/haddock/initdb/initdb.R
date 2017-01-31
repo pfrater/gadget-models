@@ -32,12 +32,12 @@ is_functional_groups$MfdbCode <- vapply(
     function (x) if (length(x) > 0) x[[1]] else as.character(NA), "")
 
 
-# assemble and import cod 
+# assemble and import haddock 
 fgName <- 'Haddock'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
 
-length_group <-  c(0, seq(10, 120, by=5))
+length_group <-  seq(0.5, 120.5, by=1)
 sigma_per_cohort <- sqrt(c(had.length.mn.sd$length.sd, 15))
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49
@@ -47,17 +47,18 @@ survey_sigma <- 8.37e-06
 
 # Import entire Cod/Haddock content for one sample point so we can use this as a tracer value
 is_fg_tracer <- is_fg_count[
-    is_fg_count$year == attr(is_dir, 'start_year') &
+    # is_fg_count$year == attr(is_dir, 'start_year') &
         is_fg_count$month %in% c(1),]
 is_fg_tracer$species <- fg_group$MfdbCode
 is_fg_tracer$areacell <- is_fg_tracer$area
 is_fg_tracer$sampling_type <- 'Bio'
+is_fg_tracer <- filter(is_fg_tracer, count > 0)
 mfdb_import_survey(mdb, is_fg_tracer, data_source = paste0('atlantis_tracer_', fg_group$Name))
 
 # create survey from tracer values
 is_fg_survey <- is_fg_count[
     is_fg_count$area %in% paste('Box', 0:52, sep='') &
-        is_fg_count$month %in% c(3,10),] %>%
+        is_fg_count$month %in% c(3,9),] %>%
     mutate(sampling_type = ifelse(month == 3,
                                   "SprSurvey",
                                   "AutSurvey")) %>%
@@ -78,7 +79,7 @@ is_fg_survey <- is_fg_count[
 #                                   "AutSurvey")) %>%
 #     mutate(count = round(count * 5e-04))
 
-survey <- filter(is_fg_survey, count >= 1)
+survey <- filter(is_fg_survey, count > 0)
 
 # strip ages and lengths from survey to mimic real world data
 # see '~gadget/gadget-models/atlantis/cod/initdb/codSampleNumbers.R
@@ -87,11 +88,10 @@ al.survey$length <- round(al.survey$length)
 al.survey$weight <- round(al.survey$weight)
 
 # Throw away empty rows
-is_fg_survey <- al.survey[al.survey$count > 0,]
-
-is_fg_survey$species <- fg_group$MfdbCode
-is_fg_survey$areacell <- is_fg_survey$area
-mfdb_import_survey(mdb, is_fg_survey, data_source = paste0('atlantis_survey_', fg_group$Name))
+al.survey <- al.survey[al.survey$count > 0,]
+al.survey$species <- fg_group$MfdbCode
+al.survey$areacell <- al.survey$area
+mfdb_import_survey(mdb, al.survey, data_source = paste0('atlantis_survey_', fg_group$Name))
 
 
 ##############################
@@ -186,6 +186,32 @@ is_catch <- getHaddockCatches(is_dir, is_area_data, fishery)
 is_catch <- filter(is_catch, functional_group == 'FHA')
 is_catch$weight_total <- is_catch$weight_total*1000
 
+########################################
+## the following code is to correct
+## the spikes that occur every 7-8 years
+########################################
+weird.yrs <- data.frame(year = sort(c(seq(1951,2011,15), seq(1959, 2004, 15))),
+                        months = c(10,4,10,4,10,4,10,4,10))
+annual.wt <-
+    is_catch %>% 
+    filter(!(month %in% c(4,10))) %>%
+    group_by(year, month) %>%
+    summarize(wt = sum(weight_total)) %>%
+    group_by(year) %>% summarize(mn.ann.wt = mean(wt))
+overcatch.rate <-
+    is_catch %>%
+    group_by(year, month) %>%
+    summarize(monthly.wt = sum(weight_total)) %>%
+    left_join(annual.wt) %>%
+    mutate(oc.rate = monthly.wt / mn.ann.wt) %>%
+    filter(oc.rate > 1.5) %>% select(year, month, oc.rate)
+is_catch <-
+    is_catch %>%
+    left_join(overcatch.rate) %>%
+    mutate(weight = ifelse(is.na(oc.rate), weight_total, weight_total / oc.rate)) %>%
+    select(-weight_total, -oc.rate)
+
+
 # Species column that maps to MFDB code
 is_catch$species <- is_catch$functional_group
 levels(is_catch$species) <- is_functional_groups[match(
@@ -193,7 +219,7 @@ levels(is_catch$species) <- is_functional_groups[match(
     is_functional_groups$GroupCode), 'MfdbCode']
 
 is_catch$sampling_type <- "Cat"
-is_catch <- rename(is_catch, areacell = area, vessel = fishery, weight = weight_total)
+is_catch <- rename(is_catch, areacell = area, vessel = fishery)
 is_catch <- filter(is_catch, weight > 0)
 is_catch$gear <- 'LLN'
 

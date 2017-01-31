@@ -1,9 +1,8 @@
 library(Rgadget)
-setwd('~/gadget/atlantis/cod/codModel')
+setwd('~/gadget/atlantis/haddock/hadModel')
 tmp <- gadget.iterative(rew.sI=TRUE,
                             main='main',
                         grouping=list(short=c('igfs.si.short', 'aut.si.short'),
-                                      mid=c('igfs.si.mid', 'aut.si.mid'),
                                       long=c('igfs.si.long', 'aut.si.long')),
                         wgts='WGTS')
 

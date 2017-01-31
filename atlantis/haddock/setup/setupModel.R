@@ -13,7 +13,7 @@ init.sigma <-
 lw <- mfdb_sample_meanweight(mdb, c('length'),
                             c(list(sampling_type=c('SprSurvey','AutSurvey'),
                                    species='HAD',
-                                   length=mfdb_interval("", seq(0,120, by=10)))))
+                                   length=mfdb_interval("", seq(0,120, by=1)))))
 
 lw.tmp <-   
     lw[[1]] %>% 
@@ -47,7 +47,7 @@ opt$stocks$imm <- within(opt$stock$imm, {
     minage <- 1
     maxage <- 19
     minlength <- 1
-    maxlength <- 110
+    maxlength <- 120
     dl <- 1
     growth <- c(linf='#had.linf', 
                 k='#had.k',
@@ -75,7 +75,7 @@ gm@stocks$imm@renewal.data$stddev <- '#had.rec.sd'
 
 gm@stocks$imm@initialdata$area.factor <- '( * #had.mult #had.init.abund)'
 
-gm@fleets <- list(lln.fleet, lln.discards, igfs.fleet, aut.fleet)
+gm@fleets <- list(lln.fleet, igfs.fleet, aut.fleet)
 gm@fleets[[2]]@suitability$params <- c("#igfs.alpha #igfs.l50")
 gm@fleets[[3]]@suitability$params <- c("#aut.alpha #aut.l50")
 

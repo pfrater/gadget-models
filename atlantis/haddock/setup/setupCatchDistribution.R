@@ -1,6 +1,7 @@
 minage <- Rgadget:::getMinage(gm)
 maxage <- Rgadget:::getMaxage(gm)
-maxlength <- 110 #max(Rgadget:::getLengthgroups(gm))
+maxlength <- 120 #max(Rgadget:::getLengthgroups(gm))
+
 
 ## Query length data to create survey catchdistribution components
 aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
@@ -34,7 +35,7 @@ aggdata <-
 #attributes(aggdata[[1]])$age <-
 #    llply(attributes(aggdata[[1]])$age,function(x) x[1])
 
-keep.years <- seq(1948, 2013, by=5)
+# keep.years <- seq(1948, 2013, by=5)
 # age5yr model
 # aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
 

@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/haddock/hadModel')
+setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod11')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'lln.comm', ratio=1))
 
@@ -81,7 +81,7 @@ si.fit.aut.survey <-
 ldist.fit.spr.survey <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.spr') ,
            aes(lower,predicted)) + geom_line() +
-    geom_line(aes(lower,observed),col='gray') +
+    geom_line(aes(lower,observed), color='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.spr' & lower==min(lower)),y=Inf),
@@ -94,7 +94,7 @@ ldist.fit.spr.survey <-
 ldist.fit.aut.survey <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
            aes(lower,predicted)) + geom_line() +
-    geom_line(aes(lower,observed),col='gray') +
+    geom_point(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.aut' & lower==min(lower)),y=Inf),

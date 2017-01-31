@@ -5,8 +5,7 @@ library(grid)
 library(Rgadget)
 setwd('~/gadget/models/atlantis/haddock/hadModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
-                  fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
-                  mat.par=c(-6.510198, 1.108594))
+                  fleet.predict = data.frame(fleet = 'lln.comm', ratio=1))
 
 
 library(tidyr)
@@ -29,9 +28,10 @@ is_functional_groups$MfdbCode <- vapply(
     mfdb_find_species(is_functional_groups$LongName)['name',],
     function (x) if (length(x) > 0) x[[1]] else as.character(NA), "")
 
-# assemble and import cod 
+# assemble and import haddock 
 fgName <- 'Haddock'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
+is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
 
 
 # compare biomass by year in gadget to atlantis
@@ -62,7 +62,6 @@ atl.gad.ts <-
 #######################################
 ## to check numbers instead of biomass
 #######################################
-is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
 had.numbers <- 
     is_fg_count %>% 
     filter(month == 2) %>%
@@ -104,9 +103,9 @@ atl.init <-
     group_by(age) %>%
     summarize(init.ind = sum(count))
 
-params <- read.gadget.parameters('cod/codModel/WGTS/params.final')
+params <- read.gadget.parameters('WGTS/params.final')
 age.params <- params[grep('age[0-9]', rownames(params), value=T), ]$value
-mult <- params[grep('cod.mult', rownames(params), value=T), ]$value
+mult <- params[grep('had.mult', rownames(params), value=T), ]$value
 init.abund <- params[grep('init.abund', rownames(params), value=T), ]$value
 
 gad.init.ages <- 10e03 * age.params * (mult * init.abund)
@@ -120,3 +119,27 @@ gad.init <-
 init.comp <- 
     ggplot(data=gad.init, aes(x=age.group, y=init)) + geom_line() +
     geom_line(data=atl.init, aes(x=age, y=init.ind))
+
+
+## playing around with biomass in different months to see if that makes a difference
+monthly.biomass <-
+    is_fg_count %>%
+    mutate(biomass = weight * count / 1e3) %>%
+    filter(!is.na(biomass)) %>% 
+    group_by(year, month) %>% 
+    summarize(biomass = sum(biomass))
+
+monthly.gad.biomass <- 
+    select(atl.gad.biomass, year, total.biomass) %>%
+    rename(gadget.biomass = total.biomass) %>% 
+    mutate(month = 3)
+
+monthly.biomass <- left_join(monthly.biomass, monthly.gad.biomass)
+
+bm.by.month <-
+    ggplot(data=monthly.biomass, aes(x=year, y=biomass/1e3,
+                                     color=factor(month))) + 
+    geom_line() + 
+    geom_line(aes(x=year, y=gadget.biomass/1e3)) +
+    theme_bw() + xlab('Year') + ylab('Biomass (tons)') 
+

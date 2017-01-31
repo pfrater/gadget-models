@@ -22,3 +22,14 @@ modelRunProtocol.txt
 /atlantis/cod/modelCheck/*
 /atlantis/cod/setup/copyModel.sh
 /atlantis/cod/setup/itterfitter.sh
+atlantis/cod/age0.1model/
+atlantis/haddock/age0.1model/
+atlantis/cod/age5yrModel/
+atlantis/haddock/age5yrModel/
+atlantis/cod/noAgeModel/
+atlantis/haddock/noAgeModel/
+atlantis/haddock/hadModel/
+atlantis/haddock/hadVersions/
+atlantis/cod/dataPoorModels/
+atlantis/haddock/dataPoorModels/
+atlantis/cod/codModelTemp/
