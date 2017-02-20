@@ -26,8 +26,7 @@ ldist <-
     left_join(species.key) %>%
     left_join(translate.all.nu()) %>%
     mutate(count=round(count*pmax(number.counted+number.measured,1,na.rm=TRUE)/
-                           pmax(1,number.measured,na.rm=TRUE)),
-           age = 0) %>%
+                           pmax(1,number.measured,na.rm=TRUE))) %>%
     ungroup() %>%
     mutate(number.measured = NULL,
            number.counted = NULL,
@@ -39,7 +38,7 @@ ldist <-
 ldist <- data.table(ldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland.cap.ldist.comm',
+                   data_source = 'capLdistComm',
                    ldist)
 
 rm(ldist)
@@ -62,6 +61,6 @@ aldist <-
 aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland.cap.aldist.comm',
+                   data_source = 'capAldistComm',
                    aldist)
 rm(aldist)

@@ -1,3 +1,17 @@
+## setting up a tracer index to see how gadget fits to exact numbers
+tracer <- mfdb_sample_count(mdb, c('length'), c(list(
+    sampling_type='Bio'),
+    defaults))
+
+gadget_dir_write(gd, gadget_likelihood_component("surveyindices",
+                                                 name = "tracer",
+                                                 weight = 1e09,
+                                                 data = tracer[[1]],
+                                                 fittype = 'fixedlinearfit',
+                                                 slope=1,
+                                                 intercept=0,
+                                                 stocknames = stocknames))
+
 ## IGFS survey indices
 spr.survey.short <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='SprSurveyTotals',

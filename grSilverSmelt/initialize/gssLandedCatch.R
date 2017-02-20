@@ -1,4 +1,4 @@
-##########################
+    ##########################
 # landings data
 ##########################
 
@@ -30,6 +30,6 @@ landings <- data.table(landings)
 
 # import landings data into mfdb
 mfdb_import_survey(mdb,
-                   data_source = 'commercial.landings',
+                   data_source = 'gssLandings',
                    landings)
 

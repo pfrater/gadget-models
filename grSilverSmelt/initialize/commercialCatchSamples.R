@@ -33,7 +33,7 @@ ldist <-
 ldist <- data.table(ldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-ldist.comm',
+                   data_source = 'gssLdistComm',
                    ldist)
 catches <- ldist # saving this for plotting purposes later on
 
@@ -58,6 +58,6 @@ aldist <-
 aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-aldist.comm',
+                   data_source = 'gssAldistComm',
                    aldist)
 rm(aldist)

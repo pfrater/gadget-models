@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/gadget-models/grSilverSmelt/gssModel')
+setwd('~/gadget/models/grSilverSmelt/gssVersions/gssModelVer57')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-18.2401844, 0.5536777))

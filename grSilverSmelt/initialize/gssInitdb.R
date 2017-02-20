@@ -7,7 +7,7 @@ library(geo)
 library(dplyr)
 library(data.table)
 
-setwd('/home/pfrater/gadget/gadget-models/grSilverSmelt')
+setwd('/home/pfrater/gadget/models/grSilverSmelt')
 
 # Create connection to MFDB database, as the Icelandic case study
 mdb <- mfdb('iceland')

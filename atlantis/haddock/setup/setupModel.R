@@ -10,6 +10,10 @@ init.sigma <-
     group_by(age) %>%
     summarize(ml=mean(mean), ms=mean(stddev, na.rm=T))
 
+atl.init.sigma <- 
+    rbind(init.sigma, init.sigma) %>%
+    arrange(age)
+
 lw <- mfdb_sample_meanweight(mdb, c('length'),
                             c(list(sampling_type=c('SprSurvey','AutSurvey'),
                                    species='HAD',
@@ -39,12 +43,12 @@ opt$time$lastyear <- end.year
 
 ## setup M and determine initial abundance
 nat.mort <- 0.2
-rc <- 19
+rc <- 20
 
 ## set up the one stock stock
 opt$stocks$imm <- within(opt$stock$imm, {
     name <- 'had'
-    minage <- 1
+    minage <- 0
     maxage <- 19
     minlength <- 1
     maxlength <- 120
@@ -55,11 +59,11 @@ opt$stocks$imm <- within(opt$stock$imm, {
                 binn=15, recl='#had.recl'
     )
     weight <- c(a=weight.alpha, b=weight.beta)
-    init.abund <- sprintf('#had.age%s', 1:rc)
+    init.abund <- sprintf('#had.age%s', 0:(rc-1))
     n <- sprintf('(* #had.rec.mult  #had.rec%s)', st.year:end.year)
     doesmature <- 0
-    sigma <- c(init.sigma$ms, rep(init.sigma$ms[6], 13))
-    M <- rep('#had.mort', rc)
+    sigma <- c(atl.init.sigma$ms, rep(atl.init.sigma$ms[12], 9))
+    M <- rep(0.35, rc)
     doesmove <- 0
     doesmigrate <- 0
     doesrenew <- 1
@@ -68,7 +72,9 @@ opt$stocks$imm <- within(opt$stock$imm, {
 
 
 # create gadget skeleton
-gm <- gadget.skeleton(time=opt$time, area=opt$area,
+source('functions/pauls.gadget.test.skeleton.R')
+source('functions/testSkeletonFunctions.R')
+gm <- paulsGadgetSkeleton(time=opt$time, area=opt$area,
                       stocks=opt$stocks, fleets=opt$fleets)
 
 gm@stocks$imm@renewal.data$stddev <- '#had.rec.sd'

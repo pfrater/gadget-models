@@ -42,7 +42,8 @@ sigma_per_cohort <- sqrt(c(had.length.mn.sd$length.sd, 15))
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49
 sel_b <- 0.046 # Controls the shape of the curve
-survey_suitability <- 5e-04 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
+survey_suitability <- rep(1, length(length_group))
+#survey_suitability <- 5e-04 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
 survey_sigma <- 8.37e-06
 
 # Import entire Cod/Haddock content for one sample point so we can use this as a tracer value
@@ -91,16 +92,7 @@ al.survey$weight <- round(al.survey$weight)
 al.survey <- al.survey[al.survey$count > 0,]
 al.survey$species <- fg_group$MfdbCode
 al.survey$areacell <- al.survey$area
-
-# adding in survey totals with all lengths and ages
-survey.total <-
-	survey %>%
-	mutate(sampling_type = ifelse(month == 3, "SprSurveyTotals", "AutSurveyTotals"),
-		   species = fg_group$MfdbCode) %>%
-	rename(areacell = area)
-
-mfdb_import_survey(mdb, survey.total, data_source = paste0('atlantis_total_survey_', fg_group$Name))
-mfdb_import_survey(mdb, al.survey, data_source = paste0('atlantis_survey_', fg_group$Name))
+mfdb_import_survey(mdb, survey, data_source = paste0('atlantis_survey_', fg_group$Name))
 
 
 ##############################
@@ -159,8 +151,10 @@ wl <- getStructN(is_dir, is_area_data, fg_group)
 age.catch.wl <- left_join(age.catch, wl)
 
 # see haddockSampleNumber.R - line 61 to EOF
-fleet.suitability <- rep(0.001, length(length_group))
-fleet.sigma <- 4.3e-07
+fleet.suitability <- rep(1, length(length_group))
+# fleet.suitability <- rep(0.001, length(length_group))
+fleet.sigma <- 0
+# fleet.sigma <- 4.3e-07
 
 # testing out using just straight samples instead of adding error
 

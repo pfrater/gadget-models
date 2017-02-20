@@ -1,53 +1,38 @@
 # import capelin acoustic survey data
-tmp <- new.env()
-load('data/capelinAcousticSurveys.RData', envir=tmp)
+source('data/formatAcousticData.R')
 
-# pythagoras <- function(a,b) {
-#     sqrt((a^2) + (b^2))
-# }
-# 
-# # compute the overall distance for each trip in meters
-# for (dataset in ls(tmp)) {
-#     temp.ds <- mget(dataset, envir=tmp)[[1]];
-#     lats <- temp.ds$lat[1:(nrow(temp.ds)-1)];
-#     lons <- temp.ds$lon[1:(nrow(temp.ds)-1)]
-#     post.lats <- temp.ds$lat[2:nrow(temp.ds)];
-#     post.lons <- temp.ds$lon[2:nrow(temp.ds)];
-#     y.meters <- (post.lats-lats)*(111320); 
-#     x.meters <- (post.lons-lons)*(111320*cos(post.lats*(pi/180)));
-#     trip.distance <- pythagoras(x.meters, y.meters);
-#     trip.distance <- c(NA, trip.distance);
-#     temp.ds$trip.distance <- trip.distance;
-#     assign(dataset, temp.ds, envir=tmp)
-# }
+new.areas <- unique(filter(aut.cap, !(area %in% reitmapping$GRIDCELL))$area)
+    
+mfdb_import_area(mdb, data.frame(
+    id = (nrow(reitmapping)+1):(nrow(reitmapping)+length(new.areas)),
+    name = new.areas,
+    size = 28*55*cos(geo::sr2d(new.areas)$lat*pi/180)))
 
-tmp$rep12.2[15] <- NULL
-cap.dat <- ldply(tmp, function(x) x)
-cap.dat$sa[cap.dat$sa == -9999] <- NA
-cap.dat$year <- gsub('rep', '', cap.dat$.id) %>% substr(1,2) %>% 
-    paste('20', ., sep='') %>% as.numeric()
-cap.dat$areacell <- d2sr(cap.dat$lat, cap.dat$lon)
+aco.dists <-
+    aut.cap.len %>%
+    select(station.id, year, month, day, gridcell, small.gridcell,
+           lat, lon, length, age, nr, sex, maturity, gutted.weight) %>%
+    mutate(areacell = d2sr(lat, lon),
+           species = 'CAP',
+           sampling_type = 'ACO',
+           sex = c('M','F')[pmax(1,sex)],
+           gear = 'PAS') %>%
+    rename(weight = gutted.weight)
 
-# formatting the cap.dat date column - it's a mess
-cap.dat <-
-    mutate(cap.dat, newdate = ifelse(is.na(date), 0,
-                                ifelse(grepl('\\.', date) & nchar(date)==8,
-                                date,
-                                ifelse(nchar(date)==10,
-                                   substr(date, 3, 10),
-                                   gsub('^(.{2})(.{2})(.*)$', '\\1.\\2.\\3', 
-                                        substr(date, 3, 8)))))) %>%
-    mutate(month = as.numeric(substr(newdate, 4, 6)))
-cap.dat$month[is.na(cap.dat$month)] <- 1
+mfdb_import_survey(mdb,
+                   data_source='capAcousticDists',
+                   aco.dists)
 
-
-cap.echo.si <-
-    select(cap.dat, .id, year, month, areacell, sa, lat, lon) %>%
-    rename(count = sa) %>%
-    mutate(sampling_type = 'ACO', 
-           species = 'CAP')
-
+cap.echo.si <- 
+    aut.cap %>%
+    filter(cap > 0) %>%
+    rename(count = cap, areacell = area) %>%
+    mutate(gear = 'PAS',
+           sampling_type = 'ACO',
+           species = 'CAP',
+           # month for 2007 is taken from length/age data
+           month = ifelse(year == 2007 & is.na(month), 11, month))
 
 mfdb_import_survey(mdb, 
-                   data_source='iceland.cap.acoustic',
+                   data_source='capAcousticSurvey',
                    cap.echo.si)

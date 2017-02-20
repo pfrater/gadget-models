@@ -77,6 +77,39 @@ had.numbers.plot <-
     theme_bw() + xlab('Year') + ylab('Numbers')
 
 
+#######################################
+## check landings
+#######################################
+atl.landings <- 
+    read.table('~/Dropbox/Paul_IA/OutM45BioV158FMV79_PF/OutCatch.txt', 
+               header=T) %>%
+    mutate(year = 1948:2012) %>%
+    select(year, starts_with(fg_group$GroupCode))
+
+atl.catch.plot <- catch.plot + geom_line(data=atl.landings, aes(x=year, y=FHA))
+
+
+#######################################
+## check numbers by age
+#######################################
+age.numbers <- 
+    fit$stock.std %>%
+    mutate(age = age - (age %% 2)) %>%
+    group_by(year, age) %>%
+    summarize(total = sum(number))
+    
+atl.age.numbers <- 
+    is_fg_count %>%
+    filter(month == 3, count >= 1) %>%
+    group_by(year, age) %>%
+    summarize(total = sum(count))
+
+age.numbers.plot <-
+    ggplot(data=age.numbers, aes(x=year, y=total, color='Gadget')) + geom_line() +
+    geom_line(data=atl.age.numbers, aes(x=year, y=total, color='Atlantis')) + 
+    facet_wrap(~age) + 
+    scale_color_manual('', breaks=c('Gadget', 'Atlantis'), values=c('red', 'black')) +
+    theme_bw() + xlab('Year') + ylab('Numbers')
 
 #######################################
 ## check growth

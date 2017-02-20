@@ -38,7 +38,7 @@ ldist <- translate.all.le() %>%
 ldist <- data.table(ldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-ldist.aut',
+                   data_source = 'gssLdistAut',
                    ldist)
 rm(ldist)
 
@@ -65,7 +65,7 @@ aldist <- translate.all.kv() %>%
 aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-aldist.aut',
+                   data_source = 'gssAldistAut',
                    aldist)
 rm(aldist)
 

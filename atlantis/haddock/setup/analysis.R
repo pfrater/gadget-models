@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod11')
+setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod17')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'lln.comm', ratio=1))
 
@@ -94,7 +94,7 @@ ldist.fit.spr.survey <-
 ldist.fit.aut.survey <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
            aes(lower,predicted)) + geom_line() +
-    geom_point(aes(lower,observed),col='gray') +
+    geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.aut' & lower==min(lower)),y=Inf),
@@ -118,6 +118,48 @@ ldist.fit.catch <-
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
+
+ages <- 
+    fit$catchdist.fleets %>%
+    filter(name %in% c('aldist.spr', 'aldist.aut', 'aldist.lln')) %>%
+    group_by(name, year, step, age) %>%
+    summarize(observed = sum(observed, na.rm=T),
+              predicted = sum(predicted, na.rm=T)) %>%
+    mutate(age = as.numeric(gsub('age', '', age)))
+
+aldist.spr.survey <-
+    ggplot(data=filter(ages, name=='aldist.spr'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.spr' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank()) 
+
+aldist.aut.survey <-
+    ggplot(data=filter(ages, name=='aldist.aut'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.aut' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+aldist.catch <-
+    ggplot(data=filter(ages, name=='aldist.lln'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.lln' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank()) 
+
 
 
 # plot suitability against length for both survey and commercial fleets

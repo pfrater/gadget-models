@@ -38,7 +38,7 @@ ldist <- translate.all.le() %>%
 ldist <- data.table(ldist)
 
 mfdb_import_survey(mdb,
-                   data_source = 'iceland-ldist.igfs',
+                   data_source = 'gssLdistSpr',
                    ldist)
 rm(ldist)
 
@@ -64,7 +64,7 @@ aldist <- data.table(aldist)
 
 mfdb_import_survey(mdb,
                    data_in=aldist,
-                   data_source = 'iceland-aldist.igfs')
+                   data_source = 'gssAldistSpr')
 rm(aldist)
 
 # # import weights and compute length~weight relationship
