@@ -35,10 +35,11 @@ is_functional_groups$MfdbCode <- vapply(
 
 # Set up sampling types
 mfdb_import_sampling_type(mdb, 
-                          data.frame(id = 1:6, 
+                          data.frame(id = 1:7, 
                                      name = c("Bio", "Cat", 
                                               "SprSurvey", "AutSurvey", 
-                                              "CommSurvey", "Discard")))
+                                              "CommSurvey", "Discard",
+                                              "DiscardSurvey")))
 
 
 # assemble and import cod 

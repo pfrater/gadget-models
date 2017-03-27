@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod17')
+setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod53')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'lln.comm', ratio=1))
 
@@ -50,7 +50,7 @@ tmp <- rbind.fill(tmp,
                         length = 'Biomass'))
 
 # plot the model survey data over the actual survey data
-si.fit.spr.survey <-
+si.spr <-
     ggplot(subset(tmp, survey=='igfs'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
@@ -60,10 +60,10 @@ si.fit.spr.survey <-
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
-    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+    theme (panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
-si.fit.aut.survey <-
+si.aut <-
     ggplot(filter(tmp, survey=='aut'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
@@ -73,12 +73,12 @@ si.fit.aut.survey <-
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
-    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+    theme (panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 
 # plot the survey length-distribution data over the actual survey length-distribution data
-ldist.fit.spr.survey <-
+ldist.spr <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.spr') ,
            aes(lower,predicted)) + geom_line() +
     geom_line(aes(lower,observed), color='gray') +
@@ -88,10 +88,10 @@ ldist.fit.spr.survey <-
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
 
-ldist.fit.aut.survey <-
+ldist.aut <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
            aes(lower,predicted)) + geom_line() +
     geom_line(aes(lower,observed),col='gray') +
@@ -101,12 +101,12 @@ ldist.fit.aut.survey <-
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 
 # plot the model catchdistribution data over actual catchdistribution data
-ldist.fit.catch <-
+ldist.catch <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.lln'),
            aes(lower,predicted)) +
     geom_line(aes(lower,observed),col='gray') +
@@ -116,7 +116,20 @@ ldist.fit.catch <-
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+ldist.discards <-
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.discards'),
+           aes(lower,predicted)) +
+    geom_line(aes(lower,observed),col='gray') +
+    facet_wrap(~year+step) + theme_bw() + geom_line() +
+    geom_text(data=mutate(subset(fit$catchdist.fleets,
+                                 name == 'ldist.discards' & lower==min(lower)),y=Inf),
+              aes(lower,y,label=year), vjust = 2,hjust = -1)+
+    ylab('Proportion') + xlab('length') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 ages <- 
@@ -127,7 +140,7 @@ ages <-
               predicted = sum(predicted, na.rm=T)) %>%
     mutate(age = as.numeric(gsub('age', '', age)))
 
-aldist.spr.survey <-
+aldist.spr <-
     ggplot(data=filter(ages, name=='aldist.spr'), aes(x=age, y=predicted)) + 
     geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
     facet_wrap(~year+step) + theme_bw() + 
@@ -135,10 +148,10 @@ aldist.spr.survey <-
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
     ylab('Proportion') + xlab('age') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
 
-aldist.aut.survey <-
+aldist.aut <-
     ggplot(data=filter(ages, name=='aldist.aut'), aes(x=age, y=predicted)) + 
     geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
     facet_wrap(~year+step) + theme_bw() + 
@@ -146,7 +159,7 @@ aldist.aut.survey <-
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
     ylab('Proportion') + xlab('age') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 aldist.catch <-
@@ -157,7 +170,7 @@ aldist.catch <-
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
     ylab('Proportion') + xlab('age') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
 
 

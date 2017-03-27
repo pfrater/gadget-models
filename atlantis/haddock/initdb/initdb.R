@@ -13,8 +13,10 @@ source('functions/getHaddockDiscards.R')
 source('functions/commCatchAges.R')
 source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
+source('functions/discardAges.R')
 source('haddock/initdb/getHadLengthVar.R') # source cod length sd at age group
 source('haddock/functions/getHaddockCatches.R')
+
 
 mdb <- mfdb('Atlantis-Iceland')
 
@@ -37,33 +39,65 @@ fgName <- 'Haddock'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
 
+
+# the following code distributes age groups among ages each year instead of cohorts
+source('functions/calcGrowth.R')
+source('functions/calcWtGrowth.R')
+source('functions/parseAges.R')
+source('functions/calcHadMort.R')
+
+# add mortality and parse ages based on m
+is_fg_count <- left_join(is_fg_count, m.by.age)
+age.count <- parseAges(is_fg_count) %>% 
+    arrange(year, area, month, day, depth, age)
+
+# this re-distributes lengths based on the growth params found in calcGrowth.R
+smooth.len <- 
+    age.count %>%
+    filter(count >= 1) %>%
+    left_join(vbMin) %>%
+    mutate(length = ifelse(age == 0, vb.simple(linf, k, age, (t0-0.1)),
+                           vb.simple(linf, k, age, t0))) %>%
+    select(depth, area, year, month, day, group, cohort, weight, length, 
+           maturity_stage, age, count)
+
+# this re-distributes weight based on the growth params found in calcGrowth.R
+# NOTE: YOU NEED TO FIX THIS BEFORE USING. WEIGHTS AT YOUNGER AGES ARE TOO HIGH!!!
+# wt <-
+#     age.count %>%
+#     filter(count >= 1) %>%
+#     left_join(exp.growth.min) %>%
+#     mutate(test.wt = exp.growth(age, max.wt, a, c))
+
+
 length_group <-  seq(0.5, 120.5, by=1)
-sigma_per_cohort <- sqrt(c(had.length.mn.sd$length.sd, 15))
+sigma_per_cohort <- c(had.length.mn.sd$length.sd, 15)
 # see ./surveySelectivity.R, ./getCodLengthVar.R-lines 49-EOF for suitability params
 sel_lsm <- 49
 sel_b <- 0.046 # Controls the shape of the curve
 survey_suitability <- 5e-04 / (1.0 + exp(-sel_b * (length_group - sel_lsm)))
-survey_sigma <- 8.37e-06
+survey_sigma <- 0
+#survey_sigma <- 8.37e-06
 
 # Import entire Cod/Haddock content for one sample point so we can use this as a tracer value
-is_fg_tracer <- is_fg_count[
+is_fg_tracer <- smooth.len[
     # is_fg_count$year == attr(is_dir, 'start_year') &
-        is_fg_count$month %in% c(1),]
+        smooth.len$month %in% c(1),]
 is_fg_tracer$species <- fg_group$MfdbCode
 is_fg_tracer$areacell <- is_fg_tracer$area
 is_fg_tracer$sampling_type <- 'Bio'
-is_fg_tracer <- filter(is_fg_tracer, count > 0)
+is_fg_tracer <- filter(is_fg_tracer, count >= 1)
 mfdb_import_survey(mdb, is_fg_tracer, data_source = paste0('atlantis_tracer_', fg_group$Name))
 
 # create survey from tracer values
-is_fg_survey <- is_fg_count[
-    is_fg_count$area %in% paste('Box', 0:52, sep='') &
-        is_fg_count$month %in% c(3,9),] %>%
+is_fg_survey <- smooth.len[
+    smooth.len$area %in% paste('Box', 0:52, sep='') &
+        smooth.len$month %in% c(3,11),] %>%
     mutate(sampling_type = ifelse(month == 3,
                                   "SprSurvey",
                                   "AutSurvey")) %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
-    atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma)
+    atlantis_tracer_survey_select(length_group, rep(0.1, length(length_group)), 0)
 
 # ss.selector <- function(len, sel_b, sel_lsm) {
 #     5e-04 / (1.0 + exp(-sel_b * (len - sel_lsm)))
@@ -79,7 +113,7 @@ is_fg_survey <- is_fg_count[
 #                                   "AutSurvey")) %>%
 #     mutate(count = round(count * 5e-04))
 
-survey <- filter(is_fg_survey, count > 0)
+survey <- filter(is_fg_survey, count >= 1)
 
 # strip ages and lengths from survey to mimic real world data
 # see '~gadget/gadget-models/atlantis/cod/initdb/codSampleNumbers.R
@@ -88,7 +122,7 @@ al.survey$length <- round(al.survey$length)
 al.survey$weight <- round(al.survey$weight)
 
 # Throw away empty rows
-al.survey <- al.survey[al.survey$count > 0,]
+al.survey <- al.survey[al.survey$count >= 1,]
 al.survey$species <- fg_group$MfdbCode
 al.survey$areacell <- al.survey$area
 mfdb_import_survey(mdb, al.survey, data_source = paste0('atlantis_survey_', fg_group$Name))
@@ -144,29 +178,48 @@ fisheryCode <- 'long'
 fishery <- is_fisheries[is_fisheries$Code == fisheryCode,]
 
 # to set up as age structured data - note that this returns values in kg, not tons
-age.catch <- commCatchAges(is_dir, is_area_data, fg_group, fishery)
+age.catch <- 
+    commCatchAges(is_dir, is_area_data, fg_group, fishery) %>%
+    mutate(area = as.character(area)) %>%
+    rename(group = functional_group)
 wl <- getStructN(is_dir, is_area_data, fg_group)
 
 age.catch.wl <- left_join(age.catch, wl)
 
+# parse the catch age-length data to single year classes
+age.catch.wl <- left_join(age.catch.wl, m.by.age)
+parsed.age.catch.wl <- 
+    parseCatchAges(age.catch.wl) %>% 
+    arrange(year, area, month, age)
+
+smooth.len.catch <- 
+    parsed.age.catch.wl %>%
+    filter(count >= 1) %>%
+    left_join(vbMin) %>%
+    mutate(length = ifelse(age == 0, vb.simple(linf, k, age, (t0-0.1)),
+                           vb.simple(linf, k, age, t0))) %>%
+    select(area, year, month, group, fishery, cohort, weight, length, 
+           age, count)
+
 # see haddockSampleNumber.R - line 61 to EOF
 fleet.suitability <- rep(0.001, length(length_group))
-fleet.sigma <- 4.3e-07
+fleet.sigma <- 0
+#fleet.sigma <- 4.3e-07
 
 # testing out using just straight samples instead of adding error
 
-comm.catch.samples <-
-    age.catch.wl %>%
+comm.catch.samples <- 
+    smooth.len.catch %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, fleet.suitability, fleet.sigma) %>%
-    filter(count > 0)
+    filter(count >= 1)
 
 # comm.catch.samples <-
 #     age.catch.wl %>%
 #     mutate(count = round(count * 0.001),
 #            length = round(length),
 #            weight = round(weight)) %>%
-#     filter(count > 0)
+#     filter(count >= 1)
 
 
 # strip age data out
@@ -175,7 +228,7 @@ comm.al.samples$species <- "HAD"
 comm.al.samples$sampling_type <- 'CommSurvey'
 comm.al.samples$gear <- "LLN"
 comm.al.samples <- rename(comm.al.samples, areacell = area, vessel = fishery)
-comm.al.samples <- filter(comm.al.samples, count > 0)
+comm.al.samples <- filter(comm.al.samples, count >= 1)
 
 mfdb_import_survey(mdb,
                    comm.al.samples,
@@ -205,11 +258,12 @@ overcatch.rate <-
     left_join(annual.wt) %>%
     mutate(oc.rate = monthly.wt / mn.ann.wt) %>%
     filter(oc.rate > 1.5) %>% select(year, month, oc.rate)
-is_catch <-
+reg_catch <-
     is_catch %>%
     left_join(overcatch.rate) %>%
     mutate(weight = ifelse(is.na(oc.rate), weight_total, weight_total / oc.rate)) %>%
     select(-weight_total, -oc.rate)
+is_catch <- reg_catch
 
 
 # Species column that maps to MFDB code
@@ -250,3 +304,48 @@ hadDiscards$gear <- 'LLN'
 mfdb_import_survey(mdb, 
                    hadDiscards, 
                    data_source = paste0("atlantisFishery_", fisheryCode, "_Discard"))
+
+
+# import discard age structure and get weight/lengths
+had.discard.ages <- 
+    discardAges(is_dir, is_area_data, fg_group, fishery) %>%
+    mutate(area = as.character(area)) %>%
+    rename(group = functional_group)
+
+# to set up as age structured data - note that this returns values in kg, not tons
+age.discard.wl <- left_join(had.discard.ages, wl)
+
+# parse the catch age-length data to single year classes
+age.discard.wl <- left_join(age.discard.wl, m.by.age)
+parsed.age.discard.wl <- 
+    parseCatchAges(age.discard.wl) %>% 
+    arrange(year, area, month, age)
+
+smooth.len.discard <- 
+    parsed.age.discard.wl %>%
+    filter(count >= 1) %>%
+    left_join(vbMin) %>%
+    mutate(length = ifelse(age == 0, vb.simple(linf, k, age, (t0-0.1)),
+                           vb.simple(linf, k, age, t0))) %>%
+    select(area, year, month, group, fishery, cohort, weight, length, 
+           age, count)
+
+# taking survey of ages/lengths of discards data
+discard.samples <-
+    smooth.len.discard %>%
+    atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
+    atlantis_tracer_survey_select(length_group, fleet.suitability, fleet.sigma) %>%
+    filter(count >= 1)
+
+# strip age data out
+discard.al.samples <- stripFleetAges(discard.samples, 0.05)
+discard.al.samples$species <- "HAD"
+discard.al.samples$sampling_type <- 'DiscardSurvey'
+discard.al.samples$gear <- "LLN"
+discard.al.samples <- rename(discard.al.samples, areacell = area, vessel = fishery)
+discard.al.samples <- filter(discard.al.samples, count >= 1)
+
+mfdb_import_survey(mdb,
+                   discard.al.samples,
+                   data_source=paste0("atlantisFishery_", fisheryCode, "_discardSamples"))
+

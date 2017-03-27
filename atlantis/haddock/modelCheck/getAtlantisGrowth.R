@@ -24,18 +24,20 @@ is_functional_groups$MfdbCode <- vapply(
 # assemble and import cod 
 fgName <- 'Haddock'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
-atl.had <- atlantis_fg_tracer(is_dir, is_area_data, fg_group) %>% filter(count > 0)
+atl.had <- atlantis_fg_tracer(is_dir, is_area_data, fg_group) %>% filter(count >= 1)
 
 # calculate growth parameters
 atl.sub <- 
     atl.had %>%
-    group_by(length, age) %>%
-    distinct()
+    group_by(month, length, age)
 
 # compute growth parameters using nlm on functions in vbParams.R
-l <- atl.sub$length
-t <- atl.sub$age
-vbMin <- nlm(sse, c(100, 0.05, -1))
+vbMin <- 
+    atl.sub %>%
+    #group_by(month) %>%
+    summarize(linf = nlm(vb.sse, c(100, 0.05, -1), length, age)$estimate[1],
+              k = nlm(vb.sse, c(100, 0.05, -1), length, age)$estimate[2],
+              t0 = nlm(vb.sse, c(100, 0.05, -1), length, age)$estimate[3])
 
 
 # looks pretty good, use parameters in vbMin for growth

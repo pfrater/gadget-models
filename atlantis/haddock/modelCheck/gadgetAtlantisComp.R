@@ -107,7 +107,7 @@ atl.age.numbers <-
 age.numbers.plot <-
     ggplot(data=age.numbers, aes(x=year, y=total, color='Gadget')) + geom_line() +
     geom_line(data=atl.age.numbers, aes(x=year, y=total, color='Atlantis')) + 
-    facet_wrap(~age) + 
+    facet_wrap(~age, scales='free_y') + 
     scale_color_manual('', breaks=c('Gadget', 'Atlantis'), values=c('red', 'black')) +
     theme_bw() + xlab('Year') + ylab('Numbers')
 

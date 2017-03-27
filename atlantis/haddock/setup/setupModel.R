@@ -29,71 +29,86 @@ lw.tmp <-
     as.numeric()
 
 ## populate the model with starting default values
-opt <- gadget.options(type='simple1stock')
 
-## adapt opt list to greater silver smelt
+## alpha and beta for lw relationship
 weight.alpha <- 0.00000587903
 weight.beta <- 3.116172
 
-opt$area$numofareas <- 1
-opt$area$areasize <- mfdb_area_size(mdb, defaults)[[1]]$size
-opt$area$area.temperature <- 3
-opt$time$firstyear <- st.year
-opt$time$lastyear <- end.year
-
 ## setup M and determine initial abundance
-nat.mort <- 0.2
+source('haddock/modelCheck/getAtlantisMort.R')
+nat.mort <- round(m.data$m, 3)
 rc <- 20
 
+# age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
+rec.number <- sprintf('%1$s.rec.scalar*%1$s.rec.%2$s', species.name, year.range)
+rec.sd <- sprintf('#%s.rec.sd', species.name)
+vonb <- von_b_formula(age, 
+                      linf=sprintf('%s.linf', species.name), 
+                      k=sprintf('%s.k',species.name), 
+                      recl=sprintf('%s.recl', species.name))
+
 ## set up the one stock stock
-opt$stocks$imm <- within(opt$stock$imm, {
-    name <- 'had'
-    minage <- 0
-    maxage <- 19
-    minlength <- 1
-    maxlength <- 120
-    dl <- 1
-    growth <- c(linf='#had.linf', 
-                k='#had.k',
-                beta='(* 10 #had.bbin)', 
-                binn=15, recl='#had.recl'
-    )
-    weight <- c(a=weight.alpha, b=weight.beta)
-    init.abund <- sprintf('#had.age%s', 0:(rc-1))
-    n <- sprintf('(* #had.rec.mult  #had.rec%s)', st.year:end.year)
-    doesmature <- 0
-    sigma <- c(atl.init.sigma$ms, rep(atl.init.sigma$ms[12], 9))
-    M <- rep(0.35, rc)
-    doesmove <- 0
-    doesmigrate <- 0
-    doesrenew <- 1
-    renewal <- list(minlength=1, maxlength=33)
-})
+had <- 
+    gadgetstock('had', gd$dir, missingOkay=T) %>%
+    gadget_update('stock',
+                  minage = 0,
+                  maxage = 19,
+                  minlength = 1,
+                  maxlength = 120,
+                  dl = 1,
+                  livesonareas = 1) %>%
+    gadget_update('doesgrow',
+                  growthparameters=c(linf=sprintf('#%s.linf', species.name), 
+                                     k=sprintf('#%s.k', species.name),
+                                     alpha=weight.alpha,
+                                     beta=weight.beta),
+                  beta=to.gadget.formulae(quote(10*had.bbin))) %>%
+    gadget_update('naturalmortality', c(nat.mort, nat.mort[length(nat.mort)])) %>%
+    gadget_update('initialconditions',
+                  normalparam=
+                      data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
+                                 area = 1,
+                                 age.factor=sprintf(andy.age.factor, 
+                                                    .[[1]]$minage:.[[1]]$maxage,
+                                                    .[[1]]$stockname) %>%
+                                     parse(text=.) %>%
+                                     map(to.gadget.formulae) %>%
+                                     unlist(),
+                                 area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
+                                                     .[[1]]$stockname),
+                                 mean = vonb,
+                                 stddev = c(init.sigma$ms, 
+                                            rep(init.sigma$ms[nrow(init.sigma)],
+                                                (.[[1]]$maxage-.[[1]]$minage)-(nrow(init.sigma)-1))),
+                                 alpha = weight.alpha,
+                                 beta = weight.beta)) %>%
+    gadget_update('refweight',
+                  data=data_frame(length=seq(.[[1]]$minlength,
+                                             .[[1]]$maxlength,
+                                             .[[1]]$dl),
+                                  mean = weight.alpha*length^weight.beta)) %>%
+    gadget_update('iseaten', 1) %>%
+    # gadget_update('doesmature', 
+    #               maturityfunction = 'continuous',
+    #               maturestocksandratios = sprintf('%smat 1',species_name),
+    #               coefficients = sprintf('( * 0.001 #%1$s.mat1) #%1$s.mat2 0 0',
+    #                                         species_name)) %>% 
+    # gadget_update('doesmove',
+    #               transitionstocksandratios = sprintf('%s.mat 1', species.name),
+    #               transitionstep = 4) %>%
+    gadget_update('doesrenew',
+                  normalparam = data_frame(year = year.range,
+                                           step = 1,
+                                           area = 1, 
+                                           age = .[[1]]$minage,
+                                           number = parse(text=rec.number) %>%
+                                               map(to.gadget.formulae) %>%
+                                               unlist(),
+                                           mean = vonb,
+                                           stddev = rec.sd,
+                                           alpha = weight.alpha,
+                                           beta = weight.beta))
 
 
-# create gadget skeleton
-source('functions/pauls.gadget.test.skeleton.R')
-source('functions/testSkeletonFunctions.R')
-gm <- paulsGadgetSkeleton(time=opt$time, area=opt$area,
-                      stocks=opt$stocks, fleets=opt$fleets)
 
-gm@stocks$imm@renewal.data$stddev <- '#had.rec.sd'
-
-gm@stocks$imm@initialdata$area.factor <- '( * #had.mult #had.init.abund)'
-
-gm@fleets <- list(lln.fleet, igfs.fleet, aut.fleet)
-gm@fleets[[2]]@suitability$params <- c("#igfs.alpha #igfs.l50")
-gm@fleets[[3]]@suitability$params <- c("#aut.alpha #aut.l50")
-
-# gm@fleets[[1]]@suitability$params <- c('0.066  70')
-# gm@fleets[[2]]@suitability$params <- c('0.046 49')
-# gm@fleets[[3]]@suitability$params <- c('0.046 49')
-
-
-#gm@fleets[[2]]@suitability$params <- c("(* #igfs.alpha (* -1 #igfs.beta)) #igfs.beta 0 1")
-#gm@fleets[[3]]@suitability$params <- c("(* #aut.alpha (* -1 #aut.beta)) #aut.beta 0 1")
-
-#gm@fleets[[2]]@suitability$params <- c("#igfs.p1 #igfs.p2 (- 1 #igfs.p1) #igfs.p4 #igfs.p5 100")
-
-gd.list <- list(dir=gd$dir)
-Rgadget:::gadget_dir_write(gd.list, gm)
+write.gadget.file(had, gd$dir)
