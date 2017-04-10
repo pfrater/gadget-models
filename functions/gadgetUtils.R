@@ -1,16 +1,20 @@
 # handy wrapper functions for producing gadget files in association with Rgadget
-von_b_formula <- function(age, linf, k, recl) {
-    vonb <- as.quoted(paste('(',
-                  linf,
-                  '* (1 - exp(-1 *',
-                  k,
-                  '* (1 - (1 + log((1 - (',
-                  recl, '/', linf,
-                  '))) /',
-                  k,
-                  ')))))'))[[1]]
-    to.gadget.formulae(vonb)
-    
+vonb_formula <- function(age, linf, k, recl) {
+    vonb <- 
+        as.quoted(
+        paste0(linf,
+           '* (1 - exp((-1 *',
+           k,
+           ') * (',
+           age,
+           '- (1 + (log(1 - (',
+           recl,
+           '/',
+           linf,
+           ')))/',
+           k,
+           '))))'))
+    sapply(vonb, to.gadget.formulae)
 }
 
 fleet.suit <- function(fleet, stock, fun) {
