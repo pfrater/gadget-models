@@ -11,10 +11,12 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codModel')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod21')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
-                  mat.par=c(-6.510198, 1.108594))
+                  mat.par=c(-6.510198, 1.108594),
+                  printfile.printatstart = 0,
+                  printfile.steps = 1)
 
 # source('~/R/rgadget/trunk/gadgetFileIO.R')
 # source('~/R/rgadget/trunk/gadgetfunctions.R')
@@ -49,7 +51,7 @@ tmp <- rbind.fill(tmp,
                         length = 'Biomass'))
 
 # plot the model survey data over the actual survey data
-si.fit.spr.survey <-
+si.spr <-
     ggplot(subset(tmp, survey=='igfs'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
@@ -59,10 +61,10 @@ si.fit.spr.survey <-
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
-    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+    theme (panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
-si.fit.aut.survey <-
+si.aut <-
     ggplot(filter(tmp, survey=='aut'), aes(year,number.x)) +
     geom_point() +
     geom_line(aes(year,predict)) +
@@ -72,25 +74,25 @@ si.fit.aut.survey <-
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
     ylab('Index') + xlab('Year') +
-    theme (panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+    theme (panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 
 # plot the survey length-distribution data over the actual survey length-distribution data
-ldist.fit.spr.survey <-
+ldist.spr <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.spr') ,
            aes(lower,predicted)) + geom_line() +
-    geom_line(aes(lower,observed),col='gray') +
+    geom_line(aes(lower,observed), color='gray') +
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.spr' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
 
-ldist.fit.aut.survey <-
+ldist.aut <-
     ggplot(subset(fit$catchdist.fleets,name == 'ldist.aut') ,
            aes(lower,predicted)) + geom_line() +
     geom_line(aes(lower,observed),col='gray') +
@@ -100,23 +102,78 @@ ldist.fit.aut.survey <-
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
 
 # plot the model catchdistribution data over actual catchdistribution data
-ldist.fit.catch <-
-    ggplot(subset(fit$catchdist.fleets,name == 'ldist.bmt'),
+ldist.catch <-
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.comm'),
            aes(lower,predicted)) +
     geom_line(aes(lower,observed),col='gray') +
     facet_wrap(~year+step) + theme_bw() + geom_line() +
     geom_text(data=mutate(subset(fit$catchdist.fleets,
-                                 name == 'ldist.bmt' & lower==min(lower)),y=Inf),
+                                 name == 'ldist.comm' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
     ylab('Proportion') + xlab('length') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-           panel.margin = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
+
+ldist.discards <-
+    ggplot(subset(fit$catchdist.fleets,name == 'ldist.discards'),
+           aes(lower,predicted)) +
+    geom_line(aes(lower,observed),col='gray') +
+    facet_wrap(~year+step) + theme_bw() + geom_line() +
+    geom_text(data=mutate(subset(fit$catchdist.fleets,
+                                 name == 'ldist.discards' & lower==min(lower)),y=Inf),
+              aes(lower,y,label=year), vjust = 2,hjust = -1)+
+    ylab('Proportion') + xlab('length') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+ages <- 
+    fit$catchdist.fleets %>%
+    filter(name %in% c('aldist.spr', 'aldist.aut', 'aldist.comm')) %>%
+    group_by(name, year, step, age) %>%
+    summarize(observed = sum(observed, na.rm=T),
+              predicted = sum(predicted, na.rm=T)) %>%
+    mutate(age = as.numeric(gsub('age', '', age)))
+
+aldist.spr <-
+    ggplot(data=filter(ages, name=='aldist.spr'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.spr' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank()) 
+
+aldist.aut <-
+    ggplot(data=filter(ages, name=='aldist.aut'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.aut' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+aldist.catch <-
+    ggplot(data=filter(ages, name=='aldist.comm'), aes(x=age, y=predicted)) + 
+    geom_line() + geom_line(aes(x=age, y=observed), color='lightgray') +
+    facet_wrap(~year+step) + theme_bw() + 
+    geom_text(data=filter(ages, name == 'aldist.comm' & age == max(age)),
+              aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
+    ylab('Proportion') + xlab('age') +
+    theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank()) 
+
 
 
 # plot suitability against length for both survey and commercial fleets
@@ -149,7 +206,7 @@ rec.plot <-
 
 # plotting the catch by year
 catch.plot <- 
-ggplot(fit$res.by.year,aes(year,catch/1000)) +
+    ggplot(fit$res.by.year,aes(year,catch/1000)) +
     geom_bar(stat='identity') +
     ylab("Catches (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
@@ -163,7 +220,7 @@ biomass.plot <-
     ylab("Total biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm')) #+
-    #facet_wrap(~stock, scales="free_y")
+#facet_wrap(~stock, scales="free_y")
 
 
 # plotting the harvest per year
@@ -173,7 +230,7 @@ harv.plot <-
     ylab("Harvestable biomass (in tons)") + xlab('Year') +  theme_bw() +
     theme(legend.position = c(0.25,0.75), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm')) #+
-    #facet_wrap(~stock, scales="free_y")
+#facet_wrap(~stock, scales="free_y")
 
 
 # plot sustainable stock biomass per year
@@ -190,73 +247,5 @@ f.plot <-
     ylab("F") + xlab("Year") +  theme_bw() +
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
-
-# mig.params <- 
-#     read.gadget.parameters('WGTS/params.final') %>%
-#     filter(grepl('mig', switch)) %>%
-#     mutate(year = as.numeric(gsub('gss.mig', '', switch)))
-# mig.plot <- 
-#     ggplot(data=mig.params, aes(x=year, y=value)) +
-#     geom_line() + theme_bw()
-    
-
-##################################################################################
-## plots from gadget.forward
-##################################################################################
-
-progn.ssb <-
-    gssForward$lw %>%
-    filter(step == 1) %>%
-    group_by(year) %>%
-    summarise(ssb = sum(weight*logit(mat.par[1],
-                                     mat.par[2],length)*
-                            number),
-              total.biomass = sum(number*weight))#,
-
-progn.by.year <-
-    left_join(prognFmax$catch %>%
-                  group_by(year) %>%
-                  summarise(catch=sum(biomass.consumed)),
-              progn.ssb)
-
-
-prog.bio.plot <-
-    ggplot(progn.by.year,aes(year,ssb/1e6)) +
-    geom_rect(aes(xmin=max(fit$res.by.year$year),
-                  xmax=Inf,ymin=-Inf,ymax=Inf),
-              fill = 'gray90', alpha=0.1) +
-    geom_line() +
-    theme_bw() + xlab('Year') + ylab('SSB (\'000 tons)') +
-    theme(plot.margin = unit(c(0,0,0,0),'cm'),
-          legend.title = element_blank(),
-          legend.position = c(0.2,0.7))
-
-
-prog.catch.plot <-
-    ggplot(progn.by.year,aes(year,catch/1000)) +
-    geom_rect(aes(xmin=max(fit$res.by.year$year),
-                  xmax=Inf,ymin=-Inf,ymax=Inf),
-              fill = 'gray90', alpha=0.1) +
-    geom_line() +
-    theme_bw() + xlab('Year') + ylab('Catch (\'000 tons)') +
-    theme(plot.margin = unit(c(0,0,0,0),'cm'),
-          legend.title = element_blank(),
-          legend.position = c(0.2,0.7)) +
-    ylim(c(0,max(fit$res.by.year$catch/1000)))
-
-prog.rec.plot <- rec.plot + geom_bar(aes(year,10*recruitment),
-                                     data=gssForward$recruitment,
-                                     fill='red',stat='identity')
-
-
-
-
-
-
-
-
-
-
-
 
 

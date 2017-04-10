@@ -9,6 +9,7 @@ ldist.igfs <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SprSurvey',
     species = defaults$species,
+    age = mfdb_interval('all', c(minage, maxage), open_ended=T),
     length = mfdb_interval("len", seq(0, maxlength, by = 1))),
     defaults))
 
@@ -38,6 +39,7 @@ ldist.aut <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'AutSurvey',
         species = defaults$species, 
+        age = mfdb_interval('all', c(minage, maxage), open_ended=T),
         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
         defaults))
 
@@ -65,6 +67,7 @@ ldist.comm <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'CommSurvey',
         species = defaults$species,
+        age = mfdb_interval('all', c(minage, maxage), open_ended=T),
         gear = c('LLN'),
         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
         defaults))
@@ -87,6 +90,7 @@ ldist.discards <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'DiscardSurvey',
         species = defaults$species,
+        age = mfdb_interval('all', c(minage, maxage), open_ended=T),
         gear = c('LLN'),
         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
         defaults))

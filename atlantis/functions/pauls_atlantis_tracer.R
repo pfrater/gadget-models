@@ -1,6 +1,6 @@
-# this function is exactly the same as atlantis_fg_tracer in mfdbatlantis 
-# except that it computes weight as the sum of structN and resN instead of 
-# multiplying structN by 3.65
+# function to read in atlantis output using different time values
+# see below sourced files
+source('functions/paulsAtlTime.R')
 
 pauls_atlantis_tracer <- function (adir, area_data, fg_group, consumption = FALSE) 
 {
@@ -9,23 +9,17 @@ pauls_atlantis_tracer <- function (adir, area_data, fg_group, consumption = FALS
                                                             seq_len(as.character(fg_group$NumCohorts))), "Nums"))
     fg_StructN <- as.numeric(mfdbatlantis:::fetch_nc_variables(nc_out, paste0(fg_group$Name, 
                                                                seq_len(as.character(fg_group$NumCohorts))), "StructN"))
-    fg_ResN <- as.numeric(mfdbatlantis:::fetch_nc_variables(nc_out, paste0(fg_group$Name, 
-                                                               seq_len(as.character(fg_group$NumCohorts))), "ResN"))
     dims <- expand.grid(depth = nc_out$dim$z$vals, area = as.character(area_data$name), 
                         time = nc_out$dim$t$vals, cohort = seq_len(as.character(fg_group$NumCohorts)), 
                         stringsAsFactors = FALSE)
-    struct_weight_grams <- mfdbatlantis:::mgn_to_grams(ifelse(fg_Nums > 0, fg_StructN, 
+    weight_grams <- mfdbatlantis:::mgn_to_grams(ifelse(fg_Nums > 0, fg_StructN, 
                                         NA))
-    res_weight_grams <- mfdbatlantis:::mgn_to_grams(ifelse(fg_Nums > 0, fg_ResN, NA))
-    total_weight <- (as.numeric(fg_StructN) * 5.7 * 20/1000) + (as.numeric(fg_ResN) * 5.7 * 20/1000)
     df_out <- data.frame(depth = dims$depth, area = dims$area, 
-                         year = mfdbatlantis:::atlantis_time_to_years(dims$time) + attr(adir, 
-                                                                         "start_year"), month = mfdbatlantis:::atlantis_time_to_months(dims$time), 
-                         day = mfdbatlantis:::atlantis_time_to_days(dims$time), 
-                         group = as.character(fg_group$GroupCode), 
-                         cohort = dims$cohort, 
-                         weight = total_weight, 
-                         length = (struct_weight_grams/fg_group$FLAG_LI_A)^(1/fg_group$FLAG_LI_B), 
+                         year = atl.seconds.to.years(dims$time) + attr(adir, 
+                                                                         "start_year"), 
+                         month = atl.seconds.to.months(dims$time), 
+                         day = atl.seconds.to.days(dims$time), group = as.character(fg_group$GroupCode), 
+                         cohort = dims$cohort, weight = weight_grams, length = (weight_grams/fg_group$FLAG_LI_A)^(1/fg_group$FLAG_LI_B), 
                          count = fg_Nums, stringsAsFactors = TRUE)
     if (consumption) {
         df_out <- aggregate(cbind(weight, length, count) ~ area + 
@@ -36,9 +30,9 @@ pauls_atlantis_tracer <- function (adir, area_data, fg_group, consumption = FALS
         dims <- expand.grid(area = as.character(area_data$name), 
                             time = nc_prod$dim$t$vals, cohort = seq_len(fg_group$NumCohorts), 
                             stringsAsFactors = FALSE)
-        df_eat <- data.frame(area = dims$area, year = mfdbatlantis:::atlantis_time_to_years(dims$time) + 
-                                 attr(adir, "start_year"), month = mfdbatlantis:::atlantis_time_to_months(dims$time), 
-                             day = mfdbatlantis:::atlantis_time_to_days(dims$time), group = as.character(fg_group$GroupCode), 
+        df_eat <- data.frame(area = dims$area, year = atlantis_time_to_years(dims$time) + 
+                                 attr(adir, "start_year"), month = atlantis_time_to_months(dims$time), 
+                             day = atlantis_time_to_days(dims$time), group = as.character(fg_group$GroupCode), 
                              cohort = dims$cohort, consumption = as.numeric(fg_Eat), 
                              stringsAsFactors = TRUE)
         df_out <- merge(df_out, df_eat, by = c("area", "year", 

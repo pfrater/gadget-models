@@ -1,7 +1,7 @@
 # code to compute and fit von Bertalanffy growth curves to species
 
-vb.simple <- function(linf, k, a, t0) { #vector with linf[1], k[2], t0[3]
-        length <- linf*(1 - exp(-k*(a-t0)));
+vb <- function(linf, k, t0, age) {
+        length <- linf*(1 - exp(-k*(age-t0)));
         return(length);
 }
 
@@ -10,18 +10,16 @@ vb.simple <- function(linf, k, a, t0) { #vector with linf[1], k[2], t0[3]
 # curve(vb(linf, k, x, 0), 0, 150)
 
 # define an sse function that we can minimize on
-vb <- function(b, age) {
+vb.optimizer <- function(b, age) {
     linf <- b[1];
     k <- b[2];
     t0 <- b[3];
-    length <- linf*(1 - exp(-k*(age-t0)));
-    return(length)
+    return(vb(linf, k, t0, age))
 }
 
 vb.sse <- function(b, length, age) {
-    lhat <- vb(b, age);
-    s <- sum((length-lhat)^2);
-    return(s);
+    lhat <- vb.optimizer(b, age);
+    return(sum((length-lhat)^2));
 }
 
 # read in data here to perform the minimizing function on

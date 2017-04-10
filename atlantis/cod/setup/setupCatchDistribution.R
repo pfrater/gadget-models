@@ -1,56 +1,33 @@
-minage <- Rgadget:::getMinage(gm)
-maxage <- Rgadget:::getMaxage(gm)
-maxlength <- 200 #max(Rgadget:::getLengthgroups(gm))
+minage <- cod[[1]]$minage
+maxage <- cod[[1]]$maxage
+minlength <- cod[[1]]$minlength
+maxlength <- cod[[1]]$maxlength
+dl <- cod[[1]]$dl
 
 ## Query length data to create survey catchdistribution components
-aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
+
+## try using mfdb_group(all = minage:maxage) for the age in ldist
+ldist.igfs <- 
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SprSurvey',
     species = defaults$species,
-    length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
+    age = mfdb_interval('all', c(minage, maxage+1)),
+    length = mfdb_interval("len", seq(minlength, maxlength, by = 1),
+                           open_ended=c('upper', 'lower'))),
     defaults))
 
-attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
-
-
-gadget_dir_write(gd,
-                 gadget_likelihood_component("catchdistribution",
-                                             name = "ldist.spr",
-                                             weight = 1,
-                                             data = aggdata[[1]],
-                                             fleetnames = c("igfs"),
-                                             stocknames = stocknames))
-
-rm(aggdata)
 
 # Age surveys
-aggdata <-
-    mfdb_sample_count(mdb, c('age', 'length'),
-                      c(list(sampling_type = 'SprSurvey',
-                             age = mfdb_step_interval('age',by=2,from=0,to=18),
-                             species=defaults$species,
-                             length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
-                        defaults))
+aldist.igfs <-
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
+        sampling_type = 'SprSurvey',
+        age = mfdb_interval('age', minage:maxage,
+                            open_ended=c('upper')),
+        species=defaults$species,
+        length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
+                               open_ended=c('upper', 'lower'))),
+        defaults))
 
-keep.years <- seq(1948, 2013, by=5)
-# age5yr model
-aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
-
-
-# # age0.1 model
-# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
-# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
-
-#attributes(aggdata[[1]])$age <-
-#    llply(attributes(aggdata[[1]])$age,function(x) x[1])
-
-gadget_dir_write(gd,
-                 gadget_likelihood_component("catchdistribution",
-                                             name = "aldist.spr",
-                                             weight = 1,
-                                             data = aggdata[[1]],
-                                             fleetnames = c("igfs"),
-                                             stocknames = stocknames))
-rm(aggdata)
 
 
 # ## Maturity @3 from IGFS
@@ -60,62 +37,28 @@ rm(aggdata)
 #                                 age=mfdb_group(imm=1:6, mat=7:30),
 #                                 length = mfdb_step_interval('len', by=1, from=0, to=maxlength),              
 #                                 maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
-# 
-# gadget_dir_write(gd,
-#                  gadget_likelihood_component("stockdistribution",
-#                                              name = "matp.igfs",
-#                                              weight = 1,
-#                                              data = aggdata[[1]],
-#                                              fleetnames = c("igfs"),
-#                                              stocknames = stocknames))
-# rm(aggdata)
+
 
 # Query length data to create autumn survey catchdistribution components
-aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
-    sampling_type = 'AutSurvey',
-    species = defaults$species,
-    length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
-    defaults))
-
-attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
-
-gadget_dir_write(gd,
-                 gadget_likelihood_component("catchdistribution",
-                                             name = "ldist.aut",
-                                             weight = 1,
-                                             data = aggdata[[1]],
-                                             fleetnames = c("aut"),
-                                             stocknames = stocknames))
-rm(aggdata)
+ldist.aut <- 
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
+        sampling_type = 'AutSurvey',
+        species = defaults$species, 
+        age = mfdb_interval('all', c(minage, maxage+1)), 
+        length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
+                               open_ended=c('upper', 'lower'))),
+        defaults))
 
 ## Age autumn survey
-aggdata <-
-    mfdb_sample_count(mdb, c('age', 'length'),
-                      c(list(sampling_type = 'AutSurvey',
-                             age = mfdb_step_interval('age',by=2,from=0,to=18),
-                             species=defaults$species,
-                             length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
-                        defaults))
-
-# age5yr model
-aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
-
-# # age0.1 model
-# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
-# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
-
-#attributes(aggdata[[1]])$age <-
-#    llply(attributes(aggdata[[1]])$age,function(x) x[1])
-
-gadget_dir_write(gd,
-                 gadget_likelihood_component("catchdistribution",
-                                             name = "aldist.aut",
-                                             weight = 1,
-                                             data = aggdata[[1]],
-                                             fleetnames = c("aut"),
-                                             stocknames = stocknames))
-rm(aggdata)
-
+aldist.aut <-
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
+        sampling_type = 'AutSurvey',
+        age = mfdb_interval('age', minage:maxage,
+                            open_ended=c('upper')),
+        species=defaults$species,
+        length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
+                               open_ended=c('upper', 'lower'))),
+        defaults))
 
 # ## Maturity @3 from autumn survey
 # aggdata <- mfdb_sample_count(mdb, c('maturity_stage','age','length'),
@@ -124,58 +67,50 @@ rm(aggdata)
 #                                          age=mfdb_group(imm=1:6, mat=7:20),
 #                                          length = mfdb_step_interval('len', by=1, from=0, to=maxlength),
 #                                          maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
-# 
-# gadget_dir_write(gd,
-#                  gadget_likelihood_component("stockdistribution",
-#                                              name = "matp.aut",
-#                                              weight = 1,
-#                                              data = aggdata[[1]],
-#                                              fleetnames = c("aut"),
-#                                              stocknames = stocknames))
-# rm(aggdata)
+
 
 
 # Query length data to create bmt catchdistribution components
-aggdata <- mfdb_sample_count(mdb, c('age', 'length'), c(list(
-    sampling_type = 'CommSurvey',
-    species = defaults$species,
-    gear = c('BMT'),
-    length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
-    defaults))
-attributes(aggdata[['0.0.0.0.0']])$age$all <- minage:maxage
-
-gadget_dir_write(gd, gadget_likelihood_component("catchdistribution",
-                                                 name = "ldist.bmt",
-                                                 weight = 1,
-                                                 data = aggdata[[1]],
-                                                 fleetnames = c("bmt.comm"),
-                                                 stocknames = stocknames))
-rm(aggdata)
+ldist.comm <- 
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
+        sampling_type = 'CommSurvey',
+        species = defaults$species,
+        age = mfdb_interval('all', c(minage, maxage+1)), 
+        gear = c('BMT'),
+        length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
+                               open_ended=c('upper', 'lower'))),
+        defaults))
 
 
-## Age bottom.trawl fleet
-aggdata <-
-    mfdb_sample_count(mdb, c('age', 'length'),
-                      c(list(sampling_type = 'CommSurvey',
-                             gear = 'BMT',
-                             age = mfdb_step_interval('age',by=2,from=0,to=18),
-                             length = mfdb_interval("len", c(0, seq(20, maxlength, by = 10)))),
-                        defaults))
-#attributes(aggdata[[1]])$age <-
-#    llply(attributes(aggdata[[1]])$age,function(x) x[1])
+## Age long line fleet
+aldist.comm <-
+    mfdb_sample_count(mdb, c('age', 'length'), c(list(
+        sampling_type = 'CommSurvey',
+        gear = 'BMT',
+        age = mfdb_interval('age', minage:maxage,
+                            open_ended = c('upper')),
+        length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
+                               open_ended=c('upper', 'lower'))),
+        defaults))
 
-# age5yr model
-aggdata[[1]] <- filter(aggdata[[1]], year %in% keep.years)
-
-# # age0.1 model
-# aggdata[[1]]$number <- round(aggdata[[1]]$number*0.1)
-# aggdata[[1]] <- filter(aggdata[[1]], number > 0)
-
-gadget_dir_write(gd,
-                 gadget_likelihood_component("catchdistribution",
-                                             name = "aldist.bmt",
-                                             weight = 1,
-                                             data = aggdata[[1]],
-                                             fleetnames = c("bmt.comm"),
-                                             stocknames = stocknames))
-rm(aggdata)
+#######################################################################
+## the following is to set up catchdistribution components for discards
+#######################################################################
+# Query length data to create bmt catchdistribution components
+# ldist.discards <- 
+#     mfdb_sample_count(mdb, c('age', 'length'), c(list(
+#         sampling_type = 'DiscardSurvey',
+#         species = defaults$species,
+#         age = mfdb_interval('all', c(minage, maxage), open_ended=T),
+#         gear = c('BMT'),
+#         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+#         defaults))
+# 
+# ## Age discards
+# aldist.discards <-
+#     mfdb_sample_count(mdb, c('age', 'length'), c(list(
+#         sampling_type = 'DiscardSurvey',
+#         gear = 'BMT',
+#         age = mfdb_step_interval('age',by=1,from=0,to=19),
+#         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+#         defaults))

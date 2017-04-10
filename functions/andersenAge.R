@@ -16,11 +16,11 @@ andersen.sse <- function(data, vals, age) {
     return(sum((vals - v.hat)^2))
 }
 
-age <- 0:10
-vals <- c(10,20,30,35,37,30,20,10,8,7,6) / 37
-vals2 <- c(100, 60, 40, 30, 24, 19, 15, 12, 11, 10, 9) / 100
-
-params <- nlm(andersen.sse, c(1,1,1,1), vals, age)
-
-plot(vals ~ age)
-curve(andersen.optimizer(params$estimate, x), add=T)
+# age <- 0:10
+# vals <- c(10,20,30,35,37,30,20,10,8,7,6) / 37
+# vals2 <- c(100, 60, 40, 30, 24, 19, 15, 12, 11, 10, 9) / 100
+# 
+# params <- nlm(andersen.sse, c(1,1,1,1), vals, age)
+# 
+# plot(vals ~ age)
+# curve(andersen.optimizer(params$estimate, x), add=T)

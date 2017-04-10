@@ -13,6 +13,7 @@ commCatchAges <- function (adir, area_data, fg_group, fishery)
                          year = mfdbatlantis:::atlantis_time_to_years(dims$time) + 
                              attr(adir, "start_year"), 
                          month = mfdbatlantis:::atlantis_time_to_months(dims$time), 
+                         day = mfdbatlantis:::atlantis_time_to_days(dims$time),
                          fishery = fishery$Code, 
                          functional_group = dims$functional_group,
                          stringsAsFactors = TRUE)

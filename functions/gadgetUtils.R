@@ -44,5 +44,6 @@ init.params <- function(params.data, switch, value,
     else {return(params.data)}
 }
 
+standard.age.factor <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
 andy.age.factor <- '(%2$s.age.alpha * exp((-1)  * (((log(%1$s)) - %2$s.age.beta) * ((log(%1$s)) - %2$s.age.beta) / %2$s.age.gamma)) + %2$s.age.delta)'
 gamma.age.factor <- '(%1$s / ((%2$s.age.alpha - 1) * (%2$s.age.beta * %2$s.age.gamma))) ** (%2$s.age.alpha - 1) * exp(%2$s.age.alpha - 1 - (%1$s / (%2$s.age.beta * %2$s.age.gamma)))'

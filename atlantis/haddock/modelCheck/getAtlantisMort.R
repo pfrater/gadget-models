@@ -9,7 +9,7 @@ setwd('~/gadget/models/atlantis')
 source('../functions/vbParams.R')
 source('functions/commCatchAges.R')
 source('functions/discardAges.R')
-is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM45BioV158FMV79_PF')
+is_dir <- atlantis_directory('~/gadget/models/atlantis/OutM45BioV158FMV79_PF')
 
 is_run_options <- atlantis_run_options(is_dir)
 

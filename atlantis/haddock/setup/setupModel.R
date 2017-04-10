@@ -37,7 +37,7 @@ weight.beta <- 3.116172
 ## setup M and determine initial abundance
 source('haddock/modelCheck/getAtlantisMort.R')
 nat.mort <- round(m.data$m, 3)
-rc <- 20
+#rc <- 20
 
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
 rec.number <- sprintf('%1$s.rec.scalar*%1$s.rec.%2$s', species.name, year.range)
@@ -68,12 +68,8 @@ had <-
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
                                  area = 1,
-                                 age.factor=sprintf(andy.age.factor, 
-                                                    .[[1]]$minage:.[[1]]$maxage,
-                                                    .[[1]]$stockname) %>%
-                                     parse(text=.) %>%
-                                     map(to.gadget.formulae) %>%
-                                     unlist(),
+                                 age.factor=sprintf('#%2$s.age%1$s', age,
+                                                    .[[1]]$stockname),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
                                  mean = vonb,

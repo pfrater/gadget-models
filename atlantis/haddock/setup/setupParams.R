@@ -8,7 +8,7 @@ read.gadget.parameters(sprintf('%s/params.out', gd$dir)) %>%
     init.params('age.beta', 1, -100, 10, 1) %>%
     init.params('age.gamma', 1, -100, 10, 1) %>%
     init.params('age.delta', 1, 0, 1000, 1) %>%
-    #init.params('age[0-9]', 20, 1e-05, 100, 1) %>%
+    init.params('age[0-9]', 20, 1e-05, 100, 1) %>%
     init.params('recl', 15.2704, 0, 40, 1) %>%
     init.params('rec.scalar', 100, 1e-05, 1000, 1) %>%
     init.params('rec.sd', 2, 0.1, 10, 1) %>%

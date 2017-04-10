@@ -18,7 +18,7 @@ source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
 source('haddock/initdb/getHadLengthVar.R') # source haddock length sd at age group
 
-is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM45BioV158FMV79_PF')
+is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM57BioV225FMV88_PF')
 is_run_options <- atlantis_run_options(is_dir)
 
 # Read in areas / surface temperatures, insert into mfdb
@@ -151,7 +151,10 @@ fisheryCode <- 'long'
 fishery <- is_fisheries[is_fisheries$Code == fisheryCode,]
 
 # to set up as age structured data - note that this returns values in kg, not tons
-age.catch <- commCatchAges(is_dir, is_area_data, fg_group, fishery)
+age.catch <-     
+        commCatchAges(is_dir, is_area_data, fg_group, fishery) %>%
+    mutate(area = as.character(area)) %>%
+    rename(group = functional_group)
 wl <- getStructN(is_dir, is_area_data, fg_group)
 
 age.catch.wl <- left_join(age.catch, wl)
@@ -185,7 +188,7 @@ comm.catch.samples <-
 comm.al.samples <- stripFleetAges(comm.catch.samples, 0.05)
 comm.al.samples$species <- "HAD"
 comm.al.samples$sampling_type <- 'CommSurvey'
-comm.al.samples$gear <- "BMT"
+comm.al.samples$gear <- "LLN"
 comm.al.samples <- rename(comm.al.samples, areacell = area, vessel = fishery)
 comm.al.samples <- filter(comm.al.samples, count > 0)
 

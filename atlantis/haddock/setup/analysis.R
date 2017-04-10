@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/haddock/hadVersions/hadMod53')
+setwd('~/gadget/models/atlantis/haddock/hadModel')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'lln.comm', ratio=1))
 

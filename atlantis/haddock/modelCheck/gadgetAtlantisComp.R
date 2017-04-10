@@ -136,10 +136,14 @@ atl.init <-
     group_by(age) %>%
     summarize(init.ind = sum(count))
 
-params <- read.gadget.parameters('WGTS/params.final')
-age.params <- params[grep('age[0-9]', rownames(params), value=T), ]$value
+params <- read.gadget.parameters('haddock/hadModel/WGTS/params.final')
+age.alpha <- params['had.age.alpha', ]$value
+age.beta <- params['had.age.beta', ]$value
+age.gamma <- params['had.age.gamma', ]$value
+age.delta <- params['had.age.delta', ]$value
 mult <- params[grep('had.mult', rownames(params), value=T), ]$value
 init.abund <- params[grep('init.abund', rownames(params), value=T), ]$value
+source('~/gadget/models/functions/andersenAge.R')
 
 gad.init.ages <- 10e03 * age.params * (mult * init.abund)
 gad.init <- data.frame(age = 1:19, init = gad.init.ages)
