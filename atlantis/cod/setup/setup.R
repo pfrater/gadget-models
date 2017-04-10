@@ -1,4 +1,4 @@
-## general setup for gadget model on greater silver smelt (Argentina silus)
+## general setup for gadget models
 library(plyr)
 library(dplyr)
 library(mfdb)

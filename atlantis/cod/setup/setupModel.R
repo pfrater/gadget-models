@@ -42,10 +42,6 @@ nat.mort <- round(m.data$m, 3)
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
 rec.number <- sprintf('%1$s.rec.scalar*%1$s.rec.%2$s', species.name, year.range)
 rec.sd <- sprintf('#%s.rec.sd', species.name)
-vonb <- von_b_formula(age, 
-                      linf=sprintf('%s.linf', species.name), 
-                      k=sprintf('%s.k',species.name), 
-                      recl=sprintf('%s.recl', species.name))
 
 ## set up the one stock stock
 cod <- 
@@ -72,7 +68,10 @@ cod <-
                                                     .[[1]]$stockname),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
-                                 mean = vonb,
+                                 mean = vonb_formula(.[[1]]$minage:.[[1]]$maxage,
+                                                     linf=sprintf('%s.linf', species.name),
+                                                     k=sprintf('%s.k', species.name),
+                                                     recl=sprintf('%s.recl', species.name)),
                                  stddev = c(init.sigma$ms, 
                                             rep(init.sigma$ms[nrow(init.sigma)],
                                                 (.[[1]]$maxage-.[[1]]$minage)-(nrow(init.sigma)-1))),
@@ -93,17 +92,23 @@ cod <-
     #               transitionstocksandratios = sprintf('%s.mat 1', species.name),
     #               transitionstep = 4) %>%
     gadget_update('doesrenew',
-                  normalparam = data_frame(year = year.range,
-                                           step = 1,
-                                           area = 1, 
-                                           age = .[[1]]$minage,
-                                           number = parse(text=rec.number) %>%
-                                               map(to.gadget.formulae) %>%
-                                               unlist(),
-                                           mean = vonb,
-                                           stddev = rec.sd,
-                                           alpha = weight.alpha,
-                                           beta = weight.beta))
+                  normalparam = 
+                      data_frame(
+                          year = year.range,
+                          step = 1,
+                          area = 1, 
+                          age = .[[1]]$minage,
+                          number = parse(text=rec.number) %>%
+                                   map(to.gadget.formulae) %>%
+                                   unlist(),
+                          mean = vonb_formula(
+                                    age=.[[1]]$minage,
+                                    linf=sprintf('%s.linf', species.name),
+                                    k=sprintf('%s.k', species.name),
+                                    recl=sprintf('%s.recl', species.name)),
+                          stddev = rec.sd,
+                          alpha = weight.alpha,
+                          beta = weight.beta))
 
 
 
