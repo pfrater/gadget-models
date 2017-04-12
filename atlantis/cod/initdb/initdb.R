@@ -19,7 +19,6 @@ source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
 source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
-mfdb('Atlantis-Iceland', destroy_schema=T)
 mdb <- mfdb('Atlantis-Iceland')
 
 # read in dir and options
@@ -224,7 +223,7 @@ smooth.len.catch <-
     mutate(length = ifelse(age == 0, vb(linf, k, (t0-0.29), age),
                            vb(linf, k, t0, age))) %>%
     select(area, year, month, fishery, group, cohort, weight, length, 
-           age, count)
+           age, maturity_stage, count)
 
 
 # see codSampleNumber.R - line 61 to EOF

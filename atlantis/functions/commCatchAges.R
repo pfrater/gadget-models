@@ -27,5 +27,7 @@ commCatchAges <- function (adir, area_data, fg_group, fishery)
     age_class_size <- as.numeric(as.character(fg_group$NumAgeClassSize))
     df_out$cohort <- sort(rep(1:cohorts, nrow(df_base)))
     df_out$age <- (df_out$cohort * age_class_size) - (age_class_size%/%2 + 1)
+    df_out$maturity_stage <- ifelse(df_out$cohort > fg_group$FLAG_AGE_MAT, 
+                                    5, 1)
     return(df_out)
 }

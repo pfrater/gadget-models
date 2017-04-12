@@ -4,21 +4,18 @@ minlength <- cod[[1]]$minlength
 maxlength <- cod[[1]]$maxlength
 dl <- cod[[1]]$dl
 
-## Query length data to create survey catchdistribution components
-
-## try using mfdb_group(all = minage:maxage) for the age in ldist
-ldist.igfs <- 
+## query database to get spring length, age, maturity
+ldist.spr <- 
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SprSurvey',
     species = defaults$species,
-    age = mfdb_interval('all', c(minage, maxage+1)),
-    length = mfdb_interval("len", seq(minlength, maxlength, by = 1),
+    age = mfdb_group(all = minage:maxage),
+    length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                            open_ended=c('upper', 'lower'))),
     defaults))
 
-
-# Age surveys
-aldist.igfs <-
+# ages
+aldist.spr <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'SprSurvey',
         age = mfdb_interval('age', minage:maxage,
@@ -28,28 +25,28 @@ aldist.igfs <-
                                open_ended=c('upper', 'lower'))),
         defaults))
 
+# maturity
+mat.spr <- 
+    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+        sampling_type = 'SprSurvey',
+        age = mfdb_group(all = minage:maxage),
+        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+                               open_ended=c('upper', 'lower')),
+        maturity_stage = mfdb_group(imm = 1, mat = 5)),
+    defaults))
 
-
-# ## Maturity @3 from IGFS
-# aggdata <- mfdb_sample_count(mdb, c('maturity_stage','age','length'),
-#                     append(defaults,
-#                         list(sampling_type='IGFS',
-#                                 age=mfdb_group(imm=1:6, mat=7:30),
-#                                 length = mfdb_step_interval('len', by=1, from=0, to=maxlength),              
-#                                 maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
-
-
-# Query length data to create autumn survey catchdistribution components
+## query database to get autumn length, age, maturity
+# length
 ldist.aut <- 
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'AutSurvey',
         species = defaults$species, 
-        age = mfdb_interval('all', c(minage, maxage+1)), 
+        age = mfdb_group(all = minage:maxage), 
         length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                                open_ended=c('upper', 'lower'))),
         defaults))
 
-## Age autumn survey
+# ages
 aldist.aut <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'AutSurvey',
@@ -60,29 +57,31 @@ aldist.aut <-
                                open_ended=c('upper', 'lower'))),
         defaults))
 
-# ## Maturity @3 from autumn survey
-# aggdata <- mfdb_sample_count(mdb, c('maturity_stage','age','length'),
-#                              append(defaults,
-#                                     list(sampling_type='AUT',
-#                                          age=mfdb_group(imm=1:6, mat=7:20),
-#                                          length = mfdb_step_interval('len', by=1, from=0, to=maxlength),
-#                                          maturity_stage = mfdb_group(gssimm = 1, gssmat = 2:5))))
+# maturity
+mat.aut <- 
+    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+        sampling_type = 'AutSurvey',
+        age = mfdb_group(all = minage:maxage),
+        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+                               open_ended=c('upper', 'lower')),
+        maturity_stage = mfdb_group(imm = 1, mat = 5)),
+        defaults))
 
 
-
-# Query length data to create bmt catchdistribution components
+## query database to get commercial length, age, maturity
+# length
 ldist.comm <- 
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'CommSurvey',
         species = defaults$species,
-        age = mfdb_interval('all', c(minage, maxage+1)), 
+        age = mfdb_group(all = minage:maxage), 
         gear = c('BMT'),
         length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                                open_ended=c('upper', 'lower'))),
         defaults))
 
 
-## Age long line fleet
+# ages
 aldist.comm <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'CommSurvey',
@@ -93,20 +92,32 @@ aldist.comm <-
                                open_ended=c('upper', 'lower'))),
         defaults))
 
+# maturity
+mat.comm <- 
+    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+        sampling_type = 'CommSurvey',
+        age = mfdb_group(all = minage:maxage),
+        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+                               open_ended=c('upper', 'lower')),
+        maturity_stage = mfdb_group(imm = 1, mat = 5)),
+        defaults))
+
+
 #######################################################################
 ## the following is to set up catchdistribution components for discards
 #######################################################################
-# Query length data to create bmt catchdistribution components
+# ## query database to get discard length, age, maturity
+# # length
 # ldist.discards <- 
 #     mfdb_sample_count(mdb, c('age', 'length'), c(list(
 #         sampling_type = 'DiscardSurvey',
 #         species = defaults$species,
-#         age = mfdb_interval('all', c(minage, maxage), open_ended=T),
+#         age = mfdb_group(all = minage:maxage),
 #         gear = c('BMT'),
 #         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
 #         defaults))
 # 
-# ## Age discards
+# # age
 # aldist.discards <-
 #     mfdb_sample_count(mdb, c('age', 'length'), c(list(
 #         sampling_type = 'DiscardSurvey',
@@ -114,3 +125,14 @@ aldist.comm <-
 #         age = mfdb_step_interval('age',by=1,from=0,to=19),
 #         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
 #         defaults))
+#
+# # maturity
+# mat.discards <- 
+#     mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+#         sampling_type = 'DiscardSurvey',
+#         age = mfdb_group(all = minage:maxage),
+#         length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+#                                open_ended=c('upper', 'lower')),
+#         maturity_stage = mfdb_group(imm = 1, mat = 5)),
+#         defaults))
+

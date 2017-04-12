@@ -14,13 +14,19 @@ gadgetlikelihood('likelihood', gd$dir, missingOkay=T) %>%
     gadget_update('catchdistribution',
                   name = 'ldist.spr',
                   weight = 1,
-                  data = ldist.igfs[[1]],
+                  data = ldist.spr[[1]],
                   fleetnames = c('spr'),
                   stocknames = stocknames) %>%
     gadget_update('catchdistribution',
                   name = 'aldist.spr',
                   weight = 1,
-                  data = aldist.igfs[[1]],
+                  data = aldist.spr[[1]],
+                  fleetnames = c('spr'),
+                  stocknames = stocknames) %>%
+    gadget_update('stockdistribution',
+                  name = 'mat.spr',
+                  weight = 1,
+                  data = mat.spr[[1]],
                   fleetnames = c('spr'),
                   stocknames = stocknames) %>%
     gadget_update('catchdistribution',
@@ -35,6 +41,12 @@ gadgetlikelihood('likelihood', gd$dir, missingOkay=T) %>%
                   data = aldist.aut[[1]],
                   fleetnames = c('aut'),
                   stocknames = stocknames) %>%
+    gadget_update('stockdistribution',
+                  name = 'mat.aut',
+                  weight = 1,
+                  data = mat.aut[[1]],
+                  fleetnames = c('aut'),
+                  stocknames = stocknames) %>%
     gadget_update('catchdistribution',
                   name = 'ldist.comm',
                   weight = 1,
@@ -47,6 +59,12 @@ gadgetlikelihood('likelihood', gd$dir, missingOkay=T) %>%
                   data = aldist.comm[[1]],
                   fleetnames = c('comm'),
                   stocknames = stocknames) %>%
+    gadget_update('stockdistribution',
+                  name = 'mat.comm',
+                  weight = 1,
+                  data = mat.comm[[1]],
+                  fleetnames = c('comm'),
+                  stocknames = stocknames) %>%
     # gadget_update('catchdistribution',
     #               name = 'ldist.discards',
     #               weight = 1,
@@ -57,6 +75,12 @@ gadgetlikelihood('likelihood', gd$dir, missingOkay=T) %>%
     #               name = 'aldist.discards',
     #               weight = 1,
     #               data = aldist.discards[[1]],
+    #               fleetnames = c('discards'),
+    #               stocknames = stocknames) %>%
+    # gadget_update('stockdistribution',
+    #               name = 'mat.discards',
+    #               weight = 1,
+    #               data = mat.discards[[1]],
     #               fleetnames = c('discards'),
     #               stocknames = stocknames) %>%
     gadget_update('surveyindices',

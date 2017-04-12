@@ -42,10 +42,6 @@ nat.mort <- round(m.data$m, 3)
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
 rec.number <- sprintf('%1$s.rec.scalar*%1$s.rec.%2$s', species.name, year.range)
 rec.sd <- sprintf('#%s.rec.sd', species.name)
-vonb <- von_b_formula(0:19, 
-                      linf=sprintf('%s.linf', species.name), 
-                      k=sprintf('%s.k',species.name), 
-                      recl=sprintf('%s.recl', species.name))
 
 ## set up the one stock stock
 cod <- 
@@ -68,8 +64,9 @@ cod <-
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
                                  area = 1,
-                                 age.factor=sprintf('#%2$s.age%1$s', age,
-                                                    .[[1]]$stockname),
+                                 age.factor=init.age.factor(age, 
+                                                            'cod.init.m',
+                                                            'cod.init.scalar'),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
                                  mean = vonb_formula(.[[1]]$minage:.[[1]]$maxage,
@@ -118,29 +115,32 @@ write.gadget.file(cod, gd$dir)
 spawnfile <- list(
     spawnsteps='spawnsteps 1',
     spawnareas='spawnareas 1',
-    spawnstocksandratios=paste(species.name, '1', sep='\t'),
+    spawnstocksandratios=sprintf('spawnstocksandratios\t%s\t1',
+                                 species.name),
     proportionfunction=
-        sprintf('function\texponential\t%1$s.spawn.alpha\t%1$s.spawn.l50',
+        sprintf('proportionfunction\texponential\t#%1$s.spawn.alpha\t#%1$s.spawn.l50',
                 species.name),
-    mortalityfunction='function constant 0.1',
+    mortalityfunction='mortalityfunction constant 0.1',
     weightlossfunction=
-        sprintf('function\texponential\t%1$s.wl.alpha\t%1$s.wl.l50',
+        sprintf('weightlossfunction\texponential\t#%1$s.wl.alpha\t#%1$s.wl.l50',
                 species.name),
     recruitment = 
-        sprintf('bevertonholt\t%1$s.bh.mu\t%1$s.bh.lam',
+        sprintf('recruitment\tbevertonholt\t#%1$s.bh.mu\t#%1$s.bh.lam',
                 species.name),
-    stockparameters=
-        data.frame(
-            mean = vonb_formula(age=cod[[1]]$minage:cod[[1]]$maxage,
-                                linf=sprintf('%s.linf', species.name),
-                                k=sprintf('%s.k', species.name),
-                                recl=sprintf('%s.recl', species.name)),
-            stddev = c(init.sigma$ms, 
-                       rep(init.sigma$ms[nrow(init.sigma)],
-                           (cod[[1]]$maxage-cod[[1]]$minage)-(nrow(init.sigma)-1))),
-            alpha = weight.alpha,
-            beta=weight.beta)
+    stockparameters = paste('stockparameters',
+                            vonb_formula(age=0,
+                                         linf=sprintf('%s.linf', species.name),
+                                         k=sprintf('%s.k', species.name),
+                                         recl=sprintf('%s.recl', species.name)),
+                            sprintf('#%s.rec.sd', species.name),
+                            weight.alpha,
+                            weight.beta,
+                            sep='\t')
+                            
 )
 
-
-
+cat(sapply(spawnfile, toString),
+    file=paste(getwd(), gd$dir, 
+                sprintf('Modelfiles/%s.spawnfile', species.name),
+                sep='/'),
+    sep='\n')
