@@ -9,7 +9,7 @@ areas <- read.csv('atlantisInfo/boxInfo.csv', header=T)
 boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
 
 st.year <- 1930
-end.year <- 1975
+end.year <- 2013
 year.range <- st.year:end.year
 defaults <- list(   
     areacell = mfdb_group("1" = boxes),
