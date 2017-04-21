@@ -34,6 +34,26 @@ fleet.suit <- function(fleet, stock, fun) {
     }
 }
 
+init.age.factor <- function(age, m, age.scalar) {
+    expr <- as.quoted(paste('exp(((-1) *', 
+                            m, 
+                            ') * ', 
+                            age, 
+                            ') * ', 
+                            age.scalar))
+    sapply(expr, to.gadget.formulae)
+}
+
+m.estimate.formula <- function(age, m, max.m) {
+    expr <- as.quoted(paste('exp(((-1) *', 
+                            m, 
+                            ') * ', 
+                            age, 
+                            ') * ', 
+                            max.m))
+    sapply(expr, to.gadget.formulae)
+}
+
 init.params <- function(params.data, switch, value, 
                         lower.bound, upper.bound, optimise) {
     w.switch <- grep(switch, params.data$switch);

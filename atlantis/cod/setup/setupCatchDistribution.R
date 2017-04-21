@@ -11,8 +11,8 @@ ldist.igfs <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
     sampling_type = 'SprSurvey',
     species = defaults$species,
-    age = mfdb_interval('all', c(minage, maxage+1)),
-    length = mfdb_interval("len", seq(minlength, maxlength, by = 1),
+    age = mfdb_group(all=minage:maxage),
+    length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                            open_ended=c('upper', 'lower'))),
     defaults))
 
@@ -44,7 +44,7 @@ ldist.aut <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'AutSurvey',
         species = defaults$species, 
-        age = mfdb_interval('all', c(minage, maxage+1)), 
+        age = mfdb_group(all=minage:maxage), 
         length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                                open_ended=c('upper', 'lower'))),
         defaults))
@@ -75,7 +75,7 @@ ldist.comm <-
     mfdb_sample_count(mdb, c('age', 'length'), c(list(
         sampling_type = 'CommSurvey',
         species = defaults$species,
-        age = mfdb_interval('all', c(minage, maxage+1)), 
+        age = mfdb_group(all=minage:maxage), 
         gear = c('BMT'),
         length = mfdb_interval("len", seq(minlength, maxlength, by = dl),
                                open_ended=c('upper', 'lower'))),
@@ -101,9 +101,9 @@ aldist.comm <-
 #     mfdb_sample_count(mdb, c('age', 'length'), c(list(
 #         sampling_type = 'DiscardSurvey',
 #         species = defaults$species,
-#         age = mfdb_interval('all', c(minage, maxage), open_ended=T),
+#         age = mfdb_group(all=minage:maxage),
 #         gear = c('BMT'),
-#         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+#         length = mfdb_interval("len", seq(0, maxlength, by = dl))),
 #         defaults))
 # 
 # ## Age discards
@@ -112,5 +112,5 @@ aldist.comm <-
 #         sampling_type = 'DiscardSurvey',
 #         gear = 'BMT',
 #         age = mfdb_step_interval('age',by=1,from=0,to=19),
-#         length = mfdb_interval("len", seq(0, maxlength, by = 1))),
+#         length = mfdb_interval("len", seq(0, maxlength, by = dl))),
 #         defaults))

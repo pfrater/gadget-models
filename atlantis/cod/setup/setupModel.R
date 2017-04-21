@@ -59,13 +59,18 @@ cod <-
                                      alpha=weight.alpha,
                                      beta=weight.beta),
                   beta=to.gadget.formulae(quote(10*cod.bbin))) %>%
-    gadget_update('naturalmortality', c(nat.mort, nat.mort[length(nat.mort)])) %>%
+    gadget_update('naturalmortality', 
+                  m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
+                                     m=sprintf('%s.nat.m', .[[1]]$stockname),
+                                     max.m=sprintf('%s.max.m', 
+                                                   .[[1]]$stockname))) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
                                  area = 1,
-                                 age.factor=sprintf('#%2$s.age%1$s', age,
-                                                    .[[1]]$stockname),
+                                 age.factor=init.age.factor(age,
+                                                            'cod.init.m',
+                                                            'cod.init.scalar'),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
                                  mean = vonb_formula(.[[1]]$minage:.[[1]]$maxage,
