@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod26')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod31')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
@@ -248,4 +248,18 @@ f.plot <-
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
 
+### these are just some basic plots to check parameters, initial vals, etc.
 
+# check initial values
+init.plot <- 
+    ggplot(filter(fit$stock.std, year == min(year)),
+                  aes(x=age, y=number/1e6)) + geom_bar(stat='identity') + 
+    ylab("Number (millions)") + xlab('Age') + theme_bw()
+
+
+# check natural mortality across ages
+params <- read.gadget.parameters('cod/codVersions/codMod30/WGTS/params.final')
+m.function <- function(age,nat.m, max.m) {
+    exp((-1)*nat.m*age)*max.m
+}
+curve(m.function(x, 0.02, 0.2963635), 0, 20)

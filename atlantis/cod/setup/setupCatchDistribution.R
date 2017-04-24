@@ -26,14 +26,14 @@ aldist.spr <-
         defaults))
 
 # maturity
-mat.spr <- 
-    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
-        sampling_type = 'SprSurvey',
-        age = mfdb_group(all = minage:maxage),
-        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
-                               open_ended=c('upper', 'lower')),
-        maturity_stage = mfdb_group(imm = 1, mat = 5)),
-    defaults))
+#mat.spr <- 
+#    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+#        sampling_type = 'SprSurvey',
+#        age = mfdb_group(all = minage:maxage),
+#        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+#                               open_ended=c('upper', 'lower')),
+#        maturity_stage = mfdb_group(imm = 1, mat = 5)),
+#    defaults))
 
 ## query database to get autumn length, age, maturity
 # length
@@ -57,15 +57,15 @@ aldist.aut <-
                                open_ended=c('upper', 'lower'))),
         defaults))
 
-# maturity
-mat.aut <- 
-    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
-        sampling_type = 'AutSurvey',
-        age = mfdb_group(all = minage:maxage),
-        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
-                               open_ended=c('upper', 'lower')),
-        maturity_stage = mfdb_group(imm = 1, mat = 5)),
-        defaults))
+# # maturity
+# mat.aut <- 
+#     mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+#         sampling_type = 'AutSurvey',
+#         age = mfdb_group(all = minage:maxage),
+#         length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+#                                open_ended=c('upper', 'lower')),
+#         maturity_stage = mfdb_group(imm = 1, mat = 5)),
+#         defaults))
 
 
 ## query database to get commercial length, age, maturity
@@ -92,15 +92,15 @@ aldist.comm <-
                                open_ended=c('upper', 'lower'))),
         defaults))
 
-# maturity
-mat.comm <- 
-    mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
-        sampling_type = 'CommSurvey',
-        age = mfdb_group(all = minage:maxage),
-        length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
-                               open_ended=c('upper', 'lower')),
-        maturity_stage = mfdb_group(imm = 1, mat = 5)),
-        defaults))
+# # maturity
+# mat.comm <- 
+#     mfdb_sample_count(mdb, c('maturity_stage', 'age', 'length'), c(list(
+#         sampling_type = 'CommSurvey',
+#         age = mfdb_group(all = minage:maxage),
+#         length = mfdb_interval('len', seq(minlength, maxlength, by=dl),
+#                               open_ended=c('upper', 'lower')),
+#         maturity_stage = mfdb_group(imm = 1, mat = 5)),
+#         defaults))
 
 
 #######################################################################

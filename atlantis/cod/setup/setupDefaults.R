@@ -8,7 +8,7 @@ areas <- read.csv('atlantisInfo/boxInfo.csv', header=T)
 #boxes <- filter(areas, boundary == 0)$box_id
 boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
 
-st.year <- 1930
+st.year <- 1948
 end.year <- 1975
 year.range <- st.year:end.year
 defaults <- list(   
