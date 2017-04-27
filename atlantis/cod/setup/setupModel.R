@@ -37,6 +37,8 @@ weight.beta <- 3.3437
 ## setup M and determine initial abundance
 source('cod/modelCheck/getAtlantisMort.R')
 nat.mort <- round(m.data$m, 3)
+test.mort <- c(0.5,0.35,0.25,0.23,0.22,0.22,0.21,0.21,0.20,0.20,
+                0.20,0.20,0.20,0,.20,0.20,0.20,0.20,0.20,0.20,0.20)
 #rc <- 20
 
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
@@ -59,7 +61,8 @@ cod <-
                                      alpha=weight.alpha,
                                      beta=weight.beta),
                   beta=to.gadget.formulae(quote(10*cod.bbin))) %>%
-    gadget_update('naturalmortality', c(nat.mort, nat.mort[length(nat.mort)])) %>%
+    gadget_update('naturalmortality', 
+                  test.mort) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
@@ -120,7 +123,7 @@ spawnfile <- list(
     proportionfunction=
         sprintf('proportionfunction\texponential\t#%1$s.spawn.alpha\t#%1$s.spawn.l50',
                 species.name),
-    mortalityfunction='mortalityfunction constant 0.1',
+    mortalityfunction=sprintf('mortalityfunction constant #%s.spawn.m', species.name),
     weightlossfunction=
         sprintf('weightlossfunction\texponential\t#%1$s.wl.alpha\t#%1$s.wl.l50',
                 species.name),
