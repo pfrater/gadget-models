@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod27')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod35')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
@@ -248,4 +248,30 @@ f.plot <-
     theme(legend.position=c(0.2, 0.8), legend.title = element_blank(),
           plot.margin = unit(c(0,0,0,0),'cm'))
 
+## basic plots to check parameters, initial values, and
+## natural mortality (if estimated)
+init.vals <- 
+    ggplot(filter(fit$stock.std, year == min(year)), 
+           aes(x=age, y=number/1e6)) +
+    geom_bar(stat='identity') +
+    xlab('Age') + ylab('Numbers (millions)') + theme_bw()
 
+params.plot <- 
+    ggplot(data=fit$params[-grep('rec.[0-9]', fit$params$switch), ],
+           aes(x=switch, y=value)) + geom_point() +
+    geom_errorbar(aes(ymin=lower, ymax=upper), width = 0.1) + 
+    facet_wrap(~switch, scales='free') + theme_bw() +
+    theme (axis.ticks.y = element_blank(),
+           panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
+           strip.background = element_blank(), strip.text.x = element_blank())
+
+# plot for natural mortality if m.estimate.formula is used
+nat.m.plot <- 
+    ggplot(data=data.frame(age=unique(fit$stock.std$age)),
+                           aes(x=age)) + 
+    stat_function(fun=function(x, nat.m, max.m) exp((-1)*nat.m*x)*max.m,
+                  args=list(nat.m=fit$params$value[grep('nat.m', 
+                                                        fit$params$switch)],
+                            max.m=fit$params$value[grep('max.m', 
+                                                        fit$params$switch)]
+                  ))

@@ -60,10 +60,9 @@ cod <-
                                      beta=weight.beta),
                   beta=to.gadget.formulae(quote(10*cod.bbin))) %>%
     gadget_update('naturalmortality', 
-                  m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
-                                     m=sprintf('%s.nat.m', .[[1]]$stockname),
-                                     max.m=sprintf('%s.max.m', 
-                                                   .[[1]]$stockname))) %>%
+                  sprintf('#%1$s.m%2$s',
+                          species.name,
+                          .[[1]]$minage:.[[1]]$maxage)) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
