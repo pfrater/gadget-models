@@ -11,8 +11,8 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod35')
-fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod39')
+fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.aldist.spr',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
                   printfile.printatstart = 0,
@@ -265,13 +265,29 @@ params.plot <-
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
+
+## plots if formulas are used for estimation
+
 # plot for natural mortality if m.estimate.formula is used
 nat.m.plot <- 
     ggplot(data=data.frame(age=unique(fit$stock.std$age)),
                            aes(x=age)) + 
-    stat_function(fun=function(x, nat.m, max.m) exp((-1)*nat.m*x)*max.m,
-                  args=list(nat.m=fit$params$value[grep('nat.m', 
+    stat_function(fun=function(x, nat.m, max.m, min.m) {
+                exp((-1)*nat.m*x)*(max.m-min.m) + min.m
+                }, args=list(nat.m=fit$params$value[grep('m.decay', 
                                                         fit$params$switch)],
                             max.m=fit$params$value[grep('max.m', 
-                                                        fit$params$switch)]
-                  ))
+                                                        fit$params$switch)],
+                            min.m=fit$params$value[grep('min.m',
+                                                         fit$params$switch)]))
+
+# plot for initial values if estimated as a function of age
+init.plot <- 
+    ggplot(data=data.frame(age=unique(fit$stock.std$age)),
+           aes(x=age)) + 
+    stat_function(fun=function(x, init.m, init.scalar) {
+                exp((-1)*init.m*x)*init.scalar
+            }, args=list(init.m=fit$params$value[grep('init.m', 
+                                                     fit$params$switch)],
+                         init.scalar=fit$params$value[grep('init.scalar', 
+                                                     fit$params$switch)]))

@@ -35,8 +35,12 @@ weight.alpha <- 0.0000021
 weight.beta <- 3.3437
 
 ## setup M and determine initial abundance
-source('cod/modelCheck/getAtlantisMort.R')
-nat.mort <- round(m.data$m, 3)
+source('cod/modelCheck/getAtlantisMort3.R')
+# for m as function of age use m.decay.vals
+# for calculated m use m.data
+nat.mort <- round(c(m.data$median.m, 
+                    rep(m.data$median.m[nrow(m.data)], 3)), 
+                  3)
 #rc <- 20
 
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'
@@ -58,18 +62,21 @@ cod <-
                                      k=sprintf('#%s.k', species.name),
                                      alpha=weight.alpha,
                                      beta=weight.beta),
-                  beta=to.gadget.formulae(quote(10*cod.bbin))) %>%
+                  beta=sprintf('(* 10 #%s.bbin)', .[[1]]$stockname)) %>%
     gadget_update('naturalmortality', 
-                  sprintf('#%1$s.m%2$s',
-                          species.name,
-                          .[[1]]$minage:.[[1]]$maxage)) %>%
+                  nat.mort) %>%
+                  # m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
+                  #                    m=sprintf('%s.m.decay', .[[1]]$stockname), 
+                  #                    max.m=sprintf('%s.max.m', .[[1]]$stockname),
+                  #                    min.m=sprintf('%s.min.m', .[[1]]$stockname))) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
                                  area = 1,
-                                 age.factor=init.age.factor(age,
-                                                            'cod.init.m',
-                                                            'cod.init.scalar'),
+                                 age.factor=init.age.factor(age=age,
+                                                            m=sprintf('%s.init.decay', .[[1]]$stockname),
+                                                            age.scalar=sprintf('%s.init.scalar', .[[1]]$stockname),
+                                                            init.min=sprintf('%s.init.min', .[[1]]$stockname)),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
                                  mean = vonb_formula(.[[1]]$minage:.[[1]]$maxage,

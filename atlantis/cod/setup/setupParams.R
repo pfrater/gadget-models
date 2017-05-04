@@ -5,13 +5,15 @@ read.gadget.parameters(sprintf('%s/params.out', gd$dir)) %>%
     init.params('linf', 128.896, 75, 170, 1) %>%
     init.params('k', 0.1381982, 0.01, 0.30, 1) %>%
     init.params('bbin', 6, 1e-08, 100, 1) %>%
-    init.params('m[0-9]', 0.2, 0.001, 0.75, 1) %>%
-    #init.params('nat.m', 0.2, 0.0001, 2, 1) %>%
-    #init.params('max.m', 0.2, 0.2, 0.75, 1) %>%
+    #init.params('m[0-9]', 0.2, 0.001, 0.75, 1) %>%
+    init.params('m.decay', 0.2, 0.0001, 2, 1) %>%
+    init.params('max.m', 0.2, 0.15, 0.75, 1) %>%
+    init.params('min.m', 0.1, 0, 0.25, 1) %>%
     init.params('mult', 5, 1e-05, 10, 1) %>%
     init.params('init.abund', 10, 1e-05, 1000, 1) %>%
-    init.params('init.m', 0.2, 1e-05, 5, 1) %>%
+    init.params('init.decay', 0.2, 1e-05, 5, 1) %>%
     init.params('init.scalar', 1000, 1, 1e04, 1) %>%
+    init.params('init.min', 500, 0, 5000, 1) %>%
     #init.params('age[0-9]', 20, 1e-05, 100, 1) %>%
     init.params('recl', 18, 0, 40, 1) %>%
     init.params('rec.scalar', 100, 1e-05, 1000, 1) %>%

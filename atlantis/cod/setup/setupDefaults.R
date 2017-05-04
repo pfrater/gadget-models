@@ -8,11 +8,13 @@ areas <- read.csv('atlantisInfo/boxInfo.csv', header=T)
 #boxes <- filter(areas, boundary == 0)$box_id
 boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
 
-st.year <- 1948
+st.year <- 1940
 end.year <- 2013
+data.st.year <- 1948
 year.range <- st.year:end.year
 defaults <- list(   
     areacell = mfdb_group("1" = boxes),
     timestep = mfdb_timestep_quarterly,
     year = st.year:end.year,
+    data.years = data.st.year:end.year,
     species = 'COD')

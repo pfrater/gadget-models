@@ -54,38 +54,26 @@ print('Sampling types imported')
 fgName <- 'Cod'
 fg_group <- is_functional_groups[c(is_functional_groups$Name == fgName),]
 is_fg_count <- atlantis_fg_tracer(is_dir, is_area_data, fg_group)
-is_fg_count <- 
-    is_fg_count %>% 
-    group_by(year, month) %>%
-    mutate(fd = min(day)) %>%
-    ungroup() %>%
-    filter(day == fd)
+
 
 # distribute 2 year atlantis age groups to single year classes
 source('functions/calcGrowth.R')
 #source('functions/calcWtGrowth.R')
 source('functions/parseAges.R')
-source('functions/calcCodMort.R')
-
+#source('functions/calcCodMort.R')
+source('cod/modelCheck/getAtlantisMort3.R')
 # add mortality and parse ages based on m
-# I changed m for age classes 0 and 2 to 3x and 2x the
-# calculated mortalities, respectively. This just seemed to give a smoother
-# age distribution. I'm trying this more as a test to see if gadget
-# can fit to the 0 age class better this way. If it works you'll have to 
-# come up with a more formal algorithm for computing m at younger ages
 age.count <- 
-    left_join(is_fg_count, m.by.age) %>%
-    mutate(m = ifelse(age == 0, m*3, 
-                      ifelse(age == 2, m*3, m))) %>%
+    left_join(is_fg_count, m.vals) %>%
     parseAges(.) %>%
-    arrange(year, area, month, day, depth, age)
+    arrange(year, month, day, area, depth, age)
 
 # redistribute lengths based on growth params
 smooth.len <- 
     age.count %>% 
     filter(count >= 1) %>%
     left_join(vbMin) %>%
-    mutate(length = ifelse(age == 0, vb(linf, k, (t0-0.29), age),
+    mutate(length = ifelse(age == 0, vb(linf, k, (t0-0.20), age),
                            vb(linf, k, t0, age))) %>%
     select(depth, area, year, month, day, group, cohort, weight, length, 
            maturity_stage, age, count)
@@ -114,12 +102,12 @@ print('Tracer data imported')
 # create survey from tracer values
 is_fg_survey <- smooth.len[
     smooth.len$area %in% paste('Box', 0:52, sep='') &
-        smooth.len$month %in% c(4,10),] %>%
-    mutate(sampling_type = ifelse(month == 4,
+        smooth.len$month %in% c(3,9),] %>%
+    mutate(sampling_type = ifelse(month == 3,
                                   "SprSurveyTotals",
                                   "AutSurveyTotals")) %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
-    atlantis_tracer_survey_select(length_group, rep(0.1, length(length_group)), 0)
+    atlantis_tracer_survey_select(length_group, rep(0.01, length(length_group)), 0)
 
 survey <- filter(is_fg_survey, count >= 1)
 survey$species <- fg_group$MfdbCode
@@ -141,7 +129,7 @@ al.survey <- filter(al.survey, count >= 1)
 al.survey$species <- fg_group$MfdbCode
 al.survey$areacell <- al.survey$area
 al.survey <- mutate(al.survey, 
-                    sampling_type = ifelse(month == 4, 
+                    sampling_type = ifelse(month == 3, 
                                            'SprSurvey',
                                            'AutSurvey'))
 mfdb_import_survey(mdb, al.survey, data_source = paste0('atlantis_survey_', fg_group$Name))
@@ -201,18 +189,12 @@ age.catch <-
     commCatchAges(is_dir, is_area_data, fg_group, fishery) %>%
     mutate(area = as.character(area)) %>%
     rename(group = functional_group)
-age.catch <-
-    age.catch %>%
-    group_by(year, month) %>%
-    mutate(fd = min(day)) %>%
-    ungroup() %>%
-    filter(day == fd)
 wl <- getStructN(is_dir, is_area_data, fg_group)
 
 age.catch.wl <- left_join(age.catch, wl)
 
 # parse the catch age-length data to single year classes
-age.catch.wl <- left_join(age.catch.wl, m.by.age)
+age.catch.wl <- left_join(age.catch.wl, m.vals)
 parsed.age.catch.wl <- 
     parseCatchAges(age.catch.wl) %>% 
     arrange(year, area, month, age)
@@ -221,7 +203,7 @@ smooth.len.catch <-
     parsed.age.catch.wl %>%
     filter(count >= 1) %>%
     left_join(vbMin) %>%
-    mutate(length = ifelse(age == 0, vb(linf, k, (t0-0.29), age),
+    mutate(length = ifelse(age == 0, vb(linf, k, (t0-0.20), age),
                            vb(linf, k, t0, age))) %>%
     select(area, year, month, fishery, group, cohort, weight, length, 
            age, count)
@@ -235,7 +217,7 @@ fleet.sigma <- 5.7e-07
 
 comm.catch.samples <- 
     smooth.len.catch %>%
-    filter(month %in% c(2:11)) %>%
+    filter(month %in% c(1:10)) %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
     atlantis_tracer_survey_select(length_group, fleet.suitability, 0) %>%
     filter(count >= 1)
@@ -258,31 +240,6 @@ is_catch <- atlantis_fisheries_catch(is_dir, is_area_data, fishery)
 is_catch <- filter(is_catch, functional_group == 'FCD')
 is_catch$weight_total <- is_catch$weight_total*1000
 
-########################################
-## the following code is to correct
-## the spikes that occur every 7-8 years
-########################################
-weird.yrs <- data.frame(year = sort(c(seq(1951,2011,15), seq(1959, 2004, 15))),
-                        months = c(10,4,10,4,10,4,10,4,10))
-annual.wt <-
-    is_catch %>% 
-    filter(!(month %in% c(4,10))) %>%
-    group_by(year, month) %>%
-    summarize(wt = sum(weight_total)) %>%
-    group_by(year) %>% summarize(mn.ann.wt = mean(wt))
-overcatch.rate <-
-    is_catch %>%
-    group_by(year, month) %>%
-    summarize(monthly.wt = sum(weight_total)) %>%
-    left_join(annual.wt) %>%
-    mutate(oc.rate = monthly.wt / mn.ann.wt) %>%
-    filter(oc.rate > 1.6) %>% select(year, month, oc.rate)
-is_catch <-
-    is_catch %>%
-    left_join(overcatch.rate) %>%
-    mutate(weight = ifelse(is.na(oc.rate), weight_total, weight_total / oc.rate)) %>%
-    select(-weight_total, -oc.rate)
-
 
 # Species column that maps to MFDB code
 is_catch$species <- is_catch$functional_group
@@ -292,7 +249,7 @@ levels(is_catch$species) <- is_functional_groups[match(
 
 is_catch$sampling_type <- "Cat"
 is_catch <- rename(is_catch, areacell = area, vessel = fishery)
-is_catch <- filter(is_catch, weight > 0)
+is_catch <- filter(is_catch, weight_total > 0)
 is_catch$gear <- 'BMT'
 
 mfdb_import_survey(mdb, 

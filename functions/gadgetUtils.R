@@ -34,23 +34,31 @@ fleet.suit <- function(fleet, stock, fun) {
     }
 }
 
-init.age.factor <- function(age, m, age.scalar) {
+init.age.factor <- function(age, m, age.scalar, init.min) {
     expr <- as.quoted(paste('exp(((-1) *', 
                             m, 
                             ') * ', 
                             age, 
-                            ') * ', 
-                            age.scalar))
+                            ') * (', 
+                            age.scalar,
+                            ' - ',
+                            init.min,
+                            ') + ',
+                            init.min))
     sapply(expr, to.gadget.formulae)
 }
 
-m.estimate.formula <- function(age, m, max.m) {
+m.estimate.formula <- function(age, m, max.m, min.m) {
     expr <- as.quoted(paste('exp(((-1) *', 
                             m, 
                             ') * ', 
                             age, 
-                            ') * ', 
-                            max.m))
+                            ') * (', 
+                            max.m,
+                            ' - ',
+                            min.m,
+                            ') + ',
+                            min.m))
     sapply(expr, to.gadget.formulae)
 }
 
