@@ -19,7 +19,7 @@ source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
 source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
-mfdb('Atlantis-Iceland', destroy_schema=T)
+#mfdb('Atlantis-Iceland', destroy_schema=T)
 mdb <- mfdb('Atlantis-Iceland')
 
 # read in dir and options
@@ -64,7 +64,7 @@ source('functions/parseAges.R')
 source('cod/modelCheck/getAtlantisMort3.R')
 # add mortality and parse ages based on m
 age.count <- 
-    left_join(is_fg_count, m.vals) %>%
+    left_join(is_fg_count, m.func.vals) %>%
     parseAges(.) %>%
     arrange(year, month, day, area, depth, age)
 
@@ -100,14 +100,16 @@ mfdb_import_survey(mdb, is_fg_tracer, data_source = paste0('atlantis_tracer_', f
 print('Tracer data imported')
 
 # create survey from tracer values
+# keep spr survey as 4 because of gadget order of operations
+# keep aut survey as 9 because of recruitment jumps in atlantis
 is_fg_survey <- smooth.len[
     smooth.len$area %in% paste('Box', 0:52, sep='') &
-        smooth.len$month %in% c(3,9),] %>%
-    mutate(sampling_type = ifelse(month == 3,
+        smooth.len$month %in% c(4,9),] %>%
+		mutate(sampling_type = ifelse(month == 4,
                                   "SprSurveyTotals",
                                   "AutSurveyTotals")) %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
-    atlantis_tracer_survey_select(length_group, rep(0.01, length(length_group)), 0)
+    atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma) 
 
 survey <- filter(is_fg_survey, count >= 1)
 survey$species <- fg_group$MfdbCode
@@ -129,7 +131,7 @@ al.survey <- filter(al.survey, count >= 1)
 al.survey$species <- fg_group$MfdbCode
 al.survey$areacell <- al.survey$area
 al.survey <- mutate(al.survey, 
-                    sampling_type = ifelse(month == 3, 
+                    sampling_type = ifelse(month == 4, 
                                            'SprSurvey',
                                            'AutSurvey'))
 mfdb_import_survey(mdb, al.survey, data_source = paste0('atlantis_survey_', fg_group$Name))
@@ -194,7 +196,7 @@ wl <- getStructN(is_dir, is_area_data, fg_group)
 age.catch.wl <- left_join(age.catch, wl)
 
 # parse the catch age-length data to single year classes
-age.catch.wl <- left_join(age.catch.wl, m.vals)
+age.catch.wl <- left_join(age.catch.wl, m.func.vals)
 parsed.age.catch.wl <- 
     parseCatchAges(age.catch.wl) %>% 
     arrange(year, area, month, age)

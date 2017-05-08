@@ -11,8 +11,8 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod39')
-fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.aldist.spr',
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod40')
+fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
                   printfile.printatstart = 0,

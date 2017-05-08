@@ -22,11 +22,11 @@ aut.landings <- structure(data.frame(year=defaults$data.years, step=3, area=1, n
 gadgetfleet('Modelfiles/fleet', gd$dir, missingOkay=T) %>%
     gadget_update('totalfleet',
                   name = 'spr',
-                  suitability = fleet.suit('spr', stocknames, 'constant'),
+                  suitability = fleet.suit('spr', stocknames, 'exponentiall50'),
                   data=igfs.landings) %>%
     gadget_update('totalfleet',
                   name = 'aut', 
-                  suitability = fleet.suit('aut', stocknames, 'constant'),
+                  suitability = fleet.suit('aut', stocknames, 'exponentiall50'),
                   data = aut.landings) %>%
     gadget_update('totalfleet',
                   name = 'comm',
@@ -37,3 +37,4 @@ gadgetfleet('Modelfiles/fleet', gd$dir, missingOkay=T) %>%
     #               suitability = fleet.suit('discards', stocknames, 'exponentiall50'),
     #               data = discards[[1]]) %>%
     write.gadget.file(gd$dir)
+

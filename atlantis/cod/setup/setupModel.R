@@ -64,11 +64,10 @@ cod <-
                                      beta=weight.beta),
                   beta=sprintf('(* 10 #%s.bbin)', .[[1]]$stockname)) %>%
     gadget_update('naturalmortality', 
-                  nat.mort) %>%
-                  # m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
-                  #                    m=sprintf('%s.m.decay', .[[1]]$stockname), 
-                  #                    max.m=sprintf('%s.max.m', .[[1]]$stockname),
-                  #                    min.m=sprintf('%s.min.m', .[[1]]$stockname))) %>%
+                  m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
+                                     m=sprintf('%s.m.decay', .[[1]]$stockname), 
+                                     max.m=sprintf('%s.max.m', .[[1]]$stockname),
+                                     min.m=sprintf('%s.min.m', .[[1]]$stockname))) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 

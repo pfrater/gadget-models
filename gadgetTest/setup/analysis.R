@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod38')
+setwd('~/gadget/models/gadgetTest/zbraInit')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
@@ -269,9 +269,13 @@ params.plot <-
 nat.m.plot <- 
     ggplot(data=data.frame(age=unique(fit$stock.std$age)),
                            aes(x=age)) + 
-    stat_function(fun=function(x, nat.m, max.m) exp((-1)*nat.m*x)*max.m,
-                  args=list(nat.m=fit$params$value[grep('nat.m', 
+    stat_function(fun=function(x, nat.m, max.m, min.m) {
+                exp((-1)*nat.m*x)*(max.m - min.m) + min.m
+            },
+                  args=list(nat.m=fit$params$value[grep('m.decay', 
                                                         fit$params$switch)],
                             max.m=fit$params$value[grep('max.m', 
+                                                        fit$params$switch)],
+                            min.m=fit$params$value[grep('min.m', 
                                                         fit$params$switch)]
                   ))

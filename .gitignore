@@ -45,3 +45,5 @@ functions/ricker.R
 atlantis/cod/codSpawn/
 atlantis/cod/codSpawnTemp/
 gadgetTest/zbraModel
+gadgetTest/zbraInit
+gadgetTest/zbraVersions
