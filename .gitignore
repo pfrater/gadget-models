@@ -44,3 +44,6 @@ atlantis/OutM45BioV158FMV79_PF
 atlantis/cod/codSpawn
 atlantis/cod/codSpawnTemp
 gadgetTest/zbraModel/
+gadgetTest/zbraInit/
+gadgetTest/zbraVersions/
+atlantis/cod/rmFiles.sh

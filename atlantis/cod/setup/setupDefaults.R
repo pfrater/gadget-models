@@ -1,6 +1,6 @@
 # defaults for time, species, area
 
-gd <- gadget_directory('cod/codModel')
+gd <- gadget_directory('cod/codSpawn')
 species.name <- 'cod'
 stocknames <- 'cod'
 
