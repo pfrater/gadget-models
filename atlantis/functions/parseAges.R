@@ -1,5 +1,5 @@
 # the following function is to parse out numbers by cohort and place them in 
-# one year age classes
+# one year age classes - you must have already merged the mortality data
 
 parseAges <- function(data) {
     base.cols <- select(data, depth:length, maturity_stage);

@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod40')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod44')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'bmt.comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
@@ -87,7 +87,7 @@ ldist.spr <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.spr' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Spring Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
@@ -100,7 +100,7 @@ ldist.aut <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.aut' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Autumn Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -115,7 +115,7 @@ ldist.catch <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.comm' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Catch Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -128,7 +128,7 @@ ldist.discards <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.discards' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Discard Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -147,7 +147,7 @@ aldist.spr <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.spr' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Spring Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
@@ -158,7 +158,7 @@ aldist.aut <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.aut' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Autumn Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -169,7 +169,7 @@ aldist.catch <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.comm' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Catch Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 

@@ -34,13 +34,13 @@ atl.init.sigma <-
 weight.alpha <- 0.0000021
 weight.beta <- 3.3437
 
-## setup M and determine initial abundance
-source('cod/modelCheck/getAtlantisMort3.R')
-# for m as function of age use m.decay.vals
+# ## setup M and determine initial abundance
+# source('cod/modelCheck/getAtlantisMort3.R')
+# # for m as function of age use m.decay.vals
 # for calculated m use m.data
-nat.mort <- round(c(m.data$median.m, 
-                    rep(m.data$median.m[nrow(m.data)], 3)), 
-                  3)
+# nat.mort <- round(c(m.data$median.m, 
+#                     rep(m.data$median.m[nrow(m.data)], 3)), 
+#                   3)
 #rc <- 20
 
 # age.mean.formula <- 'exp(-1*(%2$s.M+%3$s.init.F)*%1$s)*%2$s.init.%1$s'

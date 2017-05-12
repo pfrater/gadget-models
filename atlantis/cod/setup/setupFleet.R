@@ -13,7 +13,7 @@ comm.landings <- mfdb_sample_totalweight(mdb, NULL,
 #                                             species=defaults$species), defaults))
 
 ## set up and make surveys as fleet
-igfs.landings <- structure(data.frame(year=defaults$data.years, step=1, area=1, number=1),
+igfs.landings <- structure(data.frame(year=defaults$data.years, step=2, area=1, number=1),
                            area_group=mfdb_group(`1` = 1))
 aut.landings <- structure(data.frame(year=defaults$data.years, step=3, area=1, number=1),
           area_group=mfdb_group(`1` = 1))
