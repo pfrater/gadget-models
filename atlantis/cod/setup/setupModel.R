@@ -81,7 +81,8 @@ cod <-
                                                       k=sprintf('%s.k', species.name),
                                                       recl=sprintf('%s.recl', species.name)),
                                  stddev = c(init.sigma$ms[-1],
-                                            rep(init.sigma$ms[18],2)),
+                                            rep(init.sigma$ms[nrow(init.sigma)],
+                                                (.[[1]]$maxage - nrow(init.sigma) + 1))),
                                  alpha = weight.alpha,
                                  beta = weight.beta)) %>%
     gadget_update('refweight',
@@ -121,8 +122,8 @@ write.gadget.file(cod, gd$dir)
 spawnfile <- list(
     spawnsteps='spawnsteps 1',
     spawnareas='spawnareas 1',
-    firstspawnyear=st.year,
-	lastspawnyear=end.year,
+    firstspawnyear= sprintf('firstspawnyear %s', st.year),
+	lastspawnyear=sprintf('lastspawnyear %s', end.year),
 	spawnstocksandratios=sprintf('spawnstocksandratios\t%s\t1',
                                  species.name),
     proportionfunction=
