@@ -48,3 +48,6 @@ gadgetTest/zbraModel
 gadgetTest/zbraInit
 gadgetTest/zbraVersions
 atlantis/cod/rmFiles.sh
+gadgetTest/zbraSetup/timeAreaData/
+gadgetTest/zbraSetup/zbramodelsetupcode.zip
+gadgetTest/zbraSetup/area

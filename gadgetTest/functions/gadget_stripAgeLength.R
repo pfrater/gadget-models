@@ -1,4 +1,4 @@
-stripAgeLength <- function(survey.data, length.prop, age.prop) {
+gadget_stripAgeLength <- function(survey.data, length.prop, age.prop) {
     base.names <- grep("^count", names(survey.data), value=T, invert=T);
     base.data <- survey.data[, base.names, drop=F];
     counts <- survey.data$count;
@@ -24,18 +24,18 @@ stripAgeLength <- function(survey.data, length.prop, age.prop) {
     })
     length.data <- base.data;
     length.data$age <- NA;
-    length.data$maturity_stage <- NA;
-    length.data$weight <- NA;
+    #length.data$maturity_stage <- NA;
+    #length.data$weight <- NA;
     length.data$count <- length.count;
     no.age.length.count <- counts - age.count - length.count;
     no.age.length.count[no.age.length.count < 0] <- 0;
     no.age.length.data <- base.data;
     no.age.length.data$age <- NA;
     no.age.length.data$length <- NA;
-    no.age.length.data$maturity_stage <- NA;
-    no.age.length.data$weight <- NA;
+    #no.age.length.data$maturity_stage <- NA;
+    #no.age.length.data$weight <- NA;
     no.age.length.data$count <- no.age.length.count;
     data1 <- rbind(age.data, length.data);
     data2 <- rbind(no.age.length.data, data1)
-	return(data2)
+    return(data2)
 }
