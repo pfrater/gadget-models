@@ -51,3 +51,5 @@ atlantis/cod/rmFiles.sh
 gadgetTest/zbraSetup/timeAreaData/
 gadgetTest/zbraSetup/zbramodelsetupcode.zip
 gadgetTest/zbraSetup/area
+gadgetTest/results/*.pdf
+gadgetTest/results/*.html

@@ -4,7 +4,7 @@ stripFleetAges <- function(survey.data, age.prop) {
     counts <- survey.data$count;
     min.age.est <- ceiling(0.5/age.prop)
     age.count <- sapply(counts, function(x) {
-        if (x <= min.age.est) {
+        if (x <= min.age.est & x >= 1) {
             out <- rbinom(1,1,age.prop*2)
         } else {
             out <- ceiling(x*age.prop);

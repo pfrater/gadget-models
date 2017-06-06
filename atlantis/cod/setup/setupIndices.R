@@ -11,7 +11,7 @@ spr.si.mid <- mfdb_sample_count(mdb, c('length'), c(list(
 
 spr.si.long <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='SprSurveyTotals',
-    length = mfdb_interval('len', c(36,54,72,90), open_ended=c('upper'))),
+    length = mfdb_interval('len', c(36,maxlength))),    
     defaults))
 
 
@@ -28,5 +28,5 @@ aut.si.mid <- mfdb_sample_count(mdb, c('length'), c(list(
 
 aut.si.long <- mfdb_sample_count(mdb, c('length'), c(list(
     sampling_type ='AutSurveyTotals',
-    length = mfdb_interval('len', c(36,54,72,90), open_ended=c('upper'))),
+    length = mfdb_interval('len', c(36,maxlength))),    
     defaults))

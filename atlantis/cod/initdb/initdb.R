@@ -19,7 +19,7 @@ source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
 source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
-#mfdb('Atlantis-Iceland', destroy_schema=T)
+mfdb('Atlantis-Iceland', destroy_schema=T)
 mdb <- mfdb('Atlantis-Iceland')
 
 # read in dir and options

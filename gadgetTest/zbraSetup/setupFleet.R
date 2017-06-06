@@ -14,21 +14,21 @@ comm.landings <- structure(as.data.frame(comm.landings),
                            area_group=mfdb_group(`1` = 1))
 
 ## set up and make surveys as fleet
-igfs.landings <- structure(data.frame(year=defaults$data.years, step=4, area=1, number=1),
-                           area_group=mfdb_group(`1` = 1))
-aut.landings <- structure(data.frame(year=defaults$data.years, step=10, area=1, number=1),
-          area_group=mfdb_group(`1` = 1))
+# igfs.landings <- structure(data.frame(year=defaults$data.years, step=2, area=1, number=1),
+#                            area_group=mfdb_group(`1` = 1))
+# aut.landings <- structure(data.frame(year=defaults$data.years, step=4, area=1, number=1),
+#           area_group=mfdb_group(`1` = 1))
 
 
 gadgetfleet('Modelfiles/fleet', gd$dir, missingOkay=T) %>%
-    gadget_update('totalfleet',
-                  name = 'spr',
-                  suitability = fleet.suit('spr', stocknames, 'constant'),
-                  data=igfs.landings) %>%
-    gadget_update('totalfleet',
-                  name = 'aut', 
-                  suitability = fleet.suit('aut', stocknames, 'constant'),
-                  data = aut.landings) %>%
+    # gadget_update('totalfleet',
+    #               name = 'spr',
+    #               suitability = fleet.suit('spr', stocknames, 'constant'),
+    #               data=igfs.landings) %>%
+    # gadget_update('totalfleet',
+    #               name = 'aut', 
+    #               suitability = fleet.suit('aut', stocknames, 'constant'),
+    #               data = aut.landings) %>%
     gadget_update('totalfleet',
                   name = 'comm',
                   suitability = fleet.suit('comm', stocknames, 'exponentiall50'),

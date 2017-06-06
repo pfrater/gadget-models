@@ -5,9 +5,9 @@ gs.data <- gadget_directory('gadgetTest/zbraInit')
 species.name <- 'zbra'
 stocknames <- 'zbra'
 
-st.year <- 1983
+st.year <- 1948
 end.year <- 2013
-data.st.year <- 1983
+data.st.year <- 1948
 year.range <- st.year:end.year
 
 defaults <- list(   

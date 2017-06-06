@@ -54,7 +54,7 @@ cod <-
                   minage = 0,
                   maxage = 19,
                   minlength = 1,
-                  maxlength = 200,
+                  maxlength = 199,
                   dl = 3,
                   livesonareas = 1) %>%
     gadget_update('doesgrow',
@@ -63,19 +63,26 @@ cod <-
                                      alpha=weight.alpha,
                                      beta=weight.beta),
                   beta=sprintf('(* 10 #%s.bbin)', .[[1]]$stockname)) %>%
-    gadget_update('naturalmortality', 
-                  m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
-                                     m=sprintf('%s.m.decay', .[[1]]$stockname), 
-                                     max.m=sprintf('%s.max.m', .[[1]]$stockname),
-                                     min.m=sprintf('%s.min.m', .[[1]]$stockname))) %>%
+    gadget_update('naturalmortality', # m for each age
+                  sprintf('#%1$s.age%2$s.m', 
+                          .[[1]]$stockname, 
+                          .[[1]]$minage:.[[1]]$maxage)) %>%
+    # gadget_update('naturalmortality', # m as a function of age
+    #               m.estimate.formula(age=.[[1]]$minage:.[[1]]$maxage,
+    #                                  m=sprintf('%s.m.decay', .[[1]]$stockname), 
+    #                                  max.m=sprintf('%s.max.m', .[[1]]$stockname),
+    #                                  min.m=sprintf('%s.min.m', .[[1]]$stockname))) %>%
     gadget_update('initialconditions',
                   normalparam=
                       data_frame(age = .[[1]]$minage:.[[1]]$maxage, 
                                  area = 1,
-                                 age.factor=init.age.factor(age=age,
-                                                            m=sprintf('%s.init.decay', .[[1]]$stockname),
-                                                            age.scalar=sprintf('%s.init.scalar', .[[1]]$stockname),
-                                                            init.min=sprintf('%s.init.min', .[[1]]$stockname)),
+                                 age.factor = sprintf('(* 10 #%1$s.init%2$s)',
+                                                      .[[1]]$stockname,
+                                                      age),
+                                 # age.factor=init.age.factor(age=age,
+                                 #                            m=sprintf('%s.init.decay', .[[1]]$stockname),
+                                 #                            age.scalar=sprintf('%s.init.scalar', .[[1]]$stockname),
+                                 #                            init.min=sprintf('%s.init.min', .[[1]]$stockname)),
                                  area.factor=sprintf('( * #%1$s.mult #%1$s.init.abund)',
                                                      .[[1]]$stockname),
                                  mean = vonb_formula(.[[1]]$minage:.[[1]]$maxage,

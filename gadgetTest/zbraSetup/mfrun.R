@@ -1,5 +1,5 @@
 library(Rgadget)
-setwd('~/gadget/atlantis/cod/codModel')
+setwd('~/gadget/gadgetTest/zbraModel')
 gt <- system.time(
     tmp <- gadget.iterative(rew.sI=TRUE,
                             main='main',
