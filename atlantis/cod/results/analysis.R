@@ -11,7 +11,7 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/gadgetTest/zbraVersions/zbraVer3')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod49')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
@@ -87,7 +87,7 @@ ldist.spr <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.spr' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Spring Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
@@ -100,7 +100,7 @@ ldist.aut <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.aut' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Autumn Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -115,7 +115,7 @@ ldist.catch <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.comm' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Catch Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -128,7 +128,7 @@ ldist.discards <-
     geom_text(data=mutate(subset(fit$catchdist.fleets,
                                  name == 'ldist.discards' & lower==min(lower)),y=Inf),
               aes(lower,y,label=year), vjust = 2,hjust = -1)+
-    ylab('Proportion') + xlab('length') +
+    ylab('Proportion') + xlab('Length (cm)') + ggtitle('Discard Lengths') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -147,7 +147,7 @@ aldist.spr <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.spr' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Spring Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
@@ -158,7 +158,7 @@ aldist.aut <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.aut' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Autumn Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
@@ -169,7 +169,7 @@ aldist.catch <-
     facet_wrap(~year+step) + theme_bw() + 
     geom_text(data=filter(ages, name == 'aldist.comm' & age == max(age)),
               aes(x=max(age)/(4/3), y=Inf, label=year), vjust = 1.5) +
-    ylab('Proportion') + xlab('age') +
+    ylab('Proportion') + xlab('Age') + ggtitle('Catch Ages') +
     theme (axis.text.y = element_blank(), axis.ticks.y = element_blank(),
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank()) 
@@ -265,17 +265,29 @@ params.plot <-
            panel.spacing = unit(0,'cm'), plot.margin = unit(c(0,0,0,0),'cm'),
            strip.background = element_blank(), strip.text.x = element_blank())
 
+
+## plots if formulas are used for estimation
+
 # plot for natural mortality if m.estimate.formula is used
 nat.m.plot <- 
     ggplot(data=data.frame(age=unique(fit$stock.std$age)),
                            aes(x=age)) + 
     stat_function(fun=function(x, nat.m, max.m, min.m) {
-                exp((-1)*nat.m*x)*(max.m - min.m) + min.m
-            },
-                  args=list(nat.m=fit$params$value[grep('m.decay', 
+                exp((-1)*nat.m*x)*(max.m-min.m) + min.m
+                }, args=list(nat.m=fit$params$value[grep('m.decay', 
                                                         fit$params$switch)],
                             max.m=fit$params$value[grep('max.m', 
                                                         fit$params$switch)],
-                            min.m=fit$params$value[grep('min.m', 
-                                                        fit$params$switch)]
-                  ))
+                            min.m=fit$params$value[grep('min.m',
+                                                         fit$params$switch)]))
+
+# plot for initial values if estimated as a function of age
+init.plot <- 
+    ggplot(data=data.frame(age=unique(fit$stock.std$age)),
+           aes(x=age)) + 
+    stat_function(fun=function(x, init.m, init.scalar) {
+                exp((-1)*init.m*x)*init.scalar
+            }, args=list(init.m=fit$params$value[grep('init.m', 
+                                                     fit$params$switch)],
+                         init.scalar=fit$params$value[grep('init.scalar', 
+                                                     fit$params$switch)]))

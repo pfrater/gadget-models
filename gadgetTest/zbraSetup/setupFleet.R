@@ -31,7 +31,9 @@ gadgetfleet('Modelfiles/fleet', gd$dir, missingOkay=T) %>%
     #               data = aut.landings) %>%
     gadget_update('totalfleet',
                   name = 'comm',
-                  suitability = fleet.suit('comm', stocknames, 'exponentiall50'),
+                  suitability = fleet_suit('comm', stocknames, 
+                                           'exponentiall50',
+                                           params = list('alpha', 'l50')),
                   data = comm.landings) %>%
     # gadget_update('totalfleet',
     #               name = 'discards',

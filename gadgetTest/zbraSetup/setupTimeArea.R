@@ -6,7 +6,7 @@ gadgetfile('time',
            components = list(list(firstyear = st.year,
                                   firststep = 1,
                                   lastyear = end.year,
-                                  laststep = 1,
+                                  laststep = 4,
                                   notimesteps = c(4, rep(3, 4))))) %>%
     write.gadget.file(gd$dir)
 

@@ -2,13 +2,14 @@
 
 gd <- gadget_directory('cod/codModel')
 species.name <- 'cod'
+stock0 <- 'cod0'
 stocknames <- 'cod'
 
 areas <- read.csv('atlantisInfo/boxInfo.csv', header=T)
 #boxes <- filter(areas, boundary == 0)$box_id
 boxes <- sprintf("Box%s", filter(areas, boundary == 0)$box_id)
 
-st.year <- 1983
+st.year <- 1970
 end.year <- 2012
 data.st.year <- 1983
 year.range <- st.year:end.year

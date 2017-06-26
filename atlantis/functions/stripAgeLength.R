@@ -7,7 +7,7 @@ stripAgeLength <- function(survey.data, length.prop, age.prop) {
         if (x <= min.age.est & x >= 1) {
             out <- rbinom(1,1,age.prop*2)
         } else {
-            out <- ceiling(x*age.prop);
+            out <- round(x*age.prop);
         }
         return(out)
     })
@@ -18,7 +18,7 @@ stripAgeLength <- function(survey.data, length.prop, age.prop) {
         if (x <= min.length.est & x >= 1) {
             out <- rbinom(1,1,length.prop / 2);
         } else {
-            out <- ceiling(x*length.prop)
+            out <- round(x*length.prop)
         }
         return(out)
     })

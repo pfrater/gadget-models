@@ -7,7 +7,7 @@ library(Rgadget)
 
 setwd('/home/pfrater/gadget/models/atlantis')
 source('../functions/gadgetUtils.R')
-setup.d <- 'cod/setup'
+setup.d <- 'cod/test'
 
 # connect to mfdb database
 mdb <- mfdb('Atlantis-Iceland')

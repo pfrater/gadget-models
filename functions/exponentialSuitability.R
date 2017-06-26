@@ -5,9 +5,9 @@ exp.suit <- function(alpha, beta, gamma, delta, l, L) {
     delta / (1 + exp(-(alpha) - (beta*l) - (gamma*L)))
 }
 
-alpha <- 50
-beta <- 0.05
-alpha <- alpha*((-1)*beta)
+alpha <- 66
+beta <- 0.046
+#alpha <- alpha*((-1)*beta)
 curve(exp.suit(alpha,beta,0,1,x,500), 0, 175)
 
 # example of exponentiall50 suitability function used in gadget

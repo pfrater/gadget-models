@@ -16,7 +16,7 @@
                       weight = 1,
                       data = ldist.spr,
                       stocknames = stocknames,
-                      parameters = c('#sd.a  #sd.b'),
+                      #parameters = c('#sd.a  #sd.b'),
                       likelihoodtype = 'multinomial') %>%
         gadget_update('surveydistribution',
                       name = 'aldist.spr',

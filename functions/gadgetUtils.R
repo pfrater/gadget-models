@@ -17,22 +17,66 @@ vonb_formula <- function(age, linf, k, recl) {
     sapply(vonb, to.gadget.formulae)
 }
 
-fleet.suit <- function(fleet, stock, fun) {
-    if (fun == 'exponentiall50') {
-        suit <- paste0('\n', 
-                       paste(stock, 
-                             'function', 
-                             'exponentiall50', 
-                             sprintf('#%1$s.%2$s.alpha', stock, fleet),
-                             sprintf('#%1$s.%2$s.l50', stock, fleet)),
-                       collapse='\n')
-    }
-    else if (fun == 'constant') {
-        suit <- paste0('\n',
-                       paste(stock, 'function', 'constant', '1', sep='\t'),
-                       collapse='\n')
-    }
+## functions to write suitability lines
+# fleet suitability
+fleet_suit <- function(fleet='comm', 
+                       stock=NULL, 
+                       fun='exponentiall50', 
+                       params=NULL) {
+    paste0('\n',
+           paste(stock, 'function', fun, 
+                 ifelse(is.numeric(params),
+                        params,
+                        do.call(paste, lapply(params, function(x) {
+                            if (is.numeric(x)) {
+                                return(x)
+                            } else {
+                                sprintf('#%1$s.%2$s.%3$s',
+                                        stock, fleet, x)
+                            }
+                        }))),
+                 sep='\t'))
 }
+
+# predator suitability
+pred_suit <- function(pred='comm', 
+                      stock=NULL, 
+                      fun='newexponentiall50', 
+                      params=NULL) {
+    paste0('\n',
+           paste(stock, 'function', fun, 
+                 ifelse(is.numeric(params),
+                        params,
+                        do.call(paste, lapply(params, function(x) {
+                            if (is.numeric(x)) {
+                                return(x)
+                            } else {
+                                sprintf('#%1$s.%2$s.%3$s',
+                                        stock, pred, x)
+                            }
+                        }))),
+                 sep='\t'))
+}
+
+# surveydistribution suitability
+surveydist_suit <- function(pred='survey',
+                            stock=NULL,
+                            fun='newexponentiall50',
+                            params=NULL) {
+    paste0(paste('function', fun, 
+                 ifelse(is.numeric(params),
+                        params,
+                        do.call(paste, lapply(params, function(x) {
+                            if (is.numeric(x)) {
+                                return(x)
+                            } else {
+                                sprintf('#%1$s.%2$s.%3$s',
+                                        stock, pred, x)
+                            }
+                        }))),
+                 sep='\t'))
+}
+
 
 init.age.factor <- function(age, m, age.scalar, init.min) {
     expr <- as.quoted(paste('exp(((-1) *', 

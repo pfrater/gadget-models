@@ -109,7 +109,7 @@ is_fg_survey <- smooth.len[
                                   "SprSurveyTotals",
                                   "AutSurveyTotals")) %>%
     atlantis_tracer_add_lengthgroups(length_group, sigma_per_cohort) %>%
-    atlantis_tracer_survey_select(length_group, survey_suitability, survey_sigma) 
+    atlantis_tracer_survey_select(length_group, rep(0.001, length(length_group)), survey_sigma) 
 
 survey <- filter(is_fg_survey, count >= 1)
 survey$species <- fg_group$MfdbCode
