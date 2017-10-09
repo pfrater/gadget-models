@@ -11,12 +11,13 @@ library(dplyr)
 library(ggplot2)
 library(grid)
 library(Rgadget)
-setwd('~/gadget/models/atlantis/cod/codVersions/codMod49')
+setwd('~/gadget/models/atlantis/cod/codVersions/codMod65')
 fit <- gadget.fit(wgts="WGTS", main.file='WGTS/main.final',
                   fleet.predict = data.frame(fleet = 'comm', ratio=1),
                   mat.par=c(-6.510198, 1.108594),
                   printfile.printatstart = 0,
-                  printfile.steps = 1)
+                  printfile.steps = "all",
+                  rec.len.param = TRUE)
 
 # source('~/R/rgadget/trunk/gadgetFileIO.R')
 # source('~/R/rgadget/trunk/gadgetfunctions.R')
@@ -44,7 +45,7 @@ summary.plot <-
 tmp <- mutate(fit$sidat, survey = ifelse(substr(name,1,3)=='aut','aut', 'igfs'))
 tmp <- rbind.fill(tmp,
                   ddply(tmp,~year+survey, summarise,
-                        number.x = sum(number.x*0.008249352*lower^3.026918 ),
+                        observed = sum(observed*0.008249352*lower^3.026918 ),
                         predict = sum(predict*0.008249352*lower^3.026918 ),
                         upper = sum(upper*0.008249352*lower^3.026918 ),
                         lower = sum(lower*0.008249352*lower^3.026918 ),
@@ -52,11 +53,11 @@ tmp <- rbind.fill(tmp,
 
 # plot the model survey data over the actual survey data
 si.spr <-
-    ggplot(subset(tmp, survey=='igfs'), aes(year,number.x)) +
+    ggplot(subset(tmp, survey=='igfs'), aes(year,observed)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
-                   aes(year,ymax=number.x,ymin=predict),col='green')+
+                   aes(year,ymax=observed,ymin=predict),col='green')+
     geom_text(data=mutate(subset(tmp,year==min(year)),y=Inf),
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +
@@ -65,11 +66,11 @@ si.spr <-
            strip.background = element_blank(), strip.text.x = element_blank())
 
 si.aut <-
-    ggplot(filter(tmp, survey=='aut'), aes(year,number.x)) +
+    ggplot(filter(tmp, survey=='aut'), aes(year,observed)) +
     geom_point() +
     geom_line(aes(year,predict)) +
     geom_linerange(data=subset(tmp,year==max(year)),
-                   aes(year,ymax=number.x,ymin=predict),col='green')+
+                   aes(year,ymax=observed,ymin=predict),col='green')+
     geom_text(data=mutate(subset(tmp,year==min(year)),y=Inf),
               aes(year,y,label=length), vjust = 2,hjust = -1)+
     facet_wrap(~length,scale='free_y',ncol=2) + theme_bw() +

@@ -19,8 +19,8 @@ source('functions/getStructN.R')
 source('functions/stripFleetAges.R')
 source('cod/initdb/getCodLengthVar.R') # source cod length sd at age group
 
-mfdb('Atlantis-Iceland', destroy_schema=T)
-mdb <- mfdb('Atlantis-Iceland')
+# mfdb('atlantis_constSurvey_0.001', destroy_schema=T)
+mdb <- mfdb('atlantis_constsurv_001')
 
 # read in dir and options
 is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM57BioV225FMV88_PF')

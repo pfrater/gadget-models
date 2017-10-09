@@ -41,6 +41,7 @@ atlantis/haddock/functions/paulsGadgetPrintfile.R
 atlantis/haddock/simModel/
 atlantis/haddock/setup/setupSim/
 atlantis/OutM45BioV158FMV79_PF
+atlantis/ideas
 functions/ricker.R
 atlantis/cod/codSpawn/
 atlantis/cod/codSpawnTemp/
@@ -53,3 +54,7 @@ gadgetTest/zbraSetup/zbramodelsetupcode.zip
 gadgetTest/zbraSetup/area
 gadgetTest/results/*.pdf
 gadgetTest/results/*.html
+atlantis/varTest/bootstrapRun
+atlantis/varTest/errBootRuns
+atlantis/varTest/varModels
+

@@ -55,7 +55,7 @@ cod <-
                   maxage = 19,
                   minlength = 1,
                   maxlength = 199,
-                  dl = 3,
+                  dl = 5,
                   livesonareas = 1) %>%
     gadget_update('doesgrow',
                   growthparameters=c(linf=sprintf('#%s.linf', species.name), 

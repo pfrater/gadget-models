@@ -4,6 +4,8 @@ library(mfdbatlantis)
 library(utils)
 library(magrittr)
 setwd('~/gadget/models/atlantis')
+gadget_st_year <- 1983
+
 is_dir <- atlantis_directory('~/Dropbox/Paul_IA/OutM57BioV225FMV88_PF')
 
 is_run_options <- atlantis_run_options(is_dir)
@@ -31,10 +33,13 @@ atl.biomass <-
     mutate(year = 1948:2013) %>%
     select(year, starts_with(fg_group$GroupCode)) %>%
     mutate(atl.biomass = FCD*1000)
+    
 
 # plot gadget biomass against atlantis
 gad.biomass <- 
-    fit$res.by.year %>%
+    fit$stock.std %>%
+    filter(step == 1) %>%
+    mutate(total.biomass = mean.weight * number) %>%
     group_by(year) %>%
     summarize(total.biomass = sum(total.biomass))
 
@@ -49,29 +54,36 @@ atl.gad.plot <-
 
 biomass.comp.plot <-
     ggplot(data=atl.gad.biomass, aes(x=year)) + 
-    geom_line(aes(y=total.biomass/1e3, color='Gadget')) +
-    geom_line(aes(y=atl.biomass/1e3, color='Atlantis')) + 
+    geom_line(aes(y=total.biomass/1e6, color='Gadget')) +
+    geom_line(aes(y=atl.biomass/1e6, color='Atlantis')) + 
     scale_color_manual('', breaks=c('Gadget', 'Atlantis'), values=c('red', 'black')) +
-    theme_bw() + xlab('Year') + ylab('Biomass (tons)')
+    theme_bw() + xlab('Year') + ylab('Biomass (thousand tons)') + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
 
 bm.scale.diff.plot <- 
     ggplot(data=atl.gad.biomass, aes(x=year, y=scale.diff)) + 
     geom_line() + geom_hline(yintercept = 1, linetype='dashed') + 
     ylim(0,pmax(1.5, max(atl.gad.biomass$scale.diff, na.rm=T))) +
-    theme_bw() + xlab('Year') + ylab('Relative difference in biomass')
+    theme_bw() + xlab('Year') + ylab('Relative difference in biomass') + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
 
 #######################################
 ## to check numbers instead of biomass
 #######################################
 cod.numbers <- 
     is_fg_count %>% 
-    filter(month == 2) %>%
+    filter(month == 9) %>%
     group_by(year) %>% 
     summarize(atl.number = sum(count))
 gad.numbers <- 
-    fit$res.by.year %>%
+    fit$stock.std %>%
+    filter(step == 3) %>%
     group_by(year) %>%
-    summarize(total.number = sum(total.number))
+    summarize(total.number = sum(number))
 atl.gad.numbers <- 
     left_join(gad.numbers, cod.numbers) %>%
     mutate(scale.diff = total.number / atl.number)
@@ -81,13 +93,19 @@ numbers.comp.plot <-
     geom_line(aes(y=total.number/1e6, color='Gadget')) +
     geom_line(aes(y=atl.number/1e6, color='Atlantis')) +
     scale_color_manual('', breaks=c('Gadget', 'Atlantis'), values=c('red', 'black')) +
-    theme_bw() + xlab('Year') + ylab('Numbers (millions of fish)')
+    theme_bw() + xlab('Year') + ylab('Numbers (millions of fish)') + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
 
 nmb.scale.diff.plot <- 
     ggplot(data=atl.gad.numbers, aes(x=year, y=scale.diff)) + geom_line() +
     geom_hline(yintercept = 1, linetype='dashed') +
     ylim(0,pmax(1.5, max(atl.gad.numbers$scale.diff, na.rm=T))) +
-    theme_bw() + xlab('Year') + ylab('Relative difference in numbers')
+    theme_bw() + xlab('Year') + ylab('Relative difference in numbers') + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
 
 
 #######################################
@@ -105,28 +123,119 @@ atl.catch.plot <- catch.plot + geom_line(data=atl.landings, aes(x=year, y=FCD))
 #######################################
 ## check numbers by age
 #######################################
-age.numbers <- 
+gad.age.numbers <- 
     fit$stock.std %>%
-    filter(step == 4) %>%
+    filter(step == 2) %>%
     mutate(age = age - (age %% 2)) %>%
     group_by(year, age) %>%
-    summarize(total = sum(number))
+    summarize(gad.number = sum(number))
 
 atl.age.numbers <- 
     is_fg_count %>%
-    filter(month == 10, count >= 1) %>%
+    filter(month == 3, count >= 1) %>%
     group_by(year, age) %>%
-    summarize(total = sum(count))
+    summarize(atl.number = sum(count))
+
+atl.gad.age.numbers <- left_join(gad.age.numbers, atl.age.numbers)
 
 age.numbers.plot <-
-    ggplot(data=filter(age.numbers, year < 2013), 
-           aes(x=year, y=total/1e6, color='Gadget')) + geom_line() + 
-    geom_line(data=filter(atl.age.numbers, year < 2013), 
-              aes(x=year, y=total/1e6, color='Atlantis')) + 
+    ggplot(data=filter(atl.gad.age.numbers), 
+           aes(x=year, y=gad.number/1e6, color='Gadget')) + geom_line() + 
+    geom_line(aes(x=year, y=atl.number/1e6, color='Atlantis')) + 
     facet_wrap(~age, scales='free_y') + 
     scale_color_manual('', breaks=c('Gadget', 'Atlantis'), 
                        values=c('red', 'black')) +
-    theme_bw() + xlab('Year') + ylab('Numbers (millions of fish)')
+    theme_bw() + xlab('Year') + ylab('Numbers (millions of fish)') + 
+    theme(axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
+
+# ----------------------------------------------------------
+# age numbers by parsed out by step
+# Note: this only works when all timesteps are printed by gadget
+gad.step.age.numbers <- 
+    fit$stock.std %>%
+    mutate(age = age - (age %% 2)) %>%
+    group_by(year, age, step) %>%
+    summarize(gad.number = sum(number))
+
+monthToStep <- sort(rep(1:4,3))
+atl.step.age.numbers <- 
+    is_fg_count %>%
+    filter(count >= 1) %>%
+    mutate(step = monthToStep[month]) %>%
+    filter(month %in% c(1,4,7,10)) %>%
+    group_by(year, age, step) %>%
+    summarize(atl.number = sum(count))
+
+atl.gad.step.age.numbers <- 
+    left_join(gad.step.age.numbers, atl.step.age.numbers)
+
+step.age.numbers.plot <-
+    ggplot(data=atl.gad.step.age.numbers, 
+           aes(x=year, y=gad.number/1e6, color ='Gadget', 
+               linetype=factor(step))) + 
+    geom_line() + 
+    geom_line(data=atl.gad.step.age.numbers,
+              aes(x=year, y=atl.number/1e6, color='Atlantis', 
+                  linetype=factor(step))) + 
+    facet_wrap(~age, scales='free_y') + 
+    scale_color_manual('', breaks=c('Gadget', 'Atlantis'), 
+                       values=c('red', 'black')) +
+    theme_bw() + xlab('Year') + ylab('Numbers (millions of fish)') + 
+    theme(axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
+
+
+#-----------------------------------------------------------
+# visualize the contribution of each age group to biomass
+gad.age.biomass <- 
+    fit$stock.std %>%
+    filter(step == 3) %>%
+    mutate(age = age - (age %% 2),
+           biomass = mean.weight * number) %>%
+    group_by(year, age) %>%
+    summarize(total.biomass = sum(biomass))
+
+atl.age.biomass <- 
+    is_fg_count %>%
+    filter(month == 9, count >= 1) %>%
+    mutate(biomass = (count * weight)/1e3) %>%
+    group_by(year, age) %>%
+    summarize(atl.biomass = sum(biomass))
+
+atl.gad.age.biomass <- 
+    left_join(gad.age.biomass, atl.age.biomass) %>%
+    mutate(diff = total.biomass - atl.biomass,
+           scale.diff = total.biomass / atl.biomass)
+
+age.biomass.comp.plot <-
+    ggplot(data=atl.gad.age.biomass, aes(x=year)) + 
+    geom_line(aes(y=total.biomass/1e3, color='Gadget')) +
+    geom_line(aes(y=atl.biomass/1e3, color='Atlantis')) + 
+    facet_wrap(~age, scales = "free_y") +
+    scale_color_manual('', breaks=c('Gadget', 'Atlantis'), values=c('red', 'black')) +
+    theme_bw() + xlab('Year') + ylab('Biomass (tons)') + 
+    theme(axis.text = element_text(size = 10),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
+
+diff.by.age <- 
+    atl.gad.age.biomass %>%
+    filter(year >= gadget_st_year) %>%
+    group_by(age) %>%
+    summarize(mn.diff = mean(diff/1e3),
+              se.diff = sd(diff/1e3) / sqrt(n()))
+
+diff.by.age.plot <- 
+    ggplot(data=diff.by.age, aes(x=age, y=mn.diff)) + geom_point(size = 4) +
+    geom_errorbar(aes(ymin = mn.diff - se.diff, 
+                      ymax = mn.diff + se.diff), width = 0) + 
+    geom_hline(yintercept = 0, linetype = "dashed") + 
+    theme_bw() + xlab('Age') + ylab('Difference in Biomass (tons)') + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
+
 
 #######################################
 ## check growth
@@ -137,9 +246,13 @@ cod.growth <-
     sample_n(10000)
 
 gr.check <- 
-    ggplot(data=cod.growth, aes(x=age, y=length)) + geom_point() +
+    ggplot(data=cod.growth, aes(x=age, y=length)) + 
+    geom_point(size = 3, shape=1) +
     geom_line(data=fit$stock.growth, aes(x=age, y=length)) +
-    theme_bw()
+    theme_bw() + xlab("Age") + ylab("Length (cm)") + 
+    theme(axis.text = element_text(size = 15),
+          axis.title = element_text(size = 17),
+          legend.text = element_text(size = 15))
 
 
 #######################################
@@ -150,7 +263,7 @@ gad.init.year <- min(fit$stock.std$year)
 atl.init <- 
     is_fg_count %>%
     filter(year == gad.init.year,
-           month == min(month),
+           month == 3,
            count >= 1) %>%
     group_by(age) %>%
     summarize(atl.init = sum(count))

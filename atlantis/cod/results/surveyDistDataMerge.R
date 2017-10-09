@@ -10,8 +10,11 @@ survdist.data <-
                    area = as.character(area), age = as.character(age),
                    name = x)
         tmp.predict <- 
-            fit$out.fit[x][[1]] %>%
-            rename(predicted = number) %>%
+            read.table(sprintf('WGTS/out.fit/%s', x), 
+                       comment.char = ';',
+                       stringsAsFactors = F) %>%
+            rename(year=V1, step=V2, area=V3, 
+                   age=V4, length=V5, predicted=V6) %>% 
             mutate(length = as.numeric(as.character(gsub('len', '', length))))
         tmp <- left_join(tmp.dat, tmp.predict) %>%
             rename(allages = age)
